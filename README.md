@@ -49,7 +49,7 @@ Analiza wykazała wysoką skuteczność modeli liniowych z regularyzacją (Lasso
 > **Szczegółowa analiza modeli, studium przypadków i wnioski biznesowe znajdują się w pełnym raporcie:**
 >
 >
-> ### [➡️ Przeczytaj Raport z Analizy Modeli Predykcyjnych](src\modeling\notebooks\finall_model_report.md)
+> ### [➡️ Przeczytaj Raport z Analizy Modeli Predykcyjnych](src/modeling/notebooks/finall_model_report.md)
 
 ---
 
