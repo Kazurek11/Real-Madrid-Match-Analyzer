@@ -118,17 +118,17 @@ Poniżej znajduje się opis kluczowych modułów projektu. Każdy z nich posiada
 
 - **`rm_players`**: Agregacja i przygotowanie szczegółowych danych o 16 zawodnikach z kadry meczowej.
   
-- [➡️ **Dokumentacja podmodułu `opp_team`**](DOCUMENT\SCRIPT\finall_dataframe\final_dataframe.md)
-- [➡️ **Dokumentacja podmodułu `rm_team`**](DOCUMENT\SCRIPT\finall_dataframe\rm_team-finall_dataframe.md)
-- [➡️ **Dokumentacja podmodułu `rm_h2h`**](DOCUMENT\SCRIPT\finall_dataframe\rm_h2h-final_dataframe.md)
-- [➡️ **Dokumentacja podmodułu `rm_players`**](DOCUMENT\SCRIPT\finall_dataframe\rm_players-final_dataframe.md)
+- [➡️ **Dokumentacja podmodułu `opp_team`**](DOCUMENT/SCRIPT/finall_dataframe/final_dataframe.md)
+- [➡️ **Dokumentacja podmodułu `rm_team`**](DOCUMENT/SCRIPT/finall_dataframe/rm_team-finall_dataframe.md)
+- [➡️ **Dokumentacja podmodułu `rm_h2h`**](DOCUMENT/SCRIPT/finall_dataframe/rm_h2h-final_dataframe.md)
+- [➡️ **Dokumentacja podmodułu `rm_players`**](DOCUMENT/SCRIPT/finall_dataframe/rm_players-final_dataframe.md)
 
 ### 🛠️ Moduł `helpers`
 
 - **Cel:**- Zbiór narzędzi pomocniczych wykorzystywanych w całym projekcie. Zawiera m.in. system logowania oraz klasę `FileUtils` do bezpiecznych operacji na plikach.
 
-- [➡️ **Szczegółowa dokumentacja podmodułu `help_script`**](DOCUMENT\SCRIPT\helper\help_script.md)
-- [➡️ **Szczegółowa dokumentacja podmodułu `logger`**](DOCUMENT\SCRIPT\helper\logger.md)
+- [➡️ **Szczegółowa dokumentacja podmodułu `help_script`**](DOCUMENT/SCRIPT/helper/help_script.md)
+- [➡️ **Szczegółowa dokumentacja podmodułu `logger`**](DOCUMENT/SCRIPT/helper/logger.md)
 
 ---
 
@@ -138,7 +138,7 @@ Finalny zbiór danych to kompleksowa tabela zawierająca ponad 200 cech dla każ
 
 > **Pełny słownik danych, opis każdej kolumny oraz logika obsługi brakujących wartości znajdują się w dedykowanej dokumentacji:**
 
-### [➡️ Zobacz szczegółową strukturę datasetu](DOCUMENT\SCRIPT\finall_dataframe\final_dataframe.md)
+### [➡️ Zobacz szczegółową strukturę datasetu](DOCUMENT/SCRIPT/finall_dataframe/final_dataframe.md)
 
 ---
 
