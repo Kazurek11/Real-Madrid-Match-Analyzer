@@ -1,0 +1,463 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>helpers package &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=2827c288"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../genindex.html" />
+    <link rel="search" title="Szukaj" href="../search.html" />
+    <link rel="next" title="RM package" href="RM.html" />
+    <link rel="prev" title="finall_dataframe.rm_team package" href="finall_dataframe.rm_team.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_processing.html">data_processing package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.html">finall_dataframe package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">helpers package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-helpers.file_utils">helpers.file_utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#helpers.file_utils.FileUtils"><code class="docutils literal notranslate"><span class="pre">FileUtils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-helpers.logger">helpers.logger module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#helpers.logger.Logger"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#helpers.logger.critical"><code class="docutils literal notranslate"><span class="pre">critical()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#helpers.logger.debug"><code class="docutils literal notranslate"><span class="pre">debug()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#helpers.logger.error"><code class="docutils literal notranslate"><span class="pre">error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#helpers.logger.info"><code class="docutils literal notranslate"><span class="pre">info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#helpers.logger.set_level"><code class="docutils literal notranslate"><span class="pre">set_level()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#helpers.logger.warning"><code class="docutils literal notranslate"><span class="pre">warning()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-helpers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="RM.html">RM package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+      <li class="breadcrumb-item active">helpers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/helpers.rst.txt" rel="nofollow"> Zobacz źródło strony</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="helpers-package">
+<h1>helpers package<a class="headerlink" href="#helpers-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-helpers.file_utils">
+<span id="helpers-file-utils-module"></span><h2>helpers.file_utils module<a class="headerlink" href="#module-helpers.file_utils" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">helpers.file_utils.</span></span><span class="sig-name descname"><span class="pre">FileUtils</span></span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa zawierająca narzędzia do zarządzania plikami i operacji na plikach CSV.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.check_file_exists">
+<span class="sig-name descname"><span class="pre">check_file_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.check_file_exists"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.check_file_exists" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza czy plik istnieje pod podaną ścieżką.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.convert_excel_to_csv">
+<span class="sig-name descname"><span class="pre">convert_excel_to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">excel_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csv_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.convert_excel_to_csv"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.convert_excel_to_csv" title="Link to this definition"></a></dt>
+<dd><p>Konwertuje plik Excel do formatu CSV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>excel_path</strong> (<em>str</em>) – Ścieżka do pliku Excel</p></li>
+<li><p><strong>csv_path</strong> (<em>str</em>) – Ścieżka docelowa pliku CSV</p></li>
+<li><p><strong>sheet_name</strong> (<em>str lub int</em>) – Nazwa lub indeks arkusza do konwersji</p></li>
+<li><p><strong>index</strong> (<em>bool</em>) – Czy zachować indeks w pliku CSV</p></li>
+<li><p><strong>sort_by</strong> (<em>str</em><em>, </em><em>optional</em>) – Kolumna do sortowania przed zapisem</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em>) – Kierunek sortowania</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli konwersja się powiodła, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.ensure_directory_exists">
+<span class="sig-name descname"><span class="pre">ensure_directory_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.ensure_directory_exists"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.ensure_directory_exists" title="Link to this definition"></a></dt>
+<dd><p>Tworzy katalog jeśli nie istnieje.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>directory_path</strong> (<em>str</em>) – Ścieżka do katalogu</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli katalog istnieje lub został utworzony, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.filter_and_save">
+<span class="sig-name descname"><span class="pre">filter_and_save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_condition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.filter_and_save"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.filter_and_save" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje plik CSV, stosuje warunek filtrowania i zapisuje wynik.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku wejściowego</p></li>
+<li><p><strong>output_path</strong> (<em>str</em>) – Ścieżka do pliku wynikowego</p></li>
+<li><p><strong>filter_condition</strong> (<em>callable</em>) – Funkcja filtrująca przyjmująca DataFrame i zwracająca DataFrame</p></li>
+<li><p><strong>sort_by</strong> (<em>str</em><em>, </em><em>optional</em>) – Kolumna do sortowania</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Kierunek sortowania</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli operacja się powiodła, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.get_all_files_from_directory">
+<span class="sig-name descname"><span class="pre">get_all_files_from_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.get_all_files_from_directory"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.get_all_files_from_directory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.get_project_root">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_project_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.get_project_root"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.get_project_root" title="Link to this definition"></a></dt>
+<dd><p>Zwraca ścieżkę do głównego katalogu projektu.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.get_results_directory">
+<span class="sig-name descname"><span class="pre">get_results_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_of_directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'result'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.get_results_directory"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.get_results_directory" title="Link to this definition"></a></dt>
+<dd><p>Zwraca standardowy katalog dla wyników, tworząc go jeśli nie istnieje.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Ścieżka bazowa. Jeśli None, używa katalogu projektu.</p></li>
+<li><p><strong>name_of_directory</strong> (<em>str</em><em>, </em><em>optional</em>) – Nazwa tworzonego folderu wynikowego.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Ścieżka do katalogu wyników</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.load_csv_safe">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_csv_safe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.load_csv_safe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.load_csv_safe" title="Link to this definition"></a></dt>
+<dd><p>Bezpieczne wczytanie pliku CSV z obsługą błędów.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku CSV</p></li>
+<li><p><strong>index_col</strong> (<em>str lub int</em><em>, </em><em>optional</em>) – Nazwa kolumny lub indeks do ustawienia jako indeks</p></li>
+<li><p><strong>sort_by</strong> (<em>str lub lista</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Kolumna(y) do sortowania danych</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Kierunek sortowania, True=rosnąco, False=malejąco</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z wczytanymi danymi lub None w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[pd.DataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.load_excel_safe">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_excel_safe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.load_excel_safe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.load_excel_safe" title="Link to this definition"></a></dt>
+<dd><p>Bezpieczne wczytanie pliku Excel z obsługą błędów.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku Excel</p></li>
+<li><p><strong>sheet_name</strong> (<em>str lub int</em><em>, </em><em>optional</em>) – Nazwa lub indeks arkusza do wczytania. Domyślnie 0 (pierwszy arkusz).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z danymi z arkusza lub None w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[pd.DataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.merge_csv_files">
+<span class="sig-name descname"><span class="pre">merge_csv_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.merge_csv_files"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.merge_csv_files" title="Link to this definition"></a></dt>
+<dd><p>Łączy wiele plików CSV w jeden plik.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_paths</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Lista ścieżek do plików CSV</p></li>
+<li><p><strong>output_path</strong> (<em>str</em>) – Ścieżka docelowa dla połączonego pliku</p></li>
+<li><p><strong>index_col</strong> (<em>str</em><em>, </em><em>optional</em>) – Nazwa kolumny do ustawienia jako indeks</p></li>
+<li><p><strong>sort_by</strong> (<em>str</em><em>, </em><em>optional</em>) – Kolumna do sortowania danych po połączeniu</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Kierunek sortowania, True=rosnąco, False=malejąco</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli operacja się powiodła, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.save_csv_safe">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_csv_safe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.save_csv_safe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.save_csv_safe" title="Link to this definition"></a></dt>
+<dd><p>Bezpieczny zapis DataFrame do pliku CSV z możliwością sortowania i ustawienia indeksu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do zapisania</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – Ścieżka docelowa pliku CSV</p></li>
+<li><p><strong>index</strong> (<em>bool</em><em>, </em><em>optional</em>) – Czy zapisać indeks jako kolumnę</p></li>
+<li><p><strong>index_label</strong> (<em>str</em><em>, </em><em>optional</em>) – Etykieta dla kolumny indeksu</p></li>
+<li><p><strong>sort_by</strong> (<em>str lub lista</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Kolumna(y) do sortowania danych przed zapisem</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Kierunek sortowania, True=rosnąco, False=malejąco</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli zapis się powiódł, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.file_utils.FileUtils.save_excel_safe">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_excel_safe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Sheet1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ascending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/helpers/file_utils.html#FileUtils.save_excel_safe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.file_utils.FileUtils.save_excel_safe" title="Link to this definition"></a></dt>
+<dd><p>Bezpieczny zapis DataFrame do pliku Excel z możliwością sortowania.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do zapisania</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – Ścieżka docelowa pliku Excel</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em>) – Nazwa arkusza</p></li>
+<li><p><strong>index</strong> (<em>bool</em>) – Czy zapisać indeks jako kolumnę</p></li>
+<li><p><strong>index_label</strong> (<em>str</em><em>, </em><em>optional</em>) – Etykieta dla kolumny indeksu</p></li>
+<li><p><strong>sort_by</strong> (<em>str lub lista</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Kolumna(y) do sortowania danych przed zapisem</p></li>
+<li><p><strong>ascending</strong> (<em>bool</em><em>, </em><em>optional</em>) – Kierunek sortowania, True=rosnąco, False=malejąco</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli zapis się powiódł, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-helpers.logger">
+<span id="helpers-logger-module"></span><h2>helpers.logger module<a class="headerlink" href="#module-helpers.logger" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="helpers.logger.Logger">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">helpers.logger.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'PYTHON_REAL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_output</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#Logger"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.Logger" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa do obsługi logowania w aplikacji.
+Umożliwia zapisywanie komunikatów do pliku i/lub konsoli,
+z różnymi poziomami ważności informacji.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="helpers.logger.Logger.LEVELS">
+<span class="sig-name descname"><span class="pre">LEVELS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'CRITICAL':</span> <span class="pre">50,</span> <span class="pre">'DEBUG':</span> <span class="pre">10,</span> <span class="pre">'ERROR':</span> <span class="pre">40,</span> <span class="pre">'INFO':</span> <span class="pre">20,</span> <span class="pre">'WARNING':</span> <span class="pre">30}</span></em><a class="headerlink" href="#helpers.logger.Logger.LEVELS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.logger.Logger.critical">
+<span class="sig-name descname"><span class="pre">critical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#Logger.critical"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.Logger.critical" title="Link to this definition"></a></dt>
+<dd><p>Loguje komunikat na poziomie CRITICAL</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.logger.Logger.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#Logger.debug"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.Logger.debug" title="Link to this definition"></a></dt>
+<dd><p>Loguje komunikat na poziomie DEBUG</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.logger.Logger.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#Logger.error"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.Logger.error" title="Link to this definition"></a></dt>
+<dd><p>Loguje komunikat na poziomie ERROR</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.logger.Logger.get_default_logger">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_default_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#helpers.logger.Logger" title="helpers.logger.Logger"><span class="pre">Logger</span></a></span></span><a class="reference internal" href="../_modules/helpers/logger.html#Logger.get_default_logger"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.Logger.get_default_logger" title="Link to this definition"></a></dt>
+<dd><p>Tworzy i zwraca domyślny logger dla aplikacji.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>level</strong> – Poziom logowania (domyślnie INFO)</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Instancja Logger z domyślnymi ustawieniami</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.logger.Logger.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#Logger.info"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.Logger.info" title="Link to this definition"></a></dt>
+<dd><p>Loguje komunikat na poziomie INFO</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.logger.Logger.set_level">
+<span class="sig-name descname"><span class="pre">set_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#Logger.set_level"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.Logger.set_level" title="Link to this definition"></a></dt>
+<dd><p>Zmienia poziom logowania</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="helpers.logger.Logger.warning">
+<span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#Logger.warning"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.Logger.warning" title="Link to this definition"></a></dt>
+<dd><p>Loguje komunikat na poziomie WARNING</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="helpers.logger.critical">
+<span class="sig-prename descclassname"><span class="pre">helpers.logger.</span></span><span class="sig-name descname"><span class="pre">critical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#critical"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.critical" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="helpers.logger.debug">
+<span class="sig-prename descclassname"><span class="pre">helpers.logger.</span></span><span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#debug"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.debug" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="helpers.logger.error">
+<span class="sig-prename descclassname"><span class="pre">helpers.logger.</span></span><span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#error"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="helpers.logger.info">
+<span class="sig-prename descclassname"><span class="pre">helpers.logger.</span></span><span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#info"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="helpers.logger.set_level">
+<span class="sig-prename descclassname"><span class="pre">helpers.logger.</span></span><span class="sig-name descname"><span class="pre">set_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#set_level"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.set_level" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="helpers.logger.warning">
+<span class="sig-prename descclassname"><span class="pre">helpers.logger.</span></span><span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/helpers/logger.html#warning"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#helpers.logger.warning" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-helpers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-helpers" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="finall_dataframe.rm_team.html" class="btn btn-neutral float-left" title="finall_dataframe.rm_team package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Poprzedni</a>
+        <a href="RM.html" class="btn btn-neutral float-right" title="RM package" accesskey="n" rel="next">Następny <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

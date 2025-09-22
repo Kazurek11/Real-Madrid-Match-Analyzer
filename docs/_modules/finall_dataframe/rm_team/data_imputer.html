@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_team.data_imputer &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_team.data_imputer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.rm_team.data_imputer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">warning</span>
+
+<div class="viewcode-block" id="DataFrameImputer">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataFrameImputer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa odpowiedzialna za inteligentne uzupełnianie brakujących </span>
+<span class="sd">    wartości (NaN) w finalnym zbiorze danych.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;DataFrameImputer zainicjalizowany.&quot;</span><span class="p">)</span>
+        <span class="c1"># KROK 0: Konwersja typów danych, aby uniknąć problemów z downcastingiem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coerce_numeric_types</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_coerce_numeric_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prywatna metoda do jawnej konwersji kolumn na typ numeryczny,</span>
+<span class="sd">        gdzie to możliwe. Zapobiega ostrzeżeniom o downcastingu.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Konwersja typów danych w celu zapewnienia spójności...&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="c1"># Nie ruszamy kolumn z pozycjami i datami</span>
+            <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_POS&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">col</span> <span class="o">==</span> <span class="s1">&#39;M_DATE&#39;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            
+            <span class="c1"># Próbujemy skonwertować kolumnę na numeryczną.</span>
+            <span class="c1"># `errors=&#39;coerce&#39;` zamieni wszystko, czego nie da się skonwertować, na NaT/NaN.</span>
+            <span class="n">original_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
+            <span class="n">converted_series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Jeśli konwersja nie spowodowała utraty wszystkich danych, zastosuj ją</span>
+            <span class="k">if</span> <span class="n">converted_series</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">converted_series</span>
+                <span class="k">if</span> <span class="n">original_type</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Skonwertowano kolumnę &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; z </span><span class="si">{</span><span class="n">original_type</span><span class="si">}</span><span class="s2"> na </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DataFrameImputer.impute_player_stats">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_player_stats">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">impute_player_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># ... (bez zmian) ...</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam imputację dla statystyk zawodników...&quot;</span><span class="p">)</span>
+        <span class="n">player_pos_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;RM_PX_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_POS&#39;</span><span class="p">)]</span>
+        <span class="n">player_num_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;RM_PX_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">player_pos_cols</span><span class="p">]</span>
+        
+        <span class="n">player_pos_nan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">player_pos_cols</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">player_pos_cols</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">player_num_nan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">player_num_cols</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">player_num_cols</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">player_pos_nan</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">player_pos_nan</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">player_pos_nan</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;NoPos&#39;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Uzupełniono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">player_pos_nan</span><span class="p">)</span><span class="si">}</span><span class="s2"> kolumn pozycji jako &#39;NoPos&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">player_num_nan</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">player_num_nan</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">player_num_nan</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Uzupełniono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">player_num_nan</span><span class="p">)</span><span class="si">}</span><span class="s2"> kolumn numerycznych zerami.&quot;</span><span class="p">)</span>
+            
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;✅ Ukończono imputację danych zawodników.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="DataFrameImputer.impute_h2h_stats">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_h2h_stats">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">impute_h2h_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># ... (bez zmian) ...</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam imputację dla statystyk H2H...&quot;</span><span class="p">)</span>
+        <span class="n">h2h_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;H2H_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">!=</span> <span class="s1">&#39;H2H_EXISTS&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">h2h_cols</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;  - Brak kolumn H2H do imputacji.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+            
+        <span class="n">missing_h2h_mask</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;H2H_EXISTS&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">h2h_cols</span><span class="p">:</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">missing_h2h_mask</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">missing_h2h_mask</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Ukończono imputację danych H2H dla </span><span class="si">{</span><span class="n">missing_h2h_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> meczów bez historii.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="DataFrameImputer.impute_opponent_stats">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_opponent_stats">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">impute_opponent_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># ... (bez zmian, teraz powinno działać bez ostrzeżeń) ...</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam imputację dla statystyk przeciwników...&quot;</span><span class="p">)</span>
+        <span class="n">vs_cols_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;OP_GPM_VS_TOP&#39;</span><span class="p">:</span> <span class="s1">&#39;OP_G_SCO_ALL&#39;</span><span class="p">,</span> <span class="s1">&#39;OP_PPM_VS_TOP&#39;</span><span class="p">:</span> <span class="s1">&#39;OP_PPM_SEA&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;OP_GPM_VS_MID&#39;</span><span class="p">:</span> <span class="s1">&#39;OP_G_SCO_ALL&#39;</span><span class="p">,</span> <span class="s1">&#39;OP_PPM_VS_MID&#39;</span><span class="p">:</span> <span class="s1">&#39;OP_PPM_SEA&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;OP_GPM_VS_LOW&#39;</span><span class="p">:</span> <span class="s1">&#39;OP_G_SCO_ALL&#39;</span><span class="p">,</span> <span class="s1">&#39;OP_PPM_VS_LOW&#39;</span><span class="p">:</span> <span class="s1">&#39;OP_PPM_SEA&#39;</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">vs_col</span><span class="p">,</span> <span class="n">sea_col</span> <span class="ow">in</span> <span class="n">vs_cols_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">vs_col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">vs_col</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">vs_col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">vs_col</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">sea_col</span><span class="p">])</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Uzupełniono braki w &#39;</span><span class="si">{</span><span class="n">vs_col</span><span class="si">}</span><span class="s2">&#39; wartościami z &#39;</span><span class="si">{</span><span class="n">sea_col</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+        
+        <span class="n">l5_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;OP_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_L5&#39;</span><span class="p">)]</span>
+        <span class="n">mask_beniaminek_l5</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;OP_PPM_L5&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">mask_beniaminek_l5</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Znaleziono </span><span class="si">{</span><span class="n">mask_beniaminek_l5</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> wiersz(e) z brakiem danych _L5 (beniaminki).&quot;</span><span class="p">)</span>
+            <span class="n">low_teams_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;OP_PPM_SEA&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">1.2</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">l5_cols</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">low_teams_mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="n">median_for_low_teams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">low_teams_mask</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span> 
+                    <span class="n">median_for_low_teams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">median_for_low_teams</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask_beniaminek_l5</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">median_for_low_teams</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - Uzupełniono &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; dla beniaminków wartością: </span><span class="si">{</span><span class="n">median_for_low_teams</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">global_median</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask_beniaminek_l5</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_median</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    - Nie można było obliczyć mediany dla &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; dla drużyn LOW, użyto globalnej mediany: </span><span class="si">{</span><span class="n">global_median</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;✅ Ukończono imputację danych przeciwników.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+        
+<div class="viewcode-block" id="DataFrameImputer.impute_remaining">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_remaining">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">impute_remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># ... (bez zmian, teraz powinno działać bez ostrzeżeń) ...</span>
+        <span class="n">remaining_nan_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">remaining_nan_cols</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;✅ Brak pozostałych wartości NaN do uzupełnienia.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rozpoczynam ostateczne czyszczenie </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">remaining_nan_cols</span><span class="p">)</span><span class="si">}</span><span class="s2"> pozostałych kolumn...&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">remaining_nan_cols</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]):</span>
+                <span class="n">median_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">median_val</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Uzupełniono numeryczną kolumnę &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; medianą: </span><span class="si">{</span><span class="n">median_val</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mode_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">mode_val</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Uzupełniono kategoryczną kolumnę &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; dominantą: &#39;</span><span class="si">{</span><span class="n">mode_val</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="DataFrameImputer.run">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.run">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">impute_player_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">impute_h2h_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">impute_opponent_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">impute_remaining</span><span class="p">()</span>
+        
+        <span class="n">final_nan_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">final_nan_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;✅✅✅ Imputacja zakończona sukcesem. Finalny DataFrame jest czysty.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚠️ Po imputacji wciąż pozostało </span><span class="si">{</span><span class="n">final_nan_count</span><span class="si">}</span><span class="s2"> wartości NaN.&quot;</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

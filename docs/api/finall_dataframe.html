@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe package &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=2827c288"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../genindex.html" />
+    <link rel="search" title="Szukaj" href="../search.html" />
+    <link rel="next" title="finall_dataframe.opp_team package" href="finall_dataframe.opp_team.html" />
+    <link rel="prev" title="data_processing package" href="data_processing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_processing.html">data_processing package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">finall_dataframe package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html">finall_dataframe.opp_team package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html">finall_dataframe.rm_h2h package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html">finall_dataframe.rm_players package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html">finall_dataframe.rm_team package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-finall_dataframe.main">finall_dataframe.main module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#finall_dataframe.main.RealMadridMasterAnalyzer"><code class="docutils literal notranslate"><span class="pre">RealMadridMasterAnalyzer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#finall_dataframe.main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-finall_dataframe">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html">helpers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RM.html">RM package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+      <li class="breadcrumb-item active">finall_dataframe package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/finall_dataframe.rst.txt" rel="nofollow"> Zobacz źródło strony</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="finall-dataframe-package">
+<h1>finall_dataframe package<a class="headerlink" href="#finall-dataframe-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="finall_dataframe.opp_team.html">finall_dataframe.opp_team package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.opp_team.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.opp_team.html#module-finall_dataframe.opp_team.analyzer">finall_dataframe.opp_team.analyzer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.base_df"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.base_df</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.data_loader"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.data_loader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.season_manager"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.season_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.rm_matches"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.rm_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.opp_matches"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.opp_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.df_first_date"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.df_first_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.columns_to_add"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.columns_to_add</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.analyze"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.calculate_opponent_statistics"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.calculate_opponent_statistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.define_analysis_columns"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.define_analysis_columns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.fill_dataframe_with_stats"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.fill_dataframe_with_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.prepare_dataframe"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.prepare_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.set_base_dataframe"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.set_base_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.setup_components"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.setup_components()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.setup_data_sources"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.setup_data_sources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.analyzer.OpponentTeamAnalyzer.validate_opponent_analysis"><code class="docutils literal notranslate"><span class="pre">OpponentTeamAnalyzer.validate_opponent_analysis()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.opp_team.html#module-finall_dataframe.opp_team.data_loader">finall_dataframe.opp_team.data_loader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader"><code class="docutils literal notranslate"><span class="pre">DataLoader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader.analyzer"><code class="docutils literal notranslate"><span class="pre">DataLoader.analyzer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader.get_data_summary"><code class="docutils literal notranslate"><span class="pre">DataLoader.get_data_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader.load_base_data"><code class="docutils literal notranslate"><span class="pre">DataLoader.load_base_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader.load_match_data"><code class="docutils literal notranslate"><span class="pre">DataLoader.load_match_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader.prepare_columns"><code class="docutils literal notranslate"><span class="pre">DataLoader.prepare_columns()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.opp_team.html#module-finall_dataframe.opp_team.extended_stats">finall_dataframe.opp_team.extended_stats module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_G_CON_ALL"><code class="docutils literal notranslate"><span class="pre">calculate_OP_G_CON_ALL()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_G_SCO_ALL"><code class="docutils literal notranslate"><span class="pre">calculate_OP_G_SCO_ALL()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_G_SCO_G_CON_RAT"><code class="docutils literal notranslate"><span class="pre">calculate_OP_G_SCO_G_CON_RAT()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_ODD_L_L5"><code class="docutils literal notranslate"><span class="pre">calculate_OP_ODD_L_L5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_ODD_W_L5"><code class="docutils literal notranslate"><span class="pre">calculate_OP_ODD_W_L5()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.opp_team.html#module-finall_dataframe.opp_team.stats_functions">finall_dataframe.opp_team.stats_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_GDIF_L5"><code class="docutils literal notranslate"><span class="pre">calculate_OP_GDIF_L5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_GPM_0_1_2_PPM"><code class="docutils literal notranslate"><span class="pre">calculate_OP_GPM_0_1_2_PPM()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_GPM_1_2__1_9_PPM"><code class="docutils literal notranslate"><span class="pre">calculate_OP_GPM_1_2__1_9_PPM()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_GPM_1_9_PPR"><code class="docutils literal notranslate"><span class="pre">calculate_OP_GPM_1_9_PPR()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_G_CON_L5"><code class="docutils literal notranslate"><span class="pre">calculate_OP_G_CON_L5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_G_SCO_L5"><code class="docutils literal notranslate"><span class="pre">calculate_OP_G_SCO_L5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_OPP_POS_L5"><code class="docutils literal notranslate"><span class="pre">calculate_OP_OPP_POS_L5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_0_1_2_PPM"><code class="docutils literal notranslate"><span class="pre">calculate_OP_PPM_0_1_2_PPM()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_1_2__1_9_PPM"><code class="docutils literal notranslate"><span class="pre">calculate_OP_PPM_1_2__1_9_PPM()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_1_9_PPR"><code class="docutils literal notranslate"><span class="pre">calculate_OP_PPM_1_9_PPR()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_L5"><code class="docutils literal notranslate"><span class="pre">calculate_OP_PPM_L5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_SEA"><code class="docutils literal notranslate"><span class="pre">calculate_OP_PPM_SEA()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.opp_team.html#module-finall_dataframe.opp_team">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="finall_dataframe.rm_h2h.html">finall_dataframe.rm_h2h package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_h2h.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_h2h.html#module-finall_dataframe.rm_h2h.analyzer">finall_dataframe.rm_h2h.analyzer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.base_df"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.base_df</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.df_first_date"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.df_first_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.data_loader"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.data_loader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.rm_matches"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.rm_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.opp_matches"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.opp_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.analyze"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.calculate_h2h_statistics"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.calculate_h2h_statistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.calculate_match_h2h_stats"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.calculate_match_h2h_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.fill_dataframe_with_stats"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.fill_dataframe_with_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.prepare_dataframe"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.prepare_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.set_base_dataframe"><code class="docutils literal notranslate"><span class="pre">HeadToHeadAnalyzer.set_base_dataframe()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_h2h.html#module-finall_dataframe.rm_h2h.config">finall_dataframe.rm_h2h.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_h2h.html#module-finall_dataframe.rm_h2h.data_loader">finall_dataframe.rm_h2h.data_loader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.data_loader.H2HDataLoader"><code class="docutils literal notranslate"><span class="pre">H2HDataLoader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.data_loader.H2HDataLoader.rm_matches"><code class="docutils literal notranslate"><span class="pre">H2HDataLoader.rm_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.data_loader.H2HDataLoader.opp_matches"><code class="docutils literal notranslate"><span class="pre">H2HDataLoader.opp_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.data_loader.H2HDataLoader.load_data"><code class="docutils literal notranslate"><span class="pre">H2HDataLoader.load_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_h2h.html#module-finall_dataframe.rm_h2h.h2h_calculator">finall_dataframe.rm_h2h.h2h_calculator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.h2h_calculator.calculate_h2h_overall_ppm"><code class="docutils literal notranslate"><span class="pre">calculate_h2h_overall_ppm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.h2h_calculator.calculate_h2h_stats"><code class="docutils literal notranslate"><span class="pre">calculate_h2h_stats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.h2h_calculator.get_h2h_matches"><code class="docutils literal notranslate"><span class="pre">get_h2h_matches()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.h2h_calculator.is_playing_before"><code class="docutils literal notranslate"><span class="pre">is_playing_before()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_h2h.html#module-finall_dataframe.rm_h2h.odds_calculator">finall_dataframe.rm_h2h.odds_calculator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.odds_calculator.get_rm_odds"><code class="docutils literal notranslate"><span class="pre">get_rm_odds()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_h2h.html#module-finall_dataframe.rm_h2h.validators">finall_dataframe.rm_h2h.validators module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.validators.validate_h2h_analysis_results"><code class="docutils literal notranslate"><span class="pre">validate_h2h_analysis_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.validators.validate_h2h_dataframe"><code class="docutils literal notranslate"><span class="pre">validate_h2h_dataframe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.validators.validate_odds_dataframe"><code class="docutils literal notranslate"><span class="pre">validate_odds_dataframe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_h2h.html#module-finall_dataframe.rm_h2h">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="finall_dataframe.rm_players.html">finall_dataframe.rm_players package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_players.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_players.html#module-finall_dataframe.rm_players.RM_players">finall_dataframe.rm_players.RM_players module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_players.html#module-finall_dataframe.rm_players.analyzer">finall_dataframe.rm_players.analyzer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.data_loader"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.data_loader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.season_manager"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.season_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.player_manager"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.player_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.statistics_calculator"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.statistics_calculator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.data_aggregator"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.data_aggregator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.base_path"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.base_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.analyze"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.get_summary_statistics"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.get_summary_statistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.load_data"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.load_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.setup_components"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.setup_components()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.analyzer.RealMadridPlayersAnalyzer.validate_data_completeness"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer.validate_data_completeness()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_players.html#module-finall_dataframe.rm_players.data_agregator">finall_dataframe.rm_players.data_agregator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_agregator.DataAggregator"><code class="docutils literal notranslate"><span class="pre">DataAggregator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_agregator.DataAggregator.process_all_matches"><code class="docutils literal notranslate"><span class="pre">DataAggregator.process_all_matches()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_players.html#module-finall_dataframe.rm_players.data_loader">finall_dataframe.rm_players.data_loader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader"><code class="docutils literal notranslate"><span class="pre">DataLoader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.base_path"><code class="docutils literal notranslate"><span class="pre">DataLoader.base_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.real_path"><code class="docutils literal notranslate"><span class="pre">DataLoader.real_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.data_cache"><code class="docutils literal notranslate"><span class="pre">DataLoader.data_cache</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.matches"><code class="docutils literal notranslate"><span class="pre">DataLoader.matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.individual"><code class="docutils literal notranslate"><span class="pre">DataLoader.individual</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.players"><code class="docutils literal notranslate"><span class="pre">DataLoader.players</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.players_stats"><code class="docutils literal notranslate"><span class="pre">DataLoader.players_stats</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.old_matches"><code class="docutils literal notranslate"><span class="pre">DataLoader.old_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.all_matches"><code class="docutils literal notranslate"><span class="pre">DataLoader.all_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.min_date_individual"><code class="docutils literal notranslate"><span class="pre">DataLoader.min_date_individual</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.min_date_matches"><code class="docutils literal notranslate"><span class="pre">DataLoader.min_date_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.common_min_date"><code class="docutils literal notranslate"><span class="pre">DataLoader.common_min_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.common_dates"><code class="docutils literal notranslate"><span class="pre">DataLoader.common_dates</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.filtered_matches"><code class="docutils literal notranslate"><span class="pre">DataLoader.filtered_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.filtered_individual"><code class="docutils literal notranslate"><span class="pre">DataLoader.filtered_individual</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.get_data_summary"><code class="docutils literal notranslate"><span class="pre">DataLoader.get_data_summary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.load_all_data"><code class="docutils literal notranslate"><span class="pre">DataLoader.load_all_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.load_csv"><code class="docutils literal notranslate"><span class="pre">DataLoader.load_csv()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_players.html#module-finall_dataframe.rm_players.player_manager">finall_dataframe.rm_players.player_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.player_manager.PlayerManager"><code class="docutils literal notranslate"><span class="pre">PlayerManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.player_manager.PlayerManager.get_player_id"><code class="docutils literal notranslate"><span class="pre">PlayerManager.get_player_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.player_manager.PlayerManager.get_player_name"><code class="docutils literal notranslate"><span class="pre">PlayerManager.get_player_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.player_manager.PlayerManager.get_player_position"><code class="docutils literal notranslate"><span class="pre">PlayerManager.get_player_position()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.player_manager.PlayerManager.get_same_position_players"><code class="docutils literal notranslate"><span class="pre">PlayerManager.get_same_position_players()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_players.html#module-finall_dataframe.rm_players.season_manager">finall_dataframe.rm_players.season_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.season_manager.SeasonManager"><code class="docutils literal notranslate"><span class="pre">SeasonManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.season_manager.SeasonManager.get_previous_season"><code class="docutils literal notranslate"><span class="pre">SeasonManager.get_previous_season()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.season_manager.SeasonManager.get_season"><code class="docutils literal notranslate"><span class="pre">SeasonManager.get_season()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.season_manager.SeasonManager.get_season_for_date"><code class="docutils literal notranslate"><span class="pre">SeasonManager.get_season_for_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.season_manager.SeasonManager.get_season_name"><code class="docutils literal notranslate"><span class="pre">SeasonManager.get_season_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.season_manager.SeasonManager.is_valid_season_date"><code class="docutils literal notranslate"><span class="pre">SeasonManager.is_valid_season_date()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_players.html#module-finall_dataframe.rm_players.statistics_calculator">finall_dataframe.rm_players.statistics_calculator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator"><code class="docutils literal notranslate"><span class="pre">StatisticsCalculator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_last_season_rating"><code class="docutils literal notranslate"><span class="pre">StatisticsCalculator.get_last_season_rating()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_player_per90_stats"><code class="docutils literal notranslate"><span class="pre">StatisticsCalculator.get_player_per90_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_player_rating"><code class="docutils literal notranslate"><span class="pre">StatisticsCalculator.get_player_rating()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_player_stat"><code class="docutils literal notranslate"><span class="pre">StatisticsCalculator.get_player_stat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_player_win_ratio"><code class="docutils literal notranslate"><span class="pre">StatisticsCalculator.get_player_win_ratio()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.is_player_in_previous_season"><code class="docutils literal notranslate"><span class="pre">StatisticsCalculator.is_player_in_previous_season()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_players.html#module-finall_dataframe.rm_players">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="finall_dataframe.rm_team.html">finall_dataframe.rm_team package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_team.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_team.html#module-finall_dataframe.rm_team.analyzer">finall_dataframe.rm_team.analyzer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.team_id"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.team_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.base_df"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.base_df</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.df_prepared"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.df_prepared</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.coach_manager"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.coach_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.stats_calculator"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.stats_calculator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.season_calculator"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.season_calculator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.df_first_date"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.df_first_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.analyze"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.calculate_match_statistics"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.calculate_match_statistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.fill_dataframe_with_stats"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.fill_dataframe_with_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.prepare_dataframe"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.prepare_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.set_base_dataframe"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.set_base_dataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.setup_data_sources"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.setup_data_sources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.setup_managers"><code class="docutils literal notranslate"><span class="pre">RealMadridTeamAnalyzer.setup_managers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_team.html#module-finall_dataframe.rm_team.coach_manager">finall_dataframe.rm_team.coach_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.coach_manager.CoachManager"><code class="docutils literal notranslate"><span class="pre">CoachManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.coach_manager.CoachManager.get_coach_id_by_date"><code class="docutils literal notranslate"><span class="pre">CoachManager.get_coach_id_by_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.coach_manager.CoachManager.get_coach_id_by_name"><code class="docutils literal notranslate"><span class="pre">CoachManager.get_coach_id_by_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.coach_manager.CoachManager.get_coach_name_by_id"><code class="docutils literal notranslate"><span class="pre">CoachManager.get_coach_name_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.coach_manager.CoachManager.validate_coach_exists"><code class="docutils literal notranslate"><span class="pre">CoachManager.validate_coach_exists()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_team.html#module-finall_dataframe.rm_team.config">finall_dataframe.rm_team.config module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.config.SPECIAL_DATA"><code class="docutils literal notranslate"><span class="pre">SPECIAL_DATA</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_team.html#module-finall_dataframe.rm_team.data_imputer">finall_dataframe.rm_team.data_imputer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer"><code class="docutils literal notranslate"><span class="pre">DataFrameImputer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_h2h_stats"><code class="docutils literal notranslate"><span class="pre">DataFrameImputer.impute_h2h_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_opponent_stats"><code class="docutils literal notranslate"><span class="pre">DataFrameImputer.impute_opponent_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_player_stats"><code class="docutils literal notranslate"><span class="pre">DataFrameImputer.impute_player_stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_remaining"><code class="docutils literal notranslate"><span class="pre">DataFrameImputer.impute_remaining()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.data_imputer.DataFrameImputer.run"><code class="docutils literal notranslate"><span class="pre">DataFrameImputer.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_team.html#module-finall_dataframe.rm_team.season_calculator">finall_dataframe.rm_team.season_calculator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.SeasonCalculator"><code class="docutils literal notranslate"><span class="pre">SeasonCalculator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_goals_against_low"><code class="docutils literal notranslate"><span class="pre">SeasonCalculator.calculate_team_goals_against_low()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_goals_against_mid"><code class="docutils literal notranslate"><span class="pre">SeasonCalculator.calculate_team_goals_against_mid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_goals_against_top"><code class="docutils literal notranslate"><span class="pre">SeasonCalculator.calculate_team_goals_against_top()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_against_low"><code class="docutils literal notranslate"><span class="pre">SeasonCalculator.calculate_team_points_against_low()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_against_mid"><code class="docutils literal notranslate"><span class="pre">SeasonCalculator.calculate_team_points_against_mid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_against_top"><code class="docutils literal notranslate"><span class="pre">SeasonCalculator.calculate_team_points_against_top()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_per_match_season"><code class="docutils literal notranslate"><span class="pre">SeasonCalculator.calculate_team_points_per_match_season()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_stats_against_tier"><code class="docutils literal notranslate"><span class="pre">SeasonCalculator.calculate_team_stats_against_tier()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.season_calculator.get_all_opp_matches"><code class="docutils literal notranslate"><span class="pre">get_all_opp_matches()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_team.html#module-finall_dataframe.rm_team.stats_calculator">finall_dataframe.rm_team.stats_calculator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator"><code class="docutils literal notranslate"><span class="pre">StatsCalculator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator.rm_matches"><code class="docutils literal notranslate"><span class="pre">StatsCalculator.rm_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator.opp_matches"><code class="docutils literal notranslate"><span class="pre">StatsCalculator.opp_matches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator.season_manager"><code class="docutils literal notranslate"><span class="pre">StatsCalculator.season_manager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_coach_rating_last_5"><code class="docutils literal notranslate"><span class="pre">StatsCalculator.calculate_coach_rating_last_5()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_coach_rating_last_season"><code class="docutils literal notranslate"><span class="pre">StatsCalculator.calculate_coach_rating_last_season()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_last_5_stats"><code class="docutils literal notranslate"><span class="pre">StatsCalculator.calculate_last_5_stats()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_team.html#module-finall_dataframe.rm_team.utils">finall_dataframe.rm_team.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.utils.add_missing_columns"><code class="docutils literal notranslate"><span class="pre">add_missing_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.utils.check_NAN_in_dataframe"><code class="docutils literal notranslate"><span class="pre">check_NAN_in_dataframe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.utils.check_NaN_column_in_RM_matches"><code class="docutils literal notranslate"><span class="pre">check_NaN_column_in_RM_matches()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.rm_team.html#finall_dataframe.rm_team.utils.check_type_in_dataframe"><code class="docutils literal notranslate"><span class="pre">check_type_in_dataframe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.rm_team.html#module-finall_dataframe.rm_team">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-finall_dataframe.main">
+<span id="finall-dataframe-main-module"></span><h2>finall_dataframe.main module<a class="headerlink" href="#module-finall_dataframe.main" title="Link to this heading"></a></h2>
+<p>Główny orchestrator analizy Real Madryt.</p>
+<p>Koordynuje wszystkie moduły analizy danych: zawodników, drużyny,
+przeciwników i statystyk head-to-head. Tworzy kompletny dataset
+gotowy do machine learning.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finall_dataframe.main.</span></span><span class="sig-name descname"><span class="pre">RealMadridMasterAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#RealMadridMasterAnalyzer"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Główny analizator łączący wszystkie moduły analizy Real Madryt.</p>
+<p>Orchestruje proces analizy od zawodników przez drużynę po przeciwników
+i statystyki head-to-head. Tworzy jeden kompletny dataset z wszystkimi
+metrykami potrzebnymi do modelowania predykcyjnego.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.base_output_path">
+<span class="sig-name descname"><span class="pre">base_output_path</span></span><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.base_output_path" title="Link to this definition"></a></dt>
+<dd><p>Ścieżka do katalogu wyników</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.players_analyzer">
+<span class="sig-name descname"><span class="pre">players_analyzer</span></span><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.players_analyzer" title="Link to this definition"></a></dt>
+<dd><p>Analizator danych zawodników</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.team_analyzer">
+<span class="sig-name descname"><span class="pre">team_analyzer</span></span><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.team_analyzer" title="Link to this definition"></a></dt>
+<dd><p>Analizator statystyk drużynowych</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.opponent_analyzer">
+<span class="sig-name descname"><span class="pre">opponent_analyzer</span></span><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.opponent_analyzer" title="Link to this definition"></a></dt>
+<dd><p>Analizator statystyk przeciwników</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.h2h_analyzer">
+<span class="sig-name descname"><span class="pre">h2h_analyzer</span></span><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.h2h_analyzer" title="Link to this definition"></a></dt>
+<dd><p>Analizator statystyk head-to-head</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.analyze_head_to_head">
+<span class="sig-name descname"><span class="pre">analyze_head_to_head</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#RealMadridMasterAnalyzer.analyze_head_to_head"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.analyze_head_to_head" title="Link to this definition"></a></dt>
+<dd><p>Wykonuje analizę head-to-head i dodaje kursy bukmacherskie.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.analyze_opponents">
+<span class="sig-name descname"><span class="pre">analyze_opponents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#RealMadridMasterAnalyzer.analyze_opponents"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.analyze_opponents" title="Link to this definition"></a></dt>
+<dd><p>Wykonuje analizę przeciwników na podstawie danych meczowych.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.analyze_players">
+<span class="sig-name descname"><span class="pre">analyze_players</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#RealMadridMasterAnalyzer.analyze_players"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.analyze_players" title="Link to this definition"></a></dt>
+<dd><p>Wykonuje analizę zawodników Real Madryt.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.analyze_team">
+<span class="sig-name descname"><span class="pre">analyze_team</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#RealMadridMasterAnalyzer.analyze_team"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.analyze_team" title="Link to this definition"></a></dt>
+<dd><p>Wykonuje analizę drużynową na podstawie danych zawodników.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.create_master_dataset">
+<span class="sig-name descname"><span class="pre">create_master_dataset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#RealMadridMasterAnalyzer.create_master_dataset"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.create_master_dataset" title="Link to this definition"></a></dt>
+<dd><p>Tworzy kompletny, czysty dataset, łącząc wszystkie moduły analizy i imputacji.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.impute_missing_data">
+<span class="sig-name descname"><span class="pre">impute_missing_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#RealMadridMasterAnalyzer.impute_missing_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.impute_missing_data" title="Link to this definition"></a></dt>
+<dd><p>Wykonuje inteligentną imputację brakujących danych na finalnym zbiorze.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – Surowy DataFrame po wszystkich analizach.</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Czysty DataFrame bez wartości NaN.</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.setup_analyzers">
+<span class="sig-name descname"><span class="pre">setup_analyzers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#RealMadridMasterAnalyzer.setup_analyzers"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.setup_analyzers" title="Link to this definition"></a></dt>
+<dd><p>Inicjalizuje wszystkie moduły analizujące.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.main.RealMadridMasterAnalyzer.validate_final_dataset">
+<span class="sig-name descname"><span class="pre">validate_final_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#RealMadridMasterAnalyzer.validate_final_dataset"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.RealMadridMasterAnalyzer.validate_final_dataset" title="Link to this definition"></a></dt>
+<dd><p>Waliduje finalny dataset pod kątem kompletności i jakości.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.main.main">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/main.html#main"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.main.main" title="Link to this definition"></a></dt>
+<dd><p>Główna funkcja uruchamiająca cały proces analizy.</p>
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-finall_dataframe" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data_processing.html" class="btn btn-neutral float-left" title="data_processing package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Poprzedni</a>
+        <a href="finall_dataframe.opp_team.html" class="btn btn-neutral float-right" title="finall_dataframe.opp_team package" accesskey="n" rel="next">Następny <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

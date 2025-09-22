@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>data_processing.get_RM_matches &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=2827c288"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">data_processing.get_RM_matches</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu data_processing.get_RM_matches</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Moduł do wyodrębniania i analizy meczów Realu Madryt.</span>
+
+<span class="sd">Ten moduł pozwala na wyodrębnienie meczów Realu Madryt z połączonych danych sezonowych,</span>
+<span class="sd">dodanie specyficznych kolumn informacyjnych oraz analizę wyników drużyny.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span>  
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.merge_all_season_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataMerger</span>
+
+<div class="viewcode-block" id="RealMadridMatches">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.get_RM_matches.RealMadridMatches">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RealMadridMatches</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa odpowiedzialna za wyodrębnianie i analizę meczów Realu Madryt.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes:</span>
+<span class="sd">    - Wczytanie połączonych danych sezonowych</span>
+<span class="sd">    - Wyodrębnienie meczów Realu Madryt</span>
+<span class="sd">    - Dodanie specyficznych kolumn dla meczów RM (is_home, real_result)</span>
+<span class="sd">    - Zapis wyodrębnionych danych do pliku</span>
+<span class="sd">    - Analizę podstawowych statystyk zespołu</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">all_matches_df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje obiekt RealMadridMatches.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            all_matches_df (pd.DataFrame, optional): DataFrame z danymi wszystkich meczów.</span>
+<span class="sd">                Powinien zawierać kolumny: match_id, home_team, away_team, home_team_id, away_team_id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;all_season&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="o">=</span> <span class="n">all_matches_df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_folder</span> <span class="o">=</span> <span class="s2">&quot;rm_matches&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span> <span class="o">=</span> <span class="s2">&quot;rm_matches.csv&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_folder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_file</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="RealMadridMatches.load_from_merged_file">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.get_RM_matches.RealMadridMatches.load_from_merged_file">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_from_merged_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje dane wszystkich meczów z pliku połączonych sezonów.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli operacja się powiodła, False w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dane meczowe już wczytane.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+            
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">merged_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="s2">&quot;merged_matches&quot;</span><span class="p">,</span> <span class="s2">&quot;all_matches.csv&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">merged_file</span><span class="p">):</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytywanie danych z pliku: </span><span class="si">{</span><span class="n">merged_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">merged_file</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;match_id&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się wczytać pliku: </span><span class="si">{</span><span class="n">merged_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+                    
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie wczytano dane </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie znaleziono pliku z połączonymi danymi: </span><span class="si">{</span><span class="n">merged_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania danych meczowych: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridMatches.extract_real_madrid_matches">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.get_RM_matches.RealMadridMatches.extract_real_madrid_matches">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_real_madrid_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wyodrębnia mecze Realu Madryt i dodaje dodatkowe kolumny.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli operacja się powiodła, False w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_from_merged_file</span><span class="p">():</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie można wyodrębnić meczów RM - brak danych.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">real_madrid_id</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">real_madrid_name</span> <span class="o">=</span> <span class="s2">&quot;Real Madrid CF&quot;</span>
+            
+            <span class="n">real_madrid_filter</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">real_madrid_id</span><span class="p">)</span> <span class="o">|</span> 
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">real_madrid_id</span><span class="p">)</span> <span class="o">|</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">[</span><span class="s2">&quot;home_team&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">real_madrid_name</span><span class="p">)</span> <span class="o">|</span> 
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">[</span><span class="s2">&quot;away_team&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">real_madrid_name</span><span class="p">)</span>
+            <span class="p">)</span>
+            
+            <span class="n">rm_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">[</span><span class="n">real_madrid_filter</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;is_home&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">rm_matches</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">real_madrid_id</span><span class="p">,</span> <span class="s2">&quot;is_home&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">rm_matches</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;home_team&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">real_madrid_name</span><span class="p">,</span> <span class="s2">&quot;is_home&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            
+            <span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;real_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">if</span> <span class="s2">&quot;result&quot;</span> <span class="ow">in</span> <span class="n">rm_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">object</span><span class="p">:</span>
+                    <span class="n">rm_matches</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;is_home&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">),</span> <span class="s2">&quot;real_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="n">rm_matches</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;is_home&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">),</span> <span class="s2">&quot;real_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="n">rm_matches</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;real_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">rm_matches</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;is_home&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;real_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="n">rm_matches</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;is_home&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">),</span> <span class="s2">&quot;real_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                    <span class="n">rm_matches</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;real_result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+            
+            <span class="n">numeric_cols</span> <span class="o">=</span> <span class="n">rm_matches</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;float64&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+            <span class="n">rm_matches</span><span class="p">[</span><span class="n">numeric_cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">rm_matches</span><span class="p">[</span><span class="n">numeric_cols</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span> <span class="o">=</span> <span class="n">rm_matches</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wyodrębniono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rm_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów Realu Madryt.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wyodrębniania meczów Realu: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridMatches.get_real_madrid_matches">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.get_RM_matches.RealMadridMatches.get_real_madrid_matches">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_real_madrid_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zwraca DataFrame z przetworzonymi meczami Realu Madryt.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z meczami Realu Madryt lub None w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_from_merged_file</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_real_madrid_matches</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridMatches.save_rm_matches">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.get_RM_matches.RealMadridMatches.save_rm_matches">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_rm_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zapisuje wyodrębnione mecze Realu Madryt do pliku CSV.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            output_path (str, optional): Ścieżka do pliku wynikowego.</span>
+<span class="sd">                Jeśli None, używana jest domyślna ścieżka.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli operacja zapisu się powiodła, False w przeciwnym przypadku</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_real_madrid_matches</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie można zapisać danych - brak wyodrębnionych meczów Realu Madryt.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span>
+            
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono katalog: </span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się utworzyć katalogu </span><span class="si">{</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df_to_save</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;match_id&quot;</span> <span class="ow">in</span> <span class="n">df_to_save</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">df_to_save</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;match_id&quot;</span><span class="p">)</span>
+                
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_to_save</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zapisano </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_to_save</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów Realu Madryt do pliku: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się zapisać pliku: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+            <span class="k">return</span> <span class="n">result</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas zapisywania meczów Realu Madryt: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridMatches.analyze_rm_stats">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.get_RM_matches.RealMadridMatches.analyze_rm_stats">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_rm_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analizuje podstawowe statystyki Realu Madryt.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik z obliczonymi statystykami</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_real_madrid_matches</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie można analizować statystyk - brak wyodrębnionych meczów Realu Madryt.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">{}</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="p">{}</span>
+            
+            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;total_matches&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">)</span>
+            
+            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;wins&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;real_result&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;draws&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;real_result&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;losses&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;total_matches&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;wins&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;draws&quot;</span><span class="p">]</span>
+            
+            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;win_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;wins&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;total_matches&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;total_matches&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+            
+            <span class="k">if</span> <span class="s2">&quot;is_home&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s2">&quot;home_goals&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s2">&quot;away_goals&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">home_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;is_home&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">away_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s2">&quot;is_home&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+                
+                <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;avg_goals_scored&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span>
+                    <span class="n">home_matches</span><span class="p">[</span><span class="s2">&quot;home_goals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">away_matches</span><span class="p">[</span><span class="s2">&quot;away_goals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                <span class="p">)</span> <span class="o">/</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;total_matches&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;total_matches&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+                
+                <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;avg_goals_conceded&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span>
+                    <span class="n">home_matches</span><span class="p">[</span><span class="s2">&quot;away_goals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">away_matches</span><span class="p">[</span><span class="s2">&quot;home_goals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                <span class="p">)</span> <span class="o">/</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;total_matches&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="k">if</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;total_matches&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Statystyki Realu Madryt dla </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;total_matches&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> meczów:&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zwycięstwa: </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;wins&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;win_rate&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Remisy: </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;draws&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Porażki: </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;losses&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;avg_goals_scored&quot;</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Średnio bramek zdobytych: </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;avg_goals_scored&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Średnio bramek straconych: </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;avg_goals_conceded&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">stats</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas analizowania statystyk Realu Madryt: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span></div>
+</div>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.get_RM_matches.main">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Główna funkcja modułu, wykonuje wyodrębnienie i analizę meczów Realu Madryt.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczęcie procesu wyodrębniania meczów Realu Madryt...&quot;</span><span class="p">)</span>
+    
+    <span class="n">rm_extractor</span> <span class="o">=</span> <span class="n">RealMadridMatches</span><span class="p">()</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rm_extractor</span><span class="o">.</span><span class="n">load_from_merged_file</span><span class="p">():</span>
+        <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać danych meczowych. Przerywanie.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rm_extractor</span><span class="o">.</span><span class="n">extract_real_madrid_matches</span><span class="p">():</span>
+        <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wyodrębnić meczów Realu Madryt. Przerywanie.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rm_extractor</span><span class="o">.</span><span class="n">save_rm_matches</span><span class="p">():</span>
+        <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Nie udało się zapisać meczów Realu Madryt do pliku.&quot;</span><span class="p">)</span>
+    
+    <span class="n">rm_extractor</span><span class="o">.</span><span class="n">analyze_rm_stats</span><span class="p">()</span>
+    
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Zakończenie procesu wyodrębniania meczów Realu Madryt.&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,684 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>data_processing.merge_all_season_data &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=2827c288"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">data_processing.merge_all_season_data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu data_processing.merge_all_season_data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Moduł agregacji danych meczów LaLiga</span>
+
+<span class="sd">Ten skrypt łączy dane meczowe z wielu sezonów LaLiga w jeden zbiór danych.</span>
+<span class="sd">Zapewnia spójność kolumn i formatów danych w połączonym zbiorze.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.const_variable</span><span class="w"> </span><span class="kn">import</span> <span class="n">COLUMN_MATCHES</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">critical</span><span class="p">,</span> <span class="n">set_level</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+
+<span class="n">file_utils</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">()</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;future.no_silent_downcasting&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DataMerger">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataMerger</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa odpowiedzialna za łączenie i przetwarzanie danych meczów z różnych sezonów LaLiga.</span>
+<span class="sd">    </span>
+<span class="sd">    Umożliwia agregację danych meczowych z wielu plików źródłowych, wykonuje standaryzację formatu,</span>
+<span class="sd">    dodaje identyfikatory meczów oraz zapewnia spójność kolumn w połączonych danych.</span>
+<span class="sd">    </span>
+<span class="sd">    Klasa zapewnia funkcjonalności:</span>
+<span class="sd">    - Sprawdzanie zgodności kolumn w plikach źródłowych</span>
+<span class="sd">    - Pobieranie i przetwarzanie plików sezonowych</span>
+<span class="sd">    - Ekstrahowanie identyfikatorów sezonów z nazw plików</span>
+<span class="sd">    - Łączenie danych z wielu sezonów w jeden spójny zbiór</span>
+<span class="sd">    - Przydzielanie unikalnych identyfikatorów meczom</span>
+<span class="sd">    - Zapisywanie wynikowych zbiorów danych</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;all_matches.csv&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje obiekt DataMerger, ustawia ścieżki oraz przygotowuje szablon kolumn.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_name (str, optional): Nazwa pliku wynikowego. Domyślnie &quot;all_matches.csv&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">help</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;all_season&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">folder_name</span> <span class="o">=</span> <span class="s2">&quot;merged_matches&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_name</span> <span class="o">=</span> <span class="n">file_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_name</span><span class="p">)</span>
+        
+        <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Katalog główny projektu: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project_root</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Docelowa ścieżka do katalogu z danymi: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Docelowa ścieżka do pliku wynikowego: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns_template_data</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DataMerger.columns_template_data">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.columns_template_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">columns_template_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zwraca listę nazw kolumn oczekiwanych w plikach z danymi meczowymi.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Lista nazw kolumn wymaganych w plikach z danymi meczowymi</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">COLUMN_MATCHES</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.create_all_season_folder">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.create_all_season_folder">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_all_season_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy folder wynikowy na dane połączone ze wszystkich sezonów, jeśli nie istnieje.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Ścieżka do utworzonego lub istniejącego katalogu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">get_results_directory</span><span class="p">(</span><span class="n">base_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">name_of_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.get_season_files">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.get_season_files">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_season_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;mecze_rywala_&quot;</span> <span class="ow">or</span> <span class="s2">&quot;rival_matches&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pobiera listę plików CSV z danymi meczów sezonowych z katalogu all_season.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            pattern (str, optional): Wzorzec nazw plików do wyszukania. </span>
+<span class="sd">                Domyślnie &quot;mecze_rywala_&quot; lub &quot;rival_matches&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: Lista pełnych ścieżek do znalezionych plików CSV</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">all_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">get_all_files_from_directory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">all_files</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie znaleziono plików pasujących do wzorca </span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">*.csv&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono pliki: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">all_files</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">all_files</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wyszukiwania plików: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.extract_season_id">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.extract_season_id">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_season_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wyciąga identyfikator sezonu z nazwy pliku i konwertuje na pełny format, np. &#39;2020-2021&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku, z którego ma zostać wyekstrahowany identyfikator sezonu</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Identyfikator sezonu w formacie &quot;YYYY-YYYY&quot; lub pusty ciąg znaków w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;_(\d</span><span class="si">{2}</span><span class="s1">)_(\d</span><span class="si">{2}</span><span class="s1">)\.&#39;</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">first_year</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">second_year</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">full_first_year</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;20</span><span class="si">{</span><span class="n">first_year</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">full_second_year</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;20</span><span class="si">{</span><span class="n">second_year</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">full_first_year</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">full_second_year</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">season_id</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">season_id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="n">first_year</span> <span class="o">=</span> <span class="n">season_id</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">second_year</span> <span class="o">=</span> <span class="n">season_id</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+                    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;20</span><span class="si">{</span><span class="n">first_year</span><span class="si">}</span><span class="s2">-20</span><span class="si">{</span><span class="n">second_year</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można dopasować wzorca sezonu w pliku </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można określić sezonu z pliku </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.check_columns_in_file">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.check_columns_in_file">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_columns_in_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="nb">set</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sprawdza, czy plik ma zgodne kolumny z szablonem.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku CSV, który ma zostać sprawdzony</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[bool, set, set]: Krotka zawierająca:</span>
+<span class="sd">                - bool: True jeśli plik ma wszystkie wymagane kolumny, False w przeciwnym przypadku</span>
+<span class="sd">                - set: Zbiór brakujących kolumn</span>
+<span class="sd">                - set: Zbiór nadmiarowych kolumn</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można wczytać pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="nb">set</span><span class="p">(),</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">file_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">template_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="n">template_columns</span> <span class="o">-</span> <span class="n">file_columns</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">file_columns</span> <span class="o">-</span> <span class="n">template_columns</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> NIE MA kolumn: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">extra</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> MA NADMIAROWE kolumny: </span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">extra</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.check_and_fix_columns">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.check_and_fix_columns">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_and_fix_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sprawdza i naprawia brakujące kolumny w pliku CSV.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku CSV do sprawdzenia i naprawy</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli plik został pomyślnie naprawiony lub nie wymaga naprawy,</span>
+<span class="sd">                  False w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można wczytać pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="n">ok</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_columns_in_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ok</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+            
+        <span class="k">if</span> <span class="s1">&#39;score&#39;</span> <span class="ow">in</span> <span class="n">missing</span> <span class="ow">and</span> <span class="s1">&#39;home_goals&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;away_goals&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_score_column</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">missing</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;score&#39;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="s1">&#39;result&#39;</span> <span class="ow">in</span> <span class="n">missing</span> <span class="ow">and</span> <span class="s1">&#39;home_goals&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;away_goals&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_result_column</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">missing</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;result&#39;</span><span class="p">)</span>
+            
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dodano pustą kolumnę &#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&#39; do pliku </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+        <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Naprawiono plik </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="si">}</span><span class="s2">, dodając brakujące kolumny&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się zapisać naprawionego pliku </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">success</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.check_all_column">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.check_all_column">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_all_column</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sprawdza i naprawia kolumny we wszystkich plikach CSV.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli wszystkie pliki mają zgodne kolumny (po naprawach),</span>
+<span class="sd">                  False jeśli któregoś pliku nie da się naprawić</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">season_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_season_files</span><span class="p">()</span>
+        <span class="n">all_ok</span> <span class="o">=</span> <span class="kc">True</span>
+        
+        <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">season_files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_and_fix_columns</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+                <span class="n">all_ok</span> <span class="o">=</span> <span class="kc">False</span>
+                
+        <span class="k">if</span> <span class="n">all_ok</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wszystkie pliki mają zgodne kolumny z szablonem (po naprawach).&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Niektórych plików nie udało się naprawić.&quot;</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">all_ok</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.prepare_season_dataframe">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.prepare_season_dataframe">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_season_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje plik sezonu, dodaje kolumnę &#39;season&#39; i przetwarza dane.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku CSV zawierającego dane jednego sezonu</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[pd.DataFrame]: DataFrame z przetworzonymi danymi sezonu lub None w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">season_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">season_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+            
+        <span class="k">if</span> <span class="s1">&#39;score&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">season_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">season_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_score_column</span><span class="p">(</span><span class="n">season_df</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="s1">&#39;result&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">season_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">season_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_result_column</span><span class="p">(</span><span class="n">season_df</span><span class="p">)</span>
+        
+        <span class="n">season_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_season_id</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">season_df</span><span class="p">[</span><span class="s2">&quot;season&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">season_id</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;result&quot;</span> <span class="ow">in</span> <span class="n">season_df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="n">season_df</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">season_df</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">result_temp</span> <span class="o">=</span> <span class="n">season_df</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+                <span class="n">season_df</span><span class="p">[</span><span class="s2">&quot;result&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result_temp</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;Int64&quot;</span><span class="p">)</span>
+        
+        <span class="n">season_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reorder_columns</span><span class="p">(</span><span class="n">season_df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">season_df</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.concat_all_seasons">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.concat_all_seasons">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">concat_all_seasons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dfs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Łączy listę DataFrame&#39;ów w jeden DataFrame.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            dfs (list): Lista DataFrame&#39;ów z danymi poszczególnych sezonów</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Połączony DataFrame zawierający dane ze wszystkich sezonów</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Łączenie danych z wszystkich sezonów...&quot;</span><span class="p">)</span>
+        <span class="n">combined_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dfs</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="n">ordered_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reorder_columns</span><span class="p">(</span><span class="n">combined_df</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">ordered_df</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.check_nan_value">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.check_nan_value">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_nan_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sprawdza i wypisuje, czy w DataFrame występują wartości NaN.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame do sprawdzenia</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nan_cols</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">nan_cols</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DataFrame zawiera NaN w kolumnach: </span><span class="si">{</span><span class="n">nan_cols</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Brak wartości NaN w DataFrame.&quot;</span><span class="p">)</span></div>
+
+            
+<div class="viewcode-block" id="DataMerger.add_score_column">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.add_score_column">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_score_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dodaje kolumnę &#39;score&#39; w formacie &#39;home_goals:away_goals&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame, do którego ma zostać dodana kolumna &#39;score&#39;</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z dodaną kolumną &#39;score&#39; (jeśli to możliwe)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+            
+        <span class="k">if</span> <span class="s1">&#39;home_goals&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;away_goals&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">home_goals_formatted</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            <span class="n">away_goals_formatted</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            
+            <span class="n">home_goals_formatted</span> <span class="o">=</span> <span class="n">home_goals_formatted</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;nan&#39;</span> <span class="ow">and</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+            <span class="n">away_goals_formatted</span> <span class="o">=</span> <span class="n">away_goals_formatted</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;nan&#39;</span> <span class="ow">and</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">else</span> <span class="n">x</span><span class="p">)</span>
+            
+            <span class="n">df</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">home_goals_formatted</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="n">away_goals_formatted</span>
+            
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;:&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;nan:nan&#39;</span><span class="p">),</span> <span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dodano kolumnę &#39;score&#39; na podstawie &#39;home_goals&#39; i &#39;away_goals&#39;&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można utworzyć kolumny &#39;score&#39; - brak kolumn &#39;home_goals&#39; lub &#39;away_goals&#39;&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.add_result_column">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.add_result_column">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_result_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dodaje kolumnę &#39;result&#39; z wartościami H, D, A zależnymi od wyniku meczu.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame, do którego ma zostać dodana kolumna &#39;result&#39;</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z dodaną kolumną &#39;result&#39; (jeśli to możliwe)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+            
+        <span class="k">if</span> <span class="s1">&#39;home_goals&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;away_goals&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">home_win_mask</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span>
+            <span class="n">draw_mask</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span>
+            <span class="n">away_win_mask</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span>
+            
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">home_win_mask</span><span class="p">,</span> <span class="s1">&#39;result&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;H&#39;</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">draw_mask</span><span class="p">,</span> <span class="s1">&#39;result&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;D&#39;</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">away_win_mask</span><span class="p">,</span> <span class="s1">&#39;result&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dodano kolumnę &#39;result&#39; na podstawie &#39;home_goals&#39; i &#39;away_goals&#39;&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można utworzyć kolumny &#39;result&#39; - brak kolumn &#39;home_goals&#39; lub &#39;away_goals&#39;&quot;</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">df</span></div>
+
+    
+<div class="viewcode-block" id="DataMerger.set_match_ids">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.set_match_ids">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_match_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ustawia identyfikatory meczów, gdzie mecze Realu Madryt otrzymują ID od 1 do N,</span>
+<span class="sd">        a pozostałe mecze od 1000 wzwyż.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[pd.DataFrame]: Zaktualizowany DataFrame z kolumną match_id lub None w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Brak danych. Najpierw wczytaj pliki z sezonami.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="n">real_madrid_id</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">real_madrid_name</span> <span class="o">=</span> <span class="s2">&quot;Real Madrid CF&quot;</span>
+            
+            <span class="n">is_real_madrid_match</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">real_madrid_id</span><span class="p">)</span> <span class="o">|</span> 
+                <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">real_madrid_id</span><span class="p">)</span>
+            <span class="p">)</span>
+            
+            <span class="n">real_madrid_matches_count</span> <span class="o">=</span> <span class="n">is_real_madrid_match</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="s2">&quot;match_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">is_real_madrid_match</span><span class="p">,</span> <span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">real_madrid_matches_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">is_real_madrid_match</span><span class="p">,</span> <span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">-</span> <span class="n">real_madrid_matches_count</span><span class="p">)</span>
+            
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;Int64&#39;</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="o">=</span> <span class="n">df</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ustawiono ID od 1 do </span><span class="si">{</span><span class="n">real_madrid_matches_count</span><span class="si">}</span><span class="s2"> dla </span><span class="si">{</span><span class="n">real_madrid_matches_count</span><span class="si">}</span><span class="s2"> meczów Realu Madryt.&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ustawiono ID od 1000 do </span><span class="si">{</span><span class="mi">1000</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">real_madrid_matches_count</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> dla </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">real_madrid_matches_count</span><span class="si">}</span><span class="s2"> pozostałych meczów.&quot;</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas ustawiania ID meczów: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.save_with_match_id_as_index">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.save_with_match_id_as_index">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_with_match_id_as_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zapisuje DataFrame do pliku CSV, ustawiając match_id jako indeks.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame do zapisania</span>
+<span class="sd">            path (str): Ścieżka do pliku, w którym dane mają zostać zapisane</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli operacja zapisu się powiodła, False w przeciwnym przypadku</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;match_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak kolumny match_id w DataFrame. Nie można ustawić jako indeks.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reorder_columns</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            
+            <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;match_id&quot;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_to_save</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zapisano plik </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_to_save</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszami i indeksem match_id.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas zapisywania pliku </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.process_and_save_data">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.process_and_save_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_and_save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wykonuje pełny workflow przetwarzania danych i zapisuje wyniki.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[bool, pd.DataFrame]: Krotka zawierająca:</span>
+<span class="sd">                - bool: True jeśli operacja się powiodła, False w przypadku błędu</span>
+<span class="sd">                - pd.DataFrame: DataFrame z wszystkimi meczami lub None w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_all_column</span><span class="p">()</span>
+    
+            <span class="n">season_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_season_files</span><span class="p">()</span>
+            <span class="n">processed_seasons</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">season_files</span><span class="p">:</span>
+                <span class="n">season_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_season_dataframe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">season_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">processed_seasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">season_df</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">processed_seasons</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się przetworzyć żadnych plików.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span>
+    
+            <span class="n">all_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">concat_all_seasons</span><span class="p">(</span><span class="n">processed_seasons</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="o">=</span> <span class="n">all_matches</span>
+    
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_nan_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">)</span>
+    
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_match_ids</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reorder_columns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">)</span>
+
+            <span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">ensure_directory_exists</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+            
+            <span class="n">all_matches_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;all_matches.csv&quot;</span><span class="p">)</span>
+            
+            <span class="n">status_all_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_with_match_id_as_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">,</span> <span class="n">all_matches_path</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">status_all_matches</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zapisano plik </span><span class="si">{</span><span class="n">all_matches_path</span><span class="si">}</span><span class="s2"> z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszami.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Wystąpiły problemy podczas zapisywania pliku.&quot;</span><span class="p">)</span>
+    
+            <span class="k">return</span> <span class="n">status_all_matches</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span>
+    
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas przetwarzania danych: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="DataMerger.load_all_seasons">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.load_all_seasons">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_all_seasons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje wszystkie dane sezonów niezbędne do dalszej analizy bez zapisywania do pliku CSV.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli operacja się powiodła, False w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wczytywanie danych wszystkich sezonów...&quot;</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_all_column</span><span class="p">()</span>
+            
+            <span class="n">season_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_season_files</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">season_files</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie znaleziono plików z danymi sezonów.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="n">processed_seasons</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">season_files</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytywanie pliku: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">season_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_season_dataframe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">season_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">processed_seasons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">season_df</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">processed_seasons</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się przetworzyć żadnych plików.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">concat_all_seasons</span><span class="p">(</span><span class="n">processed_seasons</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Połączono dane z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">processed_seasons</span><span class="p">)</span><span class="si">}</span><span class="s2"> sezonów, łącznie </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów.&quot;</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_nan_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_match_ids</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się ustawić ID meczów.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Pomyślnie wczytano wszystkie dane sezonów.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania danych sezonów: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="DataMerger.reorder_columns">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.merge_all_season_data.DataMerger.reorder_columns">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reorder_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reorganizuje kolumny DataFrame zgodnie z kolejnością zdefiniowaną w COLUMN_MATCHES.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame, którego kolumny mają zostać zreorganizowane</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z zreorganizowanymi kolumnami</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+            
+        <span class="n">template_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        
+        <span class="n">extra_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">]</span>
+        
+        <span class="n">new_order</span> <span class="o">=</span> <span class="n">template_cols</span> <span class="o">+</span> <span class="n">extra_cols</span>
+        
+        <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">new_order</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

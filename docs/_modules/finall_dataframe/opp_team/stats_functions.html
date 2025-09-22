@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.opp_team.stats_functions &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.opp_team.stats_functions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.opp_team.stats_functions</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Functions using existing modules for opponent statistics calculation.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<div class="viewcode-block" id="calculate_OP_G_SCO_L5">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_G_SCO_L5">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_G_SCO_L5</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią goli zdobytych przez przeciwnika w ostatnich 5 meczach.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        stats (StatsCalculator): Obiekt kalkulatora statystyk</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        team_id (int): ID drużyny przeciwnika</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnia goli zdobytych lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">_calculate_opponent_last_5</span><span class="p">(</span><span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;OP_G_SCO_L5&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_G_CON_L5">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_G_CON_L5">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_G_CON_L5</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią goli straconych przez przeciwnika w ostatnich 5 meczach.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        stats (StatsCalculator): Obiekt kalkulatora statystyk</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        team_id (int): ID drużyny przeciwnika</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnia goli straconych lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">_calculate_opponent_last_5</span><span class="p">(</span><span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;OP_G_CON_L5&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_GDIF_L5">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_GDIF_L5">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_GDIF_L5</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią różnicę bramek przeciwnika w ostatnich 5 meczach.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        stats (StatsCalculator): Obiekt kalkulatora statystyk</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        team_id (int): ID drużyny przeciwnika</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnia różnica bramek lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">_calculate_opponent_last_5</span><span class="p">(</span><span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;OP_GDIF_L5&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_OPP_POS_L5">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_OPP_POS_L5">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_OPP_POS_L5</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią pozycji rywali przeciwnika z ostatnich 5 meczów.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        stats (StatsCalculator): Obiekt kalkulatora statystyk</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        team_id (int): ID drużyny przeciwnika</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnia pozycja rywali lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">_calculate_opponent_last_5</span><span class="p">(</span><span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;OP_OPP_PPM_L5&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_PPM_L5">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_L5">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_PPM_L5</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią punktów na mecz przeciwnika z ostatnich 5 meczów.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        stats (StatsCalculator): Obiekt kalkulatora statystyk</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        team_id (int): ID drużyny przeciwnika</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnie punkty na mecz lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">_calculate_opponent_last_5</span><span class="p">(</span><span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;OP_PPM_L5&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_PPM_SEA">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_SEA">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_PPM_SEA</span><span class="p">(</span><span class="n">calc</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią punktów na mecz przeciwnika w sezonie.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        calc (SeasonCalculator): Obiekt kalkulatora sezonowego</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnie punkty na mecz w sezonie lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">calculate_team_points_per_match_season</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_GPM_1_9_PPR">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_GPM_1_9_PPR">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_GPM_1_9_PPR</span><span class="p">(</span><span class="n">calc</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią goli na mecz przeciwnika z drużynami &gt;1.9 PPM.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        calc (SeasonCalculator): Obiekt kalkulatora sezonowego</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnia goli przeciwko top drużynom lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">calculate_team_goals_against_top</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_PPM_1_9_PPR">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_1_9_PPR">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_PPM_1_9_PPR</span><span class="p">(</span><span class="n">calc</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią punktów na mecz przeciwnika z drużynami &gt;1.9 PPM.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        calc (SeasonCalculator): Obiekt kalkulatora sezonowego</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnie punkty przeciwko top drużynom lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">calculate_team_points_against_top</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_GPM_1_2__1_9_PPM">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_GPM_1_2__1_9_PPM">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_GPM_1_2__1_9_PPM</span><span class="p">(</span><span class="n">calc</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią goli na mecz przeciwnika z drużynami 1.2-1.9 PPM.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        calc (SeasonCalculator): Obiekt kalkulatora sezonowego</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnia goli przeciwko średnim drużynom lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">calculate_team_goals_against_mid</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_PPM_1_2__1_9_PPM">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_1_2__1_9_PPM">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_PPM_1_2__1_9_PPM</span><span class="p">(</span><span class="n">calc</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią punktów na mecz przeciwnika z drużynami 1.2-1.9 PPM.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        calc (SeasonCalculator): Obiekt kalkulatora sezonowego</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnie punkty przeciwko średnim drużynom lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">calculate_team_points_against_mid</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_GPM_0_1_2_PPM">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_GPM_0_1_2_PPM">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_GPM_0_1_2_PPM</span><span class="p">(</span><span class="n">calc</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią goli na mecz przeciwnika z drużynami &lt;1.2 PPM.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        calc (SeasonCalculator): Obiekt kalkulatora sezonowego</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnia goli przeciwko słabym drużynom lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">calculate_team_goals_against_low</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_PPM_0_1_2_PPM">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.stats_functions.calculate_OP_PPM_0_1_2_PPM">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_PPM_0_1_2_PPM</span><span class="p">(</span><span class="n">calc</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnią punktów na mecz przeciwnika z drużynami &lt;1.2 PPM.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        calc (SeasonCalculator): Obiekt kalkulatora sezonowego</span>
+<span class="sd">        match_date (str/datetime): Data meczu</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średnie punkty przeciwko słabym drużynom lub np.nan</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">calculate_team_points_against_low</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

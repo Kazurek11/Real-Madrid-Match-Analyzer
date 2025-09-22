@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>helpers.file_utils &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=2827c288"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">helpers.file_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu helpers.file_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="c1"># pamietaj zeby moduły importować lokalnie</span>
+<div class="viewcode-block" id="FileUtils">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FileUtils</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa zawierająca narzędzia do zarządzania plikami i operacji na plikach CSV.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="FileUtils.get_project_root">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.get_project_root">[dokumentacja]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_project_root</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Zwraca ścieżkę do głównego katalogu projektu.&quot;&quot;&quot;</span>
+        <span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+        <span class="c1"># Jeśli jesteśmy w src/help_script, musimy iść o poziom wyżej</span>
+        <span class="n">parent_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span>
+        <span class="c1"># Jeśli jesteśmy w src, musimy iść o poziom wyżej</span>
+        <span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">parent_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">project_root</span></div>
+
+
+<div class="viewcode-block" id="FileUtils.load_csv_safe">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.load_csv_safe">[dokumentacja]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">index_col</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                     <span class="n">sort_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                     <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Bezpieczne wczytanie pliku CSV z obsługą błędów.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku CSV</span>
+<span class="sd">            index_col (str lub int, optional): Nazwa kolumny lub indeks do ustawienia jako indeks</span>
+<span class="sd">            sort_by (str lub lista[str], optional): Kolumna(y) do sortowania danych</span>
+<span class="sd">            ascending (bool, optional): Kierunek sortowania, True=rosnąco, False=malejąco</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[pd.DataFrame]: DataFrame z wczytanymi danymi lub None w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik nie istnieje: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+                
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">index_col</span><span class="p">)</span>
+            
+            <span class="c1"># Sortowanie danych, jeśli podano kolumnę</span>
+            <span class="k">if</span> <span class="n">sort_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+                
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania pliku </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FileUtils.save_csv_safe">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.save_csv_safe">[dokumentacja]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_csv_safe</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> 
+                     <span class="n">index_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sort_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                     <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Bezpieczny zapis DataFrame do pliku CSV z możliwością sortowania i ustawienia indeksu.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame do zapisania</span>
+<span class="sd">            file_path (str): Ścieżka docelowa pliku CSV</span>
+<span class="sd">            index (bool, optional): Czy zapisać indeks jako kolumnę</span>
+<span class="sd">            index_label (str, optional): Etykieta dla kolumny indeksu</span>
+<span class="sd">            sort_by (str lub lista[str], optional): Kolumna(y) do sortowania danych przed zapisem</span>
+<span class="sd">            ascending (bool, optional): Kierunek sortowania, True=rosnąco, False=malejąco</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli zapis się powiódł, False w przeciwnym razie</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>        
+            <span class="c1"># Upewnij się, że katalog istnieje</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="c1"># Sortowanie danych, jeśli podano kolumnę</span>
+            <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">sort_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">df_to_save</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+            
+            <span class="c1"># Zapis pliku</span>
+            <span class="n">df_to_save</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">index_label</span><span class="o">=</span><span class="n">index_label</span><span class="p">)</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">debug</span>  
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zapisano plik </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> pomyślnie. Wierszy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df_to_save</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">debug</span>  
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas zapisywania pliku </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="FileUtils.ensure_directory_exists">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.ensure_directory_exists">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ensure_directory_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy katalog jeśli nie istnieje.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            directory_path (str): Ścieżka do katalogu</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli katalog istnieje lub został utworzony, False w przeciwnym razie</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span> 
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Katalog </span><span class="si">{</span><span class="n">directory_path</span><span class="si">}</span><span class="s2"> jest dostępny&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można utworzyć katalogu </span><span class="si">{</span><span class="n">directory_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="FileUtils.get_results_directory">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.get_results_directory">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_results_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name_of_directory</span> <span class="o">=</span> <span class="s2">&quot;result&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zwraca standardowy katalog dla wyników, tworząc go jeśli nie istnieje.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            base_path (str, optional): Ścieżka bazowa. Jeśli None, używa katalogu projektu.</span>
+<span class="sd">            name_of_directory (str, optional): Nazwa tworzonego folderu wynikowego.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Ścieżka do katalogu wyników</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">base_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">base_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">()</span>
+        
+        <span class="n">results_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">name_of_directory</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_directory_exists</span><span class="p">(</span><span class="n">results_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">results_dir</span></div>
+
+        
+<div class="viewcode-block" id="FileUtils.check_file_exists">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.check_file_exists">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_file_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sprawdza czy plik istnieje pod podaną ścieżką.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="FileUtils.get_all_files_from_directory">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.get_all_files_from_directory">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_files_from_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory_path</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory_path</span><span class="p">):</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Katalog </span><span class="si">{</span><span class="n">directory_path</span><span class="si">}</span><span class="s2"> nie istnieje&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[]</span>
+                
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">directory_path</span><span class="p">):</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">directory_path</span><span class="si">}</span><span class="s2"> nie jest katalogiem&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[]</span>
+                
+            <span class="n">files</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory_path</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">directory_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory_path</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+            <span class="p">]</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span> 
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="si">}</span><span class="s2"> plików w katalogu </span><span class="si">{</span><span class="n">directory_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">files</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas pobierania plików z katalogu </span><span class="si">{</span><span class="n">directory_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="FileUtils.load_excel_safe">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.load_excel_safe">[dokumentacja]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_excel_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Bezpieczne wczytanie pliku Excel z obsługą błędów.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku Excel</span>
+<span class="sd">            sheet_name (str lub int, optional): Nazwa lub indeks arkusza do wczytania. Domyślnie 0 (pierwszy arkusz).</span>
+<span class="sd">                </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Optional[pd.DataFrame]: DataFrame z danymi z arkusza lub None w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik nie istnieje: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">sheet_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania pliku Excel </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> (arkusz: </span><span class="si">{</span><span class="n">sheet_name</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FileUtils.save_excel_safe">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.save_excel_safe">[dokumentacja]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_excel_safe</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sheet_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Sheet1&#39;</span><span class="p">,</span> 
+                       <span class="n">index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">index_label</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                       <span class="n">sort_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                       <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Bezpieczny zapis DataFrame do pliku Excel z możliwością sortowania.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame do zapisania</span>
+<span class="sd">            file_path (str): Ścieżka docelowa pliku Excel</span>
+<span class="sd">            sheet_name (str): Nazwa arkusza</span>
+<span class="sd">            index (bool): Czy zapisać indeks jako kolumnę</span>
+<span class="sd">            index_label (str, optional): Etykieta dla kolumny indeksu</span>
+<span class="sd">            sort_by (str lub lista[str], optional): Kolumna(y) do sortowania danych przed zapisem</span>
+<span class="sd">            ascending (bool, optional): Kierunek sortowania, True=rosnąco, False=malejąco</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli zapis się powiódł, False w przeciwnym razie</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Upewnij się, że katalog istnieje</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="c1"># Sortowanie danych, jeśli podano kolumnę</span>
+            <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">sort_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">df_to_save</span> <span class="o">=</span> <span class="n">df_to_save</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+            
+            <span class="c1"># Zapis pliku Excel</span>
+            <span class="n">df_to_save</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">sheet_name</span><span class="p">,</span> 
+                              <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">index_label</span><span class="o">=</span><span class="n">index_label</span><span class="p">)</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zapisano plik Excel </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> pomyślnie.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas zapisywania pliku Excel </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="FileUtils.merge_csv_files">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.merge_csv_files">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">merge_csv_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
+                       <span class="n">index_col</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sort_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                       <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Łączy wiele plików CSV w jeden plik.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_paths (List[str]): Lista ścieżek do plików CSV</span>
+<span class="sd">            output_path (str): Ścieżka docelowa dla połączonego pliku</span>
+<span class="sd">            index_col (str, optional): Nazwa kolumny do ustawienia jako indeks</span>
+<span class="sd">            sort_by (str, optional): Kolumna do sortowania danych po połączeniu</span>
+<span class="sd">            ascending (bool, optional): Kierunek sortowania, True=rosnąco, False=malejąco</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli operacja się powiodła, False w przeciwnym razie</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dataframes</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">file_paths</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">dataframes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+                    <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+                    <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano plik </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy)&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+                    <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się wczytać pliku </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dataframes</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać żadnego pliku CSV&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="c1"># Łączenie wszystkich dataframes</span>
+            <span class="n">merged_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dataframes</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Połączono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dataframes</span><span class="p">)</span><span class="si">}</span><span class="s2"> plików, łącznie </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">merged_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+            
+            <span class="c1"># Ustawienie indeksu, jeśli podany</span>
+            <span class="k">if</span> <span class="n">index_col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">index_col</span> <span class="ow">in</span> <span class="n">merged_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">merged_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">index_col</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="c1"># Sortowanie, jeśli podane</span>
+            <span class="k">if</span> <span class="n">sort_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">merged_df</span> <span class="o">=</span> <span class="n">merged_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+            
+            <span class="c1"># Zapis połączonego pliku</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span>
+                <span class="n">df</span><span class="o">=</span><span class="n">merged_df</span><span class="p">,</span> 
+                <span class="n">file_path</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span> 
+                <span class="n">index</span><span class="o">=</span><span class="p">(</span><span class="n">index_col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas łączenia plików CSV: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="FileUtils.filter_and_save">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.filter_and_save">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_and_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
+                       <span class="n">filter_condition</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span> 
+                       <span class="n">sort_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                       <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje plik CSV, stosuje warunek filtrowania i zapisuje wynik.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku wejściowego</span>
+<span class="sd">            output_path (str): Ścieżka do pliku wynikowego</span>
+<span class="sd">            filter_condition (callable): Funkcja filtrująca przyjmująca DataFrame i zwracająca DataFrame</span>
+<span class="sd">            sort_by (str, optional): Kolumna do sortowania</span>
+<span class="sd">            ascending (bool, optional): Kierunek sortowania</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli operacja się powiodła, False w przeciwnym razie</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Wczytaj dane</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="c1"># Zastosuj filtr</span>
+            <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">filter_condition</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            
+            <span class="c1"># Sortuj i zapisz</span>
+            <span class="k">if</span> <span class="n">sort_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">filtered_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">sort_by</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span><span class="p">)</span>
+                
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">,</span> <span class="n">output_path</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas filtrowania i zapisywania danych: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="FileUtils.convert_excel_to_csv">
+<a class="viewcode-back" href="../../api/helpers.html#helpers.file_utils.FileUtils.convert_excel_to_csv">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_excel_to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">excel_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">csv_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
+                           <span class="n">sheet_name</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                           <span class="n">sort_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                           <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Konwertuje plik Excel do formatu CSV.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            excel_path (str): Ścieżka do pliku Excel</span>
+<span class="sd">            csv_path (str): Ścieżka docelowa pliku CSV</span>
+<span class="sd">            sheet_name (str lub int): Nazwa lub indeks arkusza do konwersji</span>
+<span class="sd">            index (bool): Czy zachować indeks w pliku CSV</span>
+<span class="sd">            sort_by (str, optional): Kolumna do sortowania przed zapisem</span>
+<span class="sd">            ascending (bool): Kierunek sortowania</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli konwersja się powiodła, False w przeciwnym razie</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Wczytaj plik Excel</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_excel_safe</span><span class="p">(</span><span class="n">excel_path</span><span class="p">,</span> <span class="n">sheet_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="c1"># Sortuj i zapisz jako CSV</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span>
+                <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> 
+                <span class="n">file_path</span><span class="o">=</span><span class="n">csv_path</span><span class="p">,</span> 
+                <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+                <span class="n">sort_by</span><span class="o">=</span><span class="n">sort_by</span><span class="p">,</span>
+                <span class="n">ascending</span><span class="o">=</span><span class="n">ascending</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>  
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas konwersji pliku Excel do CSV: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

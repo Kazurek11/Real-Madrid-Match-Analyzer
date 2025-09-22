@@ -1,0 +1,1594 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>data_processing package &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=2827c288"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../genindex.html" />
+    <link rel="search" title="Szukaj" href="../search.html" />
+    <link rel="next" title="finall_dataframe package" href="finall_dataframe.html" />
+    <link rel="prev" title="src" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">data_processing package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data_processing.complete_data">data_processing.complete_data module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.complete_data.complete_all_season_files"><code class="docutils literal notranslate"><span class="pre">complete_all_season_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.complete_data.complete_missing_columns"><code class="docutils literal notranslate"><span class="pre">complete_missing_columns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.complete_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.complete_data.merge_all_files_into_one"><code class="docutils literal notranslate"><span class="pre">merge_all_files_into_one()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.complete_data.reorder_and_save_files"><code class="docutils literal notranslate"><span class="pre">reorder_and_save_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.complete_data.verify_season_files_columns"><code class="docutils literal notranslate"><span class="pre">verify_season_files_columns()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data_processing.const_variable">data_processing.const_variable module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data_processing.data_processor">data_processing.data_processor module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.data_processor.DataProcessor"><code class="docutils literal notranslate"><span class="pre">DataProcessor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data_processing.get_RM_matches">data_processing.get_RM_matches module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.get_RM_matches.RealMadridMatches"><code class="docutils literal notranslate"><span class="pre">RealMadridMatches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.get_RM_matches.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data_processing.merge_all_season_data">data_processing.merge_all_season_data module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.merge_all_season_data.DataMerger"><code class="docutils literal notranslate"><span class="pre">DataMerger</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data_processing.table_actuall_PPM">data_processing.table_actuall_PPM module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator"><code class="docutils literal notranslate"><span class="pre">SeasonPPMCalculator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.table_actuall_PPM.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data_processing.table_league">data_processing.table_league module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.table_league.League_Table"><code class="docutils literal notranslate"><span class="pre">League_Table</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.table_league.check_project_structure"><code class="docutils literal notranslate"><span class="pre">check_project_structure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.table_league.create_team_stats_template"><code class="docutils literal notranslate"><span class="pre">create_team_stats_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data_processing.table_league.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data_processing">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.html">finall_dataframe package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html">helpers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RM.html">RM package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+      <li class="breadcrumb-item active">data_processing package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/data_processing.rst.txt" rel="nofollow"> Zobacz źródło strony</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="data-processing-package">
+<h1>data_processing package<a class="headerlink" href="#data-processing-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-data_processing.complete_data">
+<span id="data-processing-complete-data-module"></span><h2>data_processing.complete_data module<a class="headerlink" href="#module-data_processing.complete_data" title="Link to this heading"></a></h2>
+<p>Moduł do weryfikacji i uzupełniania danych w plikach sezonowych.</p>
+<p>Ten skrypt weryfikuje kompletność danych w plikach sezonowych,
+sprawdzając obecność wymaganych kolumn, ewentualnie je uzupełniając,
+a następnie łącząc wszystkie pliki w jeden główny zbiór danych.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.complete_data.complete_all_season_files">
+<span class="sig-prename descclassname"><span class="pre">data_processing.complete_data.</span></span><span class="sig-name descname"><span class="pre">complete_all_season_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/data_processing/complete_data.html#complete_all_season_files"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.complete_data.complete_all_season_files" title="Link to this definition"></a></dt>
+<dd><p>Uzupełnia brakujące kolumny we wszystkich plikach sezonowych.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Słownik statusów operacji dla każdego pliku</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.complete_data.complete_missing_columns">
+<span class="sig-prename descclassname"><span class="pre">data_processing.complete_data.</span></span><span class="sig-name descname"><span class="pre">complete_missing_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/complete_data.html#complete_missing_columns"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.complete_data.complete_missing_columns" title="Link to this definition"></a></dt>
+<dd><p>Uzupełnia brakujące kolumny w pliku CSV wykorzystując istniejące metody z innych modułów.</p>
+<p>Funkcja dodaje brakujące kolumny do pliku CSV przy użyciu metod z następujących modułów:
+- DataProcessor: do standardizacji nazw drużyn i dodania ID drużyn
+- DataMerger: do dodania kolumn score i result
+- DataProcessor: do usunięcia marży bukmacherskiej i dodania uczciwych kursów
+- SeasonPPMCalculator: do obliczenia PPM_H i PPM_A</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku CSV, który ma zostać uzupełniony</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.complete_data.main">
+<span class="sig-prename descclassname"><span class="pre">data_processing.complete_data.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/complete_data.html#main"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.complete_data.main" title="Link to this definition"></a></dt>
+<dd><p>Funkcja główna uruchamiająca weryfikację, uzupełnianie kolumn i łączenie plików sezonowych.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.complete_data.merge_all_files_into_one">
+<span class="sig-prename descclassname"><span class="pre">data_processing.complete_data.</span></span><span class="sig-name descname"><span class="pre">merge_all_files_into_one</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/data_processing/complete_data.html#merge_all_files_into_one"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.complete_data.merge_all_files_into_one" title="Link to this definition"></a></dt>
+<dd><p>Łączy wszystkie pliki sezonowe w jeden główny zbiór danych.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame ze wszystkimi połączonymi danymi lub None w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional[pd.DataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.complete_data.reorder_and_save_files">
+<span class="sig-prename descclassname"><span class="pre">data_processing.complete_data.</span></span><span class="sig-name descname"><span class="pre">reorder_and_save_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/data_processing/complete_data.html#reorder_and_save_files"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.complete_data.reorder_and_save_files" title="Link to this definition"></a></dt>
+<dd><p>Porządkuje kolumny we wszystkich plikach według wzoru COLUMN_MATCHES i zapisuje pliki.</p>
+<p>Funkcja:
+1. Ustawia kolumny w kolejności zgodnej z COLUMN_MATCHES
+2. Sprawdza czy nie ma wartości NaN w danych
+3. Zapisuje zaktualizowane pliki</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Słownik statusów operacji dla każdego pliku</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.complete_data.verify_season_files_columns">
+<span class="sig-prename descclassname"><span class="pre">data_processing.complete_data.</span></span><span class="sig-name descname"><span class="pre">verify_season_files_columns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/data_processing/complete_data.html#verify_season_files_columns"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.complete_data.verify_season_files_columns" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza czy wszystkie pliki sezonowe zawierają wymagane kolumny.</p>
+<p>Funkcja weryfikuje obecność podstawowych kolumn w każdym pliku sezonowym
+zdefiniowanym w SEASON_FILES.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Słownik wyników weryfikacji dla każdego pliku,
+zawierający informacje o obecności poszczególnych kolumn.</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, Dict[str, bool]]</p>
+</dd>
+</dl>
+<p class="rubric">Przykład</p>
+<dl class="simple">
+<dt>{</dt><dd><dl class="simple">
+<dt>«mecze_rywala_19_20.csv»: {</dt><dd><p>«match_date»: True,
+«home_team»: True,
+«away_team»: True,
+«home_goals»: False,
+…</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+</section>
+<section id="module-data_processing.const_variable">
+<span id="data-processing-const-variable-module"></span><h2>data_processing.const_variable module<a class="headerlink" href="#module-data_processing.const_variable" title="Link to this heading"></a></h2>
+<p>Moduł przechowujący stałe używane w różnych częściach systemu.</p>
+<p>Ten plik zawiera zdefiniowane stałe używane w wielu modułach, co pozwala
+na centralne zarządzanie wartościami i uniknięcie duplikacji kodu.</p>
+</section>
+<section id="module-data_processing.data_processor">
+<span id="data-processing-data-processor-module"></span><h2>data_processing.data_processor module<a class="headerlink" href="#module-data_processing.data_processor" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_processing.data_processor.</span></span><span class="sig-name descname"><span class="pre">DataProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa odpowiedzialna za przetwarzanie plików CSV z danymi meczowymi.</p>
+<p>Zapewnia funkcjonalności:
+- Standaryzację nazw drużyn według ustalonego słownika mapowań
+- Usuwanie marży bukmacherskiej z kursów poprzez obliczanie uczciwych kursów
+- Weryfikację zgodności identyfikatorów drużyn z ich nazwami
+- Dodawanie identyfikatorów drużyn do DataFrame na podstawie ich nazw
+- Zaokrąglanie kolumn numerycznych do określonej liczby miejsc po przecinku</p>
+<p>Klasa wykorzystuje słowniki mapowania nazw drużyn oraz ich identyfikatorów,
+co pozwala na spójną reprezentację danych we wszystkich plikach projektu.
+Logowanie operacji jest realizowane przy użyciu modułu logger.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor.add_team_ids_to_dataframe">
+<span class="sig-name descname"><span class="pre">add_team_ids_to_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor.add_team_ids_to_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor.add_team_ids_to_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Dodaje identyfikatory drużyn do DataFrame na podstawie ich nazw.</p>
+<p>Metoda analizuje DataFrame w poszukiwaniu kolumn z nazwami drużyn (home_team, away_team)
+i dodaje odpowiadające im identyfikatory (home_team_id, away_team_id) poprzez
+odwołanie do pliku mapowania drużyn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame zawierający co najmniej kolumny home_team i away_team
+z nazwami drużyn</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Zaktualizowany DataFrame z dodanymi lub uzupełnionymi kolumnami</dt><dd><p>home_team_id i away_team_id</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Jeśli kolumny ID już istnieją, są aktualizowane tylko brakujące wartości</p></li>
+<li><p>Metoda nie modyfikuje wartości ID, które już istnieją w DataFrame</p></li>
+<li><p>W przypadku braku dopasowania nazwy drużyny do ID, odpowiednie pole pozostaje NaN</p></li>
+<li><p>Metoda nie modyfikuje oryginalnego DataFrame, zwraca jego zaktualizowaną kopię</p></li>
+<li><p>Dla dużej liczby wierszy, metoda może być wolna ze względu na wczytywanie
+pliku mapowania przy każdym odwołaniu</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor.for_name_return_id">
+<span class="sig-name descname"><span class="pre">for_name_return_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name_of_team</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor.for_name_return_id"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor.for_name_return_id" title="Link to this definition"></a></dt>
+<dd><p>Zwraca identyfikator drużyny na podstawie jej nazwy.</p>
+<p>Metoda wczytuje plik mapowania drużyn i wyszukuje identyfikator odpowiadający
+podanej nazwie drużyny. W przeciwieństwie do metody load_team_id_template(),
+ta metoda jest przeznaczona do jednorazowych odwołań do identyfikatorów drużyn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name_of_team</strong> (<em>str</em>) – Nazwa drużyny, dla której ma zostać odnaleziony identyfikator</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Identyfikator drużyny (team_id) jeśli znaleziono w pliku mapowania,</dt><dd><p>None jeśli nie znaleziono dopasowania lub wystąpił błąd</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int lub None</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Metoda wczytuje plik mapowania przy każdym wywołaniu, co może być nieefektywne
+przy wielokrotnych odwołaniach - w takim przypadku lepiej użyć load_team_id_template()</p></li>
+<li><p>Lokalizacja pliku: „[project_root]/Data/Mecze/id_nazwa/rywale.csv”</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor.load_team_id_template">
+<span class="sig-name descname"><span class="pre">load_team_id_template</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor.load_team_id_template"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor.load_team_id_template" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje mapowania identyfikatorów drużyn z pliku szablonowego.</p>
+<p>Metoda wczytuje plik «rywale.csv» zawierający mapowania ID drużyn do ich nazw
+i przygotowuje dwukierunkowe słowniki mapowań, które będą używane do weryfikacji
+spójności identyfikatorów z nazwami w plikach danych.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>True jeśli mapowania zostały pomyślnie wczytane,</dt><dd><p>False w przypadku błędu lub braku wymaganych kolumn</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Lokalizacja pliku szablonu: „[project_root]/Data/Mecze/id_nazwa/rywale.csv”</p></li>
+<li><p>Wymagane kolumny: «team_id» i «team_name» (lub ich alternatywy)</p></li>
+<li><p>W przypadku braku pliku lub problemów z wczytaniem, informacje są zapisywane w logach</p></li>
+<li><p>Obsługiwane są alternatywne nazwy kolumn: «id_rywala» zamiast «team_id»
+oraz «nazwa_rywala» zamiast «team_name»</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor.process_all_files">
+<span class="sig-name descname"><span class="pre">process_all_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor.process_all_files"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor.process_all_files" title="Link to this definition"></a></dt>
+<dd><p>Przetwarza wszystkie pliki CSV w katalogu głównym i jego podkatalogach.</p>
+<p>Metoda rekurencyjnie przeszukuje wszystkie katalogi w poszukiwaniu plików CSV
+i wykonuje dla każdego z nich operacje standaryzacji nazw drużyn oraz usuwania
+marży bukmacherskiej z kursów.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>(processed_files, names_updated, odds_updated)</dt><dd><ul class="simple">
+<li><p>processed_files (int): Liczba przetworzonych plików CSV</p></li>
+<li><p>names_updated (int): Liczba plików, w których zaktualizowano nazwy drużyn</p></li>
+<li><p>odds_updated (int): Liczba plików, w których dodano kursy bez marży</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Operacje są wykonywane sekwencyjnie dla każdego pliku</p></li>
+<li><p>Szczegółowe informacje o przetwarzaniu są zapisywane w logach</p></li>
+<li><p>Metoda nie przerywa przetwarzania w przypadku błędów z pojedynczym plikiem</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor.remove_bookmaker_margin">
+<span class="sig-name descname"><span class="pre">remove_bookmaker_margin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor.remove_bookmaker_margin"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor.remove_bookmaker_margin" title="Link to this definition"></a></dt>
+<dd><p>Usuwa marżę z kursów bukmacherskich w pliku CSV i dodaje nowe kolumny z „uczciwymi” kursami.</p>
+<p>Metoda oblicza tzw. „uczciwe kursy” (fair odds) poprzez usunięcie marży bukmacherskiej
+z oryginalnych kursów. Kursy bez marży są zaokrąglane do 2 miejsc po przecinku i zapisywane
+jako nowe kolumny z przyrostkiem „_fair”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku CSV zawierającego kolumny z kursami bukmacherskimi</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>True jeśli plik został pomyślnie zmodyfikowany, False w przypadku błędu</dt><dd><p>lub gdy plik nie zawiera wymaganych kolumn kursów</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wymagane kolumny: „home_odds”, „draw_odds”, „away_odds”</p></li>
+<li><p>Dodawane kolumny: „home_odds_fair”, „draw_odds_fair”, „away_odds_fair”</p></li>
+<li><p>Algorytm usuwania marży zakłada, że marża jest równomiernie rozłożona na wszystkie kursy</p></li>
+<li><p>Zmodyfikowany plik jest zapisywany pod tą samą ścieżką, nadpisując oryginalny plik</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor.round_numeric_columns">
+<span class="sig-name descname"><span class="pre">round_numeric_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor.round_numeric_columns"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor.round_numeric_columns" title="Link to this definition"></a></dt>
+<dd><p>Zaokrągla wszystkie kolumny numeryczne w DataFrame do określonej liczby miejsc po przecinku.</p>
+<p>Metoda identyfikuje wszystkie kolumny numeryczne w DataFrame i zaokrągla ich wartości
+do żądanej precyzji. Jest przydatna do ujednolicenia prezentacji danych liczbowych
+oraz zmniejszenia rozmiaru plików.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame zawierający dane do zaokrąglenia</p></li>
+<li><p><strong>decimals</strong> (<em>int</em><em>, </em><em>optional</em>) – Liczba miejsc po przecinku do zaokrąglenia (domyślnie: 3)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Nowy DataFrame z zaokrąglonymi wartościami w kolumnach numerycznych</dt><dd><p>lub oryginalny DataFrame, jeśli był pusty lub nie zawierał kolumn numerycznych</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Zaokrąglane są tylko kolumny typu float64 i int64</p></li>
+<li><p>Metoda nie modyfikuje oryginalnego DataFrame, zwraca jego zaktualizowaną kopię</p></li>
+<li><p>Dla kolumn typu int64, zaokrąglenie nie zmienia wartości, ale zapewnia spójność
+w przypadku konwersji typów danych</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor.standardize_team_names">
+<span class="sig-name descname"><span class="pre">standardize_team_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor.standardize_team_names"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor.standardize_team_names" title="Link to this definition"></a></dt>
+<dd><p>Standaryzuje nazwy drużyn w DataFrame lub pliku CSV.</p>
+<p>Metoda wyszukuje kolumny zawierające nazwy drużyn i zastępuje różne warianty nazw
+ich standardowymi odpowiednikami zgodnie ze słownikiem mapowań. Zapewnia to spójność
+nazewnictwa we wszystkich plikach projektu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pd.DataFrame</em><em>, </em><em>optional</em>) – DataFrame z danymi do standaryzacji.
+Jeśli podany, zmiany są dokonywane na kopii, a oryginał pozostaje niezmieniony.</p></li>
+<li><p><strong>file_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Ścieżka do pliku CSV, który ma zostać przetworzony.
+Jeśli podana, plik zostanie wczytany, przetworzony i nadpisany zmodyfikowaną zawartością.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>(updated, df) gdzie:</dt><dd><ul class="simple">
+<li><p>updated (bool): True jeśli nazwy drużyn zostały zmienione, False w przeciwnym przypadku</p></li>
+<li><p>df (pd.DataFrame): Zaktualizowany DataFrame lub None w przypadku błędu</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Wyrzuca<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – W przypadku błędów podczas przetwarzania, szczegóły są zapisywane w logach.</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Jeśli podano zarówno data jak i file_path, priorytet ma parametr data</p></li>
+<li><p>Zmiany zostają zapisane do pliku tylko jeśli wykryto faktyczne różnice w nazwach</p></li>
+<li><p>Operacja nie zmienia innych kolumn ani struktury danych</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor.validate_all_team_ids">
+<span class="sig-name descname"><span class="pre">validate_all_team_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor.validate_all_team_ids"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor.validate_all_team_ids" title="Link to this definition"></a></dt>
+<dd><p>Weryfikuje spójność identyfikatorów drużyn z ich nazwami we wszystkich plikach CSV.</p>
+<p>Metoda rekurencyjnie przeszukuje wszystkie katalogi w poszukiwaniu plików CSV
+i weryfikuje spójność identyfikatorów drużyn z ich nazwami. Gromadzi statystyki
+dotyczące liczby przetworzonych plików, plików z błędami i całkowitej liczby błędów.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>True jeśli nie znaleziono błędów we wszystkich plikach,</dt><dd><p>False jeśli wykryto błędy lub wystąpił problem podczas weryfikacji</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Metoda automatycznie wczytuje szablon mapowań ID &lt;-&gt; nazwa</p></li>
+<li><p>Szczegółowe informacje o weryfikacji i wykrytych błędach są zapisywane w logach</p></li>
+<li><p>Błędy są raportowane z numerem wiersza w pliku (numeracja od 1, z uwzględnieniem nagłówka)</p></li>
+<li><p>Metoda aktualizuje atrybuty klasy: files_processed, files_with_errors i total_errors</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.data_processor.DataProcessor.validate_team_ids_in_file">
+<span class="sig-name descname"><span class="pre">validate_team_ids_in_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../_modules/data_processing/data_processor.html#DataProcessor.validate_team_ids_in_file"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.data_processor.DataProcessor.validate_team_ids_in_file" title="Link to this definition"></a></dt>
+<dd><p>Weryfikuje spójność identyfikatorów drużyn z ich nazwami w pliku CSV.</p>
+<p>Metoda sprawdza, czy identyfikatory drużyn gospodarzy i gości odpowiadają
+ich nazwom zgodnie z wczytanym szablonem mapowań. Wykrywa niezgodności
+takie jak nieprawidłowe ID dla danej nazwy lub nieprawidłowa nazwa dla danego ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku CSV, który ma zostać zweryfikowany</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Lista wykrytych błędów w formacie [(wiersz, opis_błędu), …],</dt><dd><p>gdzie wiersz to indeks DataFrame (wiersz - 1 w pliku CSV).
+Pusta lista oznacza brak błędów.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Metoda wymaga wcześniejszego wywołania load_team_id_template()</p></li>
+<li><p>Weryfikowane są pary kolumn: home_team/home_team_id oraz away_team/away_team_id</p></li>
+<li><p>Plik CSV musi zawierać co najmniej jedną z tych par kolumn</p></li>
+<li><p>Wartości NaN są ignorowane podczas weryfikacji</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-data_processing.get_RM_matches">
+<span id="data-processing-get-rm-matches-module"></span><h2>data_processing.get_RM_matches module<a class="headerlink" href="#module-data_processing.get_RM_matches" title="Link to this heading"></a></h2>
+<p>Moduł do wyodrębniania i analizy meczów Realu Madryt.</p>
+<p>Ten moduł pozwala na wyodrębnienie meczów Realu Madryt z połączonych danych sezonowych,
+dodanie specyficznych kolumn informacyjnych oraz analizę wyników drużyny.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_processing.get_RM_matches.RealMadridMatches">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_processing.get_RM_matches.</span></span><span class="sig-name descname"><span class="pre">RealMadridMatches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_matches_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/get_RM_matches.html#RealMadridMatches"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.get_RM_matches.RealMadridMatches" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa odpowiedzialna za wyodrębnianie i analizę meczów Realu Madryt.</p>
+<p>Notes:
+- Wczytanie połączonych danych sezonowych
+- Wyodrębnienie meczów Realu Madryt
+- Dodanie specyficznych kolumn dla meczów RM (is_home, real_result)
+- Zapis wyodrębnionych danych do pliku
+- Analizę podstawowych statystyk zespołu</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.get_RM_matches.RealMadridMatches.analyze_rm_stats">
+<span class="sig-name descname"><span class="pre">analyze_rm_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/get_RM_matches.html#RealMadridMatches.analyze_rm_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.get_RM_matches.RealMadridMatches.analyze_rm_stats" title="Link to this definition"></a></dt>
+<dd><p>Analizuje podstawowe statystyki Realu Madryt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Słownik z obliczonymi statystykami</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.get_RM_matches.RealMadridMatches.extract_real_madrid_matches">
+<span class="sig-name descname"><span class="pre">extract_real_madrid_matches</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/get_RM_matches.html#RealMadridMatches.extract_real_madrid_matches"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.get_RM_matches.RealMadridMatches.extract_real_madrid_matches" title="Link to this definition"></a></dt>
+<dd><p>Wyodrębnia mecze Realu Madryt i dodaje dodatkowe kolumny.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.get_RM_matches.RealMadridMatches.get_real_madrid_matches">
+<span class="sig-name descname"><span class="pre">get_real_madrid_matches</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/get_RM_matches.html#RealMadridMatches.get_real_madrid_matches"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.get_RM_matches.RealMadridMatches.get_real_madrid_matches" title="Link to this definition"></a></dt>
+<dd><p>Zwraca DataFrame z przetworzonymi meczami Realu Madryt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame z meczami Realu Madryt lub None w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.get_RM_matches.RealMadridMatches.load_from_merged_file">
+<span class="sig-name descname"><span class="pre">load_from_merged_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/get_RM_matches.html#RealMadridMatches.load_from_merged_file"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.get_RM_matches.RealMadridMatches.load_from_merged_file" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje dane wszystkich meczów z pliku połączonych sezonów.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.get_RM_matches.RealMadridMatches.save_rm_matches">
+<span class="sig-name descname"><span class="pre">save_rm_matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/get_RM_matches.html#RealMadridMatches.save_rm_matches"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.get_RM_matches.RealMadridMatches.save_rm_matches" title="Link to this definition"></a></dt>
+<dd><p>Zapisuje wyodrębnione mecze Realu Madryt do pliku CSV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Ścieżka do pliku wynikowego.
+Jeśli None, używana jest domyślna ścieżka.</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli operacja zapisu się powiodła, False w przeciwnym przypadku</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.get_RM_matches.main">
+<span class="sig-prename descclassname"><span class="pre">data_processing.get_RM_matches.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/get_RM_matches.html#main"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.get_RM_matches.main" title="Link to this definition"></a></dt>
+<dd><p>Główna funkcja modułu, wykonuje wyodrębnienie i analizę meczów Realu Madryt.</p>
+</dd></dl>
+
+</section>
+<section id="module-data_processing.merge_all_season_data">
+<span id="data-processing-merge-all-season-data-module"></span><h2>data_processing.merge_all_season_data module<a class="headerlink" href="#module-data_processing.merge_all_season_data" title="Link to this heading"></a></h2>
+<p>Moduł agregacji danych meczów LaLiga</p>
+<p>Ten skrypt łączy dane meczowe z wielu sezonów LaLiga w jeden zbiór danych.
+Zapewnia spójność kolumn i formatów danych w połączonym zbiorze.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_processing.merge_all_season_data.</span></span><span class="sig-name descname"><span class="pre">DataMerger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'all_matches.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa odpowiedzialna za łączenie i przetwarzanie danych meczów z różnych sezonów LaLiga.</p>
+<p>Umożliwia agregację danych meczowych z wielu plików źródłowych, wykonuje standaryzację formatu,
+dodaje identyfikatory meczów oraz zapewnia spójność kolumn w połączonych danych.</p>
+<p>Klasa zapewnia funkcjonalności:
+- Sprawdzanie zgodności kolumn w plikach źródłowych
+- Pobieranie i przetwarzanie plików sezonowych
+- Ekstrahowanie identyfikatorów sezonów z nazw plików
+- Łączenie danych z wielu sezonów w jeden spójny zbiór
+- Przydzielanie unikalnych identyfikatorów meczom
+- Zapisywanie wynikowych zbiorów danych</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.add_result_column">
+<span class="sig-name descname"><span class="pre">add_result_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.add_result_column"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.add_result_column" title="Link to this definition"></a></dt>
+<dd><p>Dodaje kolumnę «result» z wartościami H, D, A zależnymi od wyniku meczu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame, do którego ma zostać dodana kolumna «result»</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z dodaną kolumną «result» (jeśli to możliwe)</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.add_score_column">
+<span class="sig-name descname"><span class="pre">add_score_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.add_score_column"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.add_score_column" title="Link to this definition"></a></dt>
+<dd><p>Dodaje kolumnę «score» w formacie «home_goals:away_goals».</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame, do którego ma zostać dodana kolumna «score»</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z dodaną kolumną «score» (jeśli to możliwe)</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.check_all_column">
+<span class="sig-name descname"><span class="pre">check_all_column</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.check_all_column"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.check_all_column" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza i naprawia kolumny we wszystkich plikach CSV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>True jeśli wszystkie pliki mają zgodne kolumny (po naprawach),</dt><dd><p>False jeśli któregoś pliku nie da się naprawić</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.check_and_fix_columns">
+<span class="sig-name descname"><span class="pre">check_and_fix_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.check_and_fix_columns"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.check_and_fix_columns" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza i naprawia brakujące kolumny w pliku CSV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku CSV do sprawdzenia i naprawy</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>True jeśli plik został pomyślnie naprawiony lub nie wymaga naprawy,</dt><dd><p>False w przypadku błędu</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.check_columns_in_file">
+<span class="sig-name descname"><span class="pre">check_columns_in_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.check_columns_in_file"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.check_columns_in_file" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza, czy plik ma zgodne kolumny z szablonem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku CSV, który ma zostać sprawdzony</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Krotka zawierająca:</dt><dd><ul class="simple">
+<li><p>bool: True jeśli plik ma wszystkie wymagane kolumny, False w przeciwnym przypadku</p></li>
+<li><p>set: Zbiór brakujących kolumn</p></li>
+<li><p>set: Zbiór nadmiarowych kolumn</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[bool, set, set]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.check_nan_value">
+<span class="sig-name descname"><span class="pre">check_nan_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.check_nan_value"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.check_nan_value" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza i wypisuje, czy w DataFrame występują wartości NaN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do sprawdzenia</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.columns_template_data">
+<span class="sig-name descname"><span class="pre">columns_template_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.columns_template_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.columns_template_data" title="Link to this definition"></a></dt>
+<dd><p>Zwraca listę nazw kolumn oczekiwanych w plikach z danymi meczowymi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Lista nazw kolumn wymaganych w plikach z danymi meczowymi</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.concat_all_seasons">
+<span class="sig-name descname"><span class="pre">concat_all_seasons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.concat_all_seasons"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.concat_all_seasons" title="Link to this definition"></a></dt>
+<dd><p>Łączy listę DataFrame’ów w jeden DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dfs</strong> (<em>list</em>) – Lista DataFrame’ów z danymi poszczególnych sezonów</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Połączony DataFrame zawierający dane ze wszystkich sezonów</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.create_all_season_folder">
+<span class="sig-name descname"><span class="pre">create_all_season_folder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.create_all_season_folder"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.create_all_season_folder" title="Link to this definition"></a></dt>
+<dd><p>Tworzy folder wynikowy na dane połączone ze wszystkich sezonów, jeśli nie istnieje.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Ścieżka do utworzonego lub istniejącego katalogu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.extract_season_id">
+<span class="sig-name descname"><span class="pre">extract_season_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.extract_season_id"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.extract_season_id" title="Link to this definition"></a></dt>
+<dd><p>Wyciąga identyfikator sezonu z nazwy pliku i konwertuje na pełny format, np. «2020-2021».</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku, z którego ma zostać wyekstrahowany identyfikator sezonu</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identyfikator sezonu w formacie „YYYY-YYYY” lub pusty ciąg znaków w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.get_season_files">
+<span class="sig-name descname"><span class="pre">get_season_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'mecze_rywala_'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.get_season_files"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.get_season_files" title="Link to this definition"></a></dt>
+<dd><p>Pobiera listę plików CSV z danymi meczów sezonowych z katalogu all_season.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pattern</strong> (<em>str</em><em>, </em><em>optional</em>) – Wzorzec nazw plików do wyszukania.
+Domyślnie „<a href="#id1"><span class="problematic" id="id2">mecze_rywala_</span></a>” lub „rival_matches”.</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Lista pełnych ścieżek do znalezionych plików CSV</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.load_all_seasons">
+<span class="sig-name descname"><span class="pre">load_all_seasons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.load_all_seasons"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.load_all_seasons" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje wszystkie dane sezonów niezbędne do dalszej analizy bez zapisywania do pliku CSV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.prepare_season_dataframe">
+<span class="sig-name descname"><span class="pre">prepare_season_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.prepare_season_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.prepare_season_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje plik sezonu, dodaje kolumnę «season» i przetwarza dane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku CSV zawierającego dane jednego sezonu</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z przetworzonymi danymi sezonu lub None w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[pd.DataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.process_and_save_data">
+<span class="sig-name descname"><span class="pre">process_and_save_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.process_and_save_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.process_and_save_data" title="Link to this definition"></a></dt>
+<dd><p>Wykonuje pełny workflow przetwarzania danych i zapisuje wyniki.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Krotka zawierająca:</dt><dd><ul class="simple">
+<li><p>bool: True jeśli operacja się powiodła, False w przypadku błędu</p></li>
+<li><p>pd.DataFrame: DataFrame z wszystkimi meczami lub None w przypadku błędu</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[bool, pd.DataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.reorder_columns">
+<span class="sig-name descname"><span class="pre">reorder_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.reorder_columns"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.reorder_columns" title="Link to this definition"></a></dt>
+<dd><p>Reorganizuje kolumny DataFrame zgodnie z kolejnością zdefiniowaną w COLUMN_MATCHES.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame, którego kolumny mają zostać zreorganizowane</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z zreorganizowanymi kolumnami</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.save_with_match_id_as_index">
+<span class="sig-name descname"><span class="pre">save_with_match_id_as_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.save_with_match_id_as_index"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.save_with_match_id_as_index" title="Link to this definition"></a></dt>
+<dd><p>Zapisuje DataFrame do pliku CSV, ustawiając match_id jako indeks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do zapisania</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – Ścieżka do pliku, w którym dane mają zostać zapisane</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli operacja zapisu się powiodła, False w przeciwnym przypadku</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.merge_all_season_data.DataMerger.set_match_ids">
+<span class="sig-name descname"><span class="pre">set_match_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/data_processing/merge_all_season_data.html#DataMerger.set_match_ids"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.merge_all_season_data.DataMerger.set_match_ids" title="Link to this definition"></a></dt>
+<dd><p>Ustawia identyfikatory meczów, gdzie mecze Realu Madryt otrzymują ID od 1 do N,
+a pozostałe mecze od 1000 wzwyż.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Zaktualizowany DataFrame z kolumną match_id lub None w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional[pd.DataFrame]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-data_processing.table_actuall_PPM">
+<span id="data-processing-table-actuall-ppm-module"></span><h2>data_processing.table_actuall_PPM module<a class="headerlink" href="#module-data_processing.table_actuall_PPM" title="Link to this heading"></a></h2>
+<p>Moduł obliczania dynamicznych statystyk PPM dla plików sezonowych LaLiga.</p>
+<p>Ten skrypt dodaje do każdego pliku sezonowego kolumny PPM_H oraz PPM_A,
+czyli punkty na mecz gospodarza i gościa liczone DYNAMICZNIE przed każdym meczem.
+PPM jest obliczane na podstawie dotychczasowych wyników drużyn w bieżącym sezonie.</p>
+<p>Moduł umożliwia:
+- Przetwarzanie wielu plików sezonowych jednocześnie
+- Obliczanie aktualnych punktów na mecz dla każdej drużyny
+- Aktualizację plików CSV z danymi sezonowymi</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_processing.table_actuall_PPM.</span></span><span class="sig-name descname"><span class="pre">SeasonPPMCalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_actuall_PPM.html#SeasonPPMCalculator"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa odpowiedzialna za obliczanie punktów na mecz (PPM) dla gospodarza i gościa w plikach sezonowych.</p>
+<p>Klasa umożliwia obliczenie i dodanie do pliku sezonowego dwóch kolumn:
+- PPM_H: punkty na mecz zespołu gospodarzy przed danym meczem
+- PPM_A: punkty na mecz zespołu gości przed danym meczem</p>
+<p>PPM jest obliczane jako stosunek dotychczas zdobytych punktów do liczby rozegranych meczów.
+Dla każdego meczu w pliku, PPM jest obliczane na podstawie wyników wcześniejszych meczów,
+co daje dynamiczny obraz formy drużyn tuż przed każdym meczem.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.file_path">
+<span class="sig-name descname"><span class="pre">file_path</span></span><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.file_path" title="Link to this definition"></a></dt>
+<dd><p>Ścieżka do pliku CSV z danymi sezonu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.data_frame">
+<span class="sig-name descname"><span class="pre">data_frame</span></span><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.data_frame" title="Link to this definition"></a></dt>
+<dd><p>DataFrame z danymi sezonu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.team_points">
+<span class="sig-name descname"><span class="pre">team_points</span></span><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.team_points" title="Link to this definition"></a></dt>
+<dd><p>Słownik z punktami zdobytymi przez każdą drużynę</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.team_matches_played">
+<span class="sig-name descname"><span class="pre">team_matches_played</span></span><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.team_matches_played" title="Link to this definition"></a></dt>
+<dd><p>Słownik z liczbą meczów rozegranych przez każdą drużynę</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.ppm_home_team">
+<span class="sig-name descname"><span class="pre">ppm_home_team</span></span><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.ppm_home_team" title="Link to this definition"></a></dt>
+<dd><p>Lista z PPM gospodarza dla każdego meczu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.ppm_away_team">
+<span class="sig-name descname"><span class="pre">ppm_away_team</span></span><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.ppm_away_team" title="Link to this definition"></a></dt>
+<dd><p>Lista z PPM gościa dla każdego meczu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.file_utils">
+<span class="sig-name descname"><span class="pre">file_utils</span></span><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.file_utils" title="Link to this definition"></a></dt>
+<dd><p>Instancja klasy pomocniczej do operacji na plikach</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="helpers.html#helpers.file_utils.FileUtils" title="helpers.file_utils.FileUtils">FileUtils</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.calculate_ppm">
+<span class="sig-name descname"><span class="pre">calculate_ppm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/data_processing/table_actuall_PPM.html#SeasonPPMCalculator.calculate_ppm"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.calculate_ppm" title="Link to this definition"></a></dt>
+<dd><p>Oblicza punkty na mecz (PPM) dla gospodarza i gościa w każdym meczu.</p>
+<p>Metoda sortuje mecze według kolejki (i ewentualnie daty, jeśli jest dostępna),
+a następnie iteruje po meczach w kolejności chronologicznej. Dla każdego meczu:
+1. Oblicza PPM dla gospodarza i gościa na podstawie dotychczasowych wyników
+2. Aktualizuje liczbę rozegranych meczów przez obie drużyny
+3. Aktualizuje liczbę punktów zdobytych przez obie drużyny (3 za zwycięstwo, 1 za remis)</p>
+<p>Po zakończeniu iteracji, metoda dodaje obliczone wartości PPM jako nowe kolumny
+«PPM_H» i «PPM_A» do DataFrame data_frame.</p>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Dla drużyny, która nie rozegrała jeszcze żadnego meczu, PPM wynosi 0.0</p></li>
+<li><p>PPM jest zaokrąglane do 3 miejsc po przecinku</p></li>
+<li><p>Metoda pomija aktualizację punktów dla meczów bez znanego wyniku (NaN)</p></li>
+<li><p>Drużyny są identyfikowane za pomocą ich identyfikatorów (home_team_id, away_team_id)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/table_actuall_PPM.html#SeasonPPMCalculator.load_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.load_data" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje dane z pliku CSV i weryfikuje obecność wymaganych kolumn.</p>
+<p>Metoda najpierw przygotowuje dane (standaryzacja nazw, dodanie ID), a następnie
+wczytuje plik CSV i sprawdza, czy zawiera wszystkie niezbędne kolumny
+do obliczenia PPM. Wymagane kolumny to: «round», «home_team_id», «away_team_id»,
+«home_goals», «away_goals».</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>True jeśli plik został poprawnie wczytany i zawiera wszystkie wymagane kolumny,</dt><dd><p>False w przeciwnym razie</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.prepare_data">
+<span class="sig-name descname"><span class="pre">prepare_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/table_actuall_PPM.html#SeasonPPMCalculator.prepare_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.prepare_data" title="Link to this definition"></a></dt>
+<dd><p>Przygotowuje dane przed obliczaniem PPM - standaryzuje nazwy drużyn i dodaje brakujące ID.</p>
+<p>Metoda standaryzuje nazwy drużyn według określonego słownika mapowań,
+a następnie dodaje identyfikatory drużyn (home_team_id i away_team_id) jeśli ich brakuje.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli dane zostały pomyślnie przygotowane, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.SeasonPPMCalculator.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/data_processing/table_actuall_PPM.html#SeasonPPMCalculator.save"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_actuall_PPM.SeasonPPMCalculator.save" title="Link to this definition"></a></dt>
+<dd><p>Zapisuje zaktualizowany DataFrame z kolumnami PPM do oryginalnego pliku CSV.</p>
+<p>Metoda wykorzystuje funkcję save_csv_safe z klasy FileUtils do bezpiecznego
+zapisania danych do pliku CSV. Po pomyślnym zapisie, informacja jest logowana.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli zapis się powiódł, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Metoda nadpisuje oryginalny plik z dodatkowymi kolumnami PPM_H i PPM_A</p></li>
+<li><p>Indeksy DataFrame nie są zapisywane do pliku (index=False)</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.table_actuall_PPM.main">
+<span class="sig-prename descclassname"><span class="pre">data_processing.table_actuall_PPM.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/data_processing/table_actuall_PPM.html#main"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_actuall_PPM.main" title="Link to this definition"></a></dt>
+<dd><p>Główna funkcja programu, aktualizuje pliki sezonowe o kolumny PPM_H i PPM_A.</p>
+<p>Funkcja wykonuje następujące kroki:
+1. Inicjalizuje FileUtils i określa ścieżki do katalogu sezonów
+2. Sprawdza czy katalog z plikami sezonów istnieje, tworzy go jeśli nie
+3. Iteruje po zdefiniowanej liście plików sezonowych (SEASON_FILES)
+4. Dla każdego istniejącego pliku sezonu:</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>Inicjalizuje SeasonPPMCalculator</p></li>
+<li><p>Wczytuje dane</p></li>
+<li><p>Oblicza PPM dla wszystkich meczów</p></li>
+<li><p>Zapisuje zaktualizowane dane do pliku</p></li>
+</ol>
+</div></blockquote>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Informacje o postępie są logowane za pomocą modułu logger</p></li>
+<li><p>Pliki, które nie istnieją, są pomijane z odpowiednim ostrzeżeniem</p></li>
+<li><p>Obsługa błędów jest realizowana przez metody klasy SeasonPPMCalculator</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="module-data_processing.table_league">
+<span id="data-processing-table-league-module"></span><h2>data_processing.table_league module<a class="headerlink" href="#module-data_processing.table_league" title="Link to this heading"></a></h2>
+<p>Moduł generowania tabel ligowych na podstawie danych meczowych LaLiga. Pomaga on sprawdzać komplementarność danych.</p>
+<p>Ten skrypt tworzy tabele ligowe na podstawie plików CSV zawierających wyniki meczów.
+Umożliwia generowanie tabel dla konkretnych przedziałów czasowych, analizę formy drużyn
+oraz zapisywanie wyników do plików CSV.</p>
+<p>Funkcjonalności:
+- Przetwarzanie plików CSV z wynikami meczów z różnych sezonów (2021-2025)
+- Obliczanie statystyk dla każdej drużyny: punkty, gole, bilans bramkowy
+- Generowanie osobne zestawienia dla meczów domowych i wyjazdowych
+- Tworzenie rankingów „all-time” łączące dane z wielu sezonów
+- Zapisywanie wyników do plików CSV w folderze „results”
+- Analizowanie formy drużyn na podstawie ostatnich 5 meczów</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_processing.table_league.</span></span><span class="sig-name descname"><span class="pre">League_Table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_until</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rival_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#League_Table"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.League_Table" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa odpowiedzialna za tworzenie i zarządzanie tabelami ligowymi.</p>
+<p>Umożliwia tworzenie tabel ligowych na podstawie danych meczowych w określonym przedziale
+czasowym. Obsługuje różne sezony ligowe, wylicza statystyki drużyn, sortuje tabelę
+według punktów i różnicy bramek oraz zapisuje wyniki do plików CSV.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.file_path_data">
+<span class="sig-name descname"><span class="pre">file_path_data</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.file_path_data" title="Link to this definition"></a></dt>
+<dd><p>Ścieżka do pliku z danymi meczów</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.date_from">
+<span class="sig-name descname"><span class="pre">date_from</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.date_from" title="Link to this definition"></a></dt>
+<dd><p>Data początkowa zakresu w formacie YYYY-MM-DD</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.date_until">
+<span class="sig-name descname"><span class="pre">date_until</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.date_until" title="Link to this definition"></a></dt>
+<dd><p>Data końcowa zakresu w formacie YYYY-MM-DD</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.table">
+<span class="sig-name descname"><span class="pre">table</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.table" title="Link to this definition"></a></dt>
+<dd><p>DataFrame zawierający obliczoną tabelę ligową</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.file_utils">
+<span class="sig-name descname"><span class="pre">file_utils</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.file_utils" title="Link to this definition"></a></dt>
+<dd><p>Instancja klasy pomocniczej do operacji na plikach</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="helpers.html#helpers.file_utils.FileUtils" title="helpers.file_utils.FileUtils">FileUtils</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.project_root">
+<span class="sig-name descname"><span class="pre">project_root</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.project_root" title="Link to this definition"></a></dt>
+<dd><p>Ścieżka do głównego katalogu projektu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.data" title="Link to this definition"></a></dt>
+<dd><p>Wczytane dane meczowe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.rival">
+<span class="sig-name descname"><span class="pre">rival</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.rival" title="Link to this definition"></a></dt>
+<dd><p>Instancja klasy Rival, jeśli tabela jest powiązana z konkretnym rywalem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="RM.html#RM.RM_rivals.Rival" title="RM.RM_rivals.Rival">Rival</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.rival_id">
+<span class="sig-name descname"><span class="pre">rival_id</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.rival_id" title="Link to this definition"></a></dt>
+<dd><p>ID rywala, jeśli tabela jest powiązana z konkretnym rywalem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.rival_name">
+<span class="sig-name descname"><span class="pre">rival_name</span></span><a class="headerlink" href="#data_processing.table_league.League_Table.rival_name" title="Link to this definition"></a></dt>
+<dd><p>Nazwa rywala, jeśli tabela jest powiązana z konkretnym rywalem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.calculate_table_for_two_dates">
+<span class="sig-name descname"><span class="pre">calculate_table_for_two_dates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#League_Table.calculate_table_for_two_dates"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.League_Table.calculate_table_for_two_dates" title="Link to this definition"></a></dt>
+<dd><p>Oblicza tabelę ligową dla zakresu dat od self.date_from do self.date_until.</p>
+<p>Metoda analizuje wszystkie mecze w podanym zakresie dat, oblicza statystyki dla każdej
+drużyny (punkty, gole, zwycięstwa, itd.) i tworzy posortowaną tabelę ligową.
+Tabela jest sortowana według punktów, różnicy bramek i liczby strzelonych goli.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Obliczona tabela ligowa jako DataFrame</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Metoda przetwarza każdy mecz i aktualizuje statystyki obu drużyn</p></li>
+<li><p>Tabela jest sortowana w kolejności: punkty (malejąco), różnica bramek (malejąco),
+strzelone gole (malejąco)</p></li>
+<li><p>Drużyny są identyfikowane przez ich ID, a nazwy są dodawane jeśli dostępne</p></li>
+<li><p>Tabela zawiera kolumny: pozycja, ID drużyny, nazwa drużyny, mecze, zwycięstwa,
+remisy, porażki, strzelone gole, stracone gole, różnica bramek, punkty</p></li>
+<li><p>Tabela jest zapisywana jako atrybut klasy (self.table)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.check_form_team">
+<span class="sig-name descname"><span class="pre">check_form_team</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">team_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#League_Table.check_form_team"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.League_Table.check_form_team" title="Link to this definition"></a></dt>
+<dd><p>Analizuje formę drużyny na podstawie ostatnich 5 meczów od self.date_until.</p>
+<p>Metoda oblicza różne wskaźniki formy drużyny na podstawie jej ostatnich 5 meczów:
+średnie kursy, średnie gole strzelone i stracone, średnią różnicę bramek,
+średnią pozycję rywali oraz średnią zdobywanych punktów na mecz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>team_id</strong> (<em>int</em>) – ID drużyny do analizy</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>DataFrame zawierający jeden wiersz ze statystykami formy drużyny:</dt><dd><ul class="simple">
+<li><p>OP_ODD_W_L5: Średni kurs na wygraną z ostatnich 5 meczów</p></li>
+<li><p>OP_ODD_L_L5: Średni kurs na porażkę z ostatnich 5 meczów</p></li>
+<li><p>OP_G_SCO_L5: Średnia goli zdobytych w ostatnich 5 meczach</p></li>
+<li><p>OP_G_CON_L5: Średnia goli straconych w ostatnich 5 meczach</p></li>
+<li><p>OP_GDIF_L5: Średnia różnica bramek w ostatnich 5 meczach</p></li>
+<li><p>OP_OPP_POS_L5: Średnia pozycja rywali w ostatnich 5 meczach</p></li>
+<li><p>OP_PPM_L5: Średnia punktów na mecz w ostatnich 5 meczach</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Jeśli drużyna nie rozegrała żadnego meczu, zwracany jest DataFrame z zerami</p></li>
+<li><p>Wartości są zaokrąglane do 3 miejsc po przecinku</p></li>
+<li><p>Dla meczów u siebie i na wyjeździe stosowane są odpowiednie kolumny kursów i PPM</p></li>
+<li><p>Jeśli brak danych o kursach lub PPM, są one pomijane w obliczeniach</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.check_season">
+<span class="sig-name descname"><span class="pre">check_season</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#League_Table.check_season"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.League_Table.check_season" title="Link to this definition"></a></dt>
+<dd><p>Określa sezon na podstawie zakresu dat self.date_from i self.date_until.</p>
+<p>Metoda porównuje podany zakres dat z predefiniowanymi datami sezonów zdefiniowanymi
+w stałych SEASON_DATES i zwraca identyfikator sezonu, jeśli zakres mieści się w którymś z sezonów.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Identyfikator sezonu (np. „20_21”, „21_22”) lub None, gdy nie znaleziono pasującego sezonu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.get_last_5_matches">
+<span class="sig-name descname"><span class="pre">get_last_5_matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">team_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#League_Table.get_last_5_matches"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.League_Table.get_last_5_matches" title="Link to this definition"></a></dt>
+<dd><p>Zwraca 5 ostatnich meczów drużyny przed datą self.date_until.</p>
+<p>Metoda filtruje mecze danej drużyny, sortuje je według dat i zwraca 5 ostatnich
+spotkań rozegranych przed datą końcową self.date_until.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>team_id</strong> (<em>int</em>) – ID drużyny</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>DataFrame zawierający 5 ostatnich meczów drużyny lub pusty DataFrame</dt><dd><p>jeśli dane są niedostępne lub brak kolumny match_date</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Metoda zwraca mecze, w których drużyna występowała jako gospodarz lub gość</p></li>
+<li><p>Mecze są sortowane według daty, od najnowszych do najstarszych</p></li>
+<li><p>Jeśli brak kolumny match_date, zwracany jest pusty DataFrame</p></li>
+<li><p>Jeśli drużyna rozegrała mniej niż 5 meczów, zwracane są wszystkie dostępne mecze</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.reorder_columns">
+<span class="sig-name descname"><span class="pre">reorder_columns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#League_Table.reorder_columns"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.League_Table.reorder_columns" title="Link to this definition"></a></dt>
+<dd><p>Zmienia kolejność kolumn w tabeli na standardowy układ.</p>
+<p>Metoda reorganizuje kolumny w tabeli ligowej według predefiniowanego porządku,
+co zapewnia spójny układ danych we wszystkich generowanych tabelach. Kolumny,
+które nie są zdefiniowane w porządku standardowym, są dodawane na końcu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame z uporządkowanymi kolumnami lub None, jeśli tabela nie została jeszcze obliczona</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Jeśli tabela nie została jeszcze obliczona (self.table is None), zwracane jest None</p></li>
+<li><p>Metoda nie usuwa żadnych kolumn, tylko zmienia ich kolejność</p></li>
+<li><p>Kolumny, których nie ma w predefiniowanej liście, są umieszczane na końcu tabeli</p></li>
+<li><p>Informacja o zmianie kolejności kolumn jest logowana</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.save_or_update_file">
+<span class="sig-name descname"><span class="pre">save_or_update_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#League_Table.save_or_update_file"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.League_Table.save_or_update_file" title="Link to this definition"></a></dt>
+<dd><p>Zapisuje obliczoną tabelę ligową do pliku CSV w folderze wynikowym.</p>
+<p>Metoda tworzy folder wynikowy, jeśli nie istnieje, generuje nazwę pliku na podstawie
+sezonu lub zakresu dat i zapisuje tabelę do pliku CSV. Przed zapisem kolumny
+są reorganizowane za pomocą metody reorder_columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Ścieżka do zapisanego pliku CSV lub None w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Jeśli tabela nie została jeszcze obliczona, metoda automatycznie wywołuje
+calculate_table_for_two_dates()</p></li>
+<li><p>Nazwa pliku jest generowana na podstawie identyfikatora sezonu lub zakresu dat</p></li>
+<li><p>Metoda używa FileUtils do bezpiecznego zapisywania plików i tworzenia katalogów</p></li>
+<li><p>Informacje o zapisie i ewentualne błędy są logowane</p></li>
+<li><p>W przypadku błędu zwracana jest wartość None</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_processing.table_league.League_Table.update_date">
+<span class="sig-name descname"><span class="pre">update_date</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#League_Table.update_date"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.League_Table.update_date" title="Link to this definition"></a></dt>
+<dd><p>Aktualizuje dane na podstawie podanego zakresu dat.</p>
+<p>Metoda filtruje wczytane dane, pozostawiając tylko mecze rozegrane w zakresie
+od self.date_from do self.date_until. Jeśli kolumna match_date nie istnieje
+w danych, operacja nie zostanie wykonana.</p>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Kolumna match_date jest konwertowana na typ datetime</p></li>
+<li><p>Mecze spoza zakresu dat są usuwane z DataFrame</p></li>
+<li><p>Błędy są logowane za pomocą modułu logger</p></li>
+<li><p>Jeśli kolumna match_date nie istnieje, wyświetlany jest komunikat błędu</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.table_league.check_project_structure">
+<span class="sig-prename descclassname"><span class="pre">data_processing.table_league.</span></span><span class="sig-name descname"><span class="pre">check_project_structure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#check_project_structure"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.check_project_structure" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza strukturę projektu i wyświetla diagnostykę.</p>
+<p>Funkcja weryfikuje istnienie kluczowych katalogów projektu, ich dostępność
+i zawartość. W przypadku braku wymaganych katalogów, próbuje je utworzyć.
+Wyniki diagnostyki są logowane za pomocą modułu logger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Funkcja sprawdza katalogi: Data, Data/Mecze, Data/Mecze/all_season, results</p></li>
+<li><p>Dla każdego katalogu sprawdzane są: istnienie, uprawnienia do zapisu, zawartość</p></li>
+<li><p>Jeśli katalog nie istnieje, podejmowana jest próba jego utworzenia</p></li>
+<li><p>Wszystkie informacje i błędy są logowane za pomocą modułu logger</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.table_league.create_team_stats_template">
+<span class="sig-prename descclassname"><span class="pre">data_processing.table_league.</span></span><span class="sig-name descname"><span class="pre">create_team_stats_template</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/data_processing/table_league.html#create_team_stats_template"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.create_team_stats_template" title="Link to this definition"></a></dt>
+<dd><p>Tworzy szablon statystyk drużyny z wartościami początkowymi.</p>
+<p>Funkcja zwraca nowy słownik zawierający pola statystyk drużyny z zerowymi wartościami.
+Używanie szablonu zapobiega problemom z referencjami, które mogłyby wystąpić przy
+wielokrotnym używaniu tego samego słownika.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Słownik zawierający początkowe wartości statystyk drużyny:</dt><dd><ul class="simple">
+<li><p>matches: liczba rozegranych meczów</p></li>
+<li><p>wins: liczba zwycięstw</p></li>
+<li><p>draws: liczba remisów</p></li>
+<li><p>losses: liczba porażek</p></li>
+<li><p>goals_scored: liczba strzelonych goli</p></li>
+<li><p>goals_conceded: liczba straconych goli</p></li>
+<li><p>points: zdobyte punkty</p></li>
+<li><p>home_matches: liczba meczów jako gospodarz</p></li>
+<li><p>away_matches: liczba meczów jako gość</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data_processing.table_league.main">
+<span class="sig-prename descclassname"><span class="pre">data_processing.table_league.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/data_processing/table_league.html#main"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#data_processing.table_league.main" title="Link to this definition"></a></dt>
+<dd><p>Główna funkcja skryptu, przetwarza pliki sezonowe i dodaje kolumny PPM.</p>
+<p>Funkcja dla każdego pliku sezonowego:
+1. Standaryzuje nazwy drużyn w formacie zgodnym z mapowaniem
+2. Dodaje identyfikatory drużyn (home_team_id, away_team_id) na podstawie pliku mapowania
+3. Oblicza punkty na mecz (PPM) dla każdej drużyny przed każdym meczem
+4. Zapisuje zaktualizowane pliki z nowymi kolumnami PPM_H i PPM_A</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Pliki sezonowe są określone w stałej SEASON_FILES</p></li>
+<li><p>Funkcja ignoruje pliki, które nie istnieją</p></li>
+<li><p>Funkcja raportuje postęp i błędy za pomocą modułu logger</p></li>
+<li><p>Każdy plik jest przetwarzany niezależnie, błędy w jednym pliku nie wpływają na przetwarzanie pozostałych</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="module-data_processing">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-data_processing" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="src" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Poprzedni</a>
+        <a href="finall_dataframe.html" class="btn btn-neutral float-right" title="finall_dataframe package" accesskey="n" rel="next">Następny <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

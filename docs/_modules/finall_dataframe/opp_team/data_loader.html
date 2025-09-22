@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.opp_team.data_loader &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.opp_team.data_loader</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.opp_team.data_loader</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Moduł ładowania danych dla analizy przeciwników Real Madryt.</span>
+
+<span class="sd">Ten moduł odpowiada za wczytywanie i przygotowanie danych meczowych</span>
+<span class="sd">wymaganych do obliczania statystyk drużyn przeciwnych w meczach</span>
+<span class="sd">przeciwko Real Madryt, włączając historyczne wyniki i formy zespołów.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.analyzer</span><span class="w"> </span><span class="kn">import</span> <span class="n">RealMadridTeamAnalyzer</span> 
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">warning</span>
+
+<div class="viewcode-block" id="DataLoader">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataLoader</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ładowarka danych dla analizy statystyk przeciwników Real Madryt.</span>
+<span class="sd">    </span>
+<span class="sd">    Odpowiada za wczytywanie, synchronizację i przygotowanie wszystkich</span>
+<span class="sd">    źródeł danych wymaganych do obliczania statystyk przeciwników, ich</span>
+<span class="sd">    form, wydajności i trendów przed meczami z Real Madryt.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        analyzer (RealMadridTeamAnalyzer): Analizator drużynowy Real Madryt używany jako punkt odniesienia</span>
+<span class="sd">        </span>
+<span class="sd">    Data Sources:</span>
+<span class="sd">        - RM_all_matches_stats.csv: Mecze Real Madryt z pełnymi statystykami</span>
+<span class="sd">        - all_matches.csv: Wszystkie mecze La Liga dla analizy przeciwników</span>
+<span class="sd">        </span>
+<span class="sd">    Process Flow:</span>
+<span class="sd">        1. Wykorzystuje dane Real Madryt jako bazę do analizy</span>
+<span class="sd">        2. Ładuje dodatkowe dane meczowe przeciwników</span>
+<span class="sd">        3. Synchronizuje i przygotowuje struktury danych</span>
+<span class="sd">        4. Dodaje kolumny dla statystyk przeciwników</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje ładowarkę danych dla analizy przeciwników.</span>
+<span class="sd">        </span>
+<span class="sd">        Tworzy instancję RealMadridTeamAnalyzer z predefiniowanym ID</span>
+<span class="sd">        Real Madryt (team_id=1) jako punkt odniesienia dla analizy</span>
+<span class="sd">        statystyk przeciwników.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Real Madryt ma standardowe ID=1 w systemie</span>
+<span class="sd">            - Analizator RM służy jako źródło danych bazowych</span>
+<span class="sd">            - Przygotowuje infrastrukturę do analizy przeciwników</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analyzer</span> <span class="o">=</span> <span class="n">RealMadridTeamAnalyzer</span><span class="p">(</span><span class="n">team_id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;DataLoader dla analizy przeciwników zainicjalizowany&quot;</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="DataLoader.load_base_data">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader.load_base_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_base_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje i przygotowuje bazowe dane Real Madryt dla analizy przeciwników.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: Krotka zawierająca:</span>
+<span class="sd">                - df (pd.DataFrame): DataFrame z danymi meczów Real Madryt zawierający:</span>
+<span class="sd">                    * MATCH_ID: Unikalny identyfikator meczu</span>
+<span class="sd">                    * M_DATE: Data meczu w formacie datetime</span>
+<span class="sd">                    * OPPONENT_ID: ID drużyny przeciwnika</span>
+<span class="sd">                    * HOME_AWAY: Czy Real grał u siebie czy na wyjeździe</span>
+<span class="sd">                    * RESULT: Wynik meczu (W/D/L)</span>
+<span class="sd">                    * Wszystkie kolumny ze statystykami drużynowymi RM</span>
+<span class="sd">                    </span>
+<span class="sd">                - first_date (pd.Timestamp): Najwcześniejsza data meczu w zbiorze,</span>
+<span class="sd">                                           używana jako punkt startowy analizy</span>
+<span class="sd">        </span>
+<span class="sd">        Process:</span>
+<span class="sd">            1. Uruchamia analizę drużynową Real Madryt</span>
+<span class="sd">            2. Tworzy kopię DataFrame dla bezpieczeństwa danych</span>
+<span class="sd">            3. Konwertuje kolumnę M_DATE do formatu datetime jeśli potrzeba</span>
+<span class="sd">            4. Oblicza najwcześniejszą datę jako punkt referencyjny</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Konwersja dat jest kluczowa dla późniejszych analiz czasowych</span>
+<span class="sd">            - Pierwsza data służy do filtrowania meczów przeciwników</span>
+<span class="sd">            - DataFrame zawiera kompletne statystyki drużynowe Real Madryt</span>
+<span class="sd">            - Dane są przygotowane do rozszerzenia o statystyki przeciwników</span>
+<span class="sd">            </span>
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; loader = DataLoader()</span>
+<span class="sd">            &gt;&gt;&gt; df, first_date = loader.load_base_data()</span>
+<span class="sd">            &gt;&gt;&gt; print(f&quot;Mecze do analizy: {len(df)}&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; print(f&quot;Okres analizy od: {first_date}&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam ładowanie bazowych danych Real Madryt&quot;</span><span class="p">)</span>
+        
+        <span class="n">base_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">analyzer</span><span class="o">.</span><span class="n">analyze</span><span class="p">()</span>
+        <span class="n">prepared_df</span> <span class="o">=</span> <span class="n">base_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">prepared_df</span><span class="p">[</span><span class="s2">&quot;M_DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">:</span>
+            <span class="n">prepared_df</span><span class="p">[</span><span class="s2">&quot;M_DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">prepared_df</span><span class="p">[</span><span class="s2">&quot;M_DATE&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Skonwertowano kolumnę M_DATE do formatu datetime&quot;</span><span class="p">)</span>
+        
+        <span class="n">first_date</span> <span class="o">=</span> <span class="n">prepared_df</span><span class="p">[</span><span class="s2">&quot;M_DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Załadowano bazowe dane: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">prepared_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów od </span><span class="si">{</span><span class="n">first_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">prepared_df</span><span class="p">,</span> <span class="n">first_date</span></div>
+
+    
+<div class="viewcode-block" id="DataLoader.load_match_data">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader.load_match_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_match_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje kompletne dane meczowe Real Madryt i wszystkich drużyn La Liga.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: Krotka zawierająca:</span>
+<span class="sd">                - rm_matches (pd.DataFrame): Mecze Real Madryt z kolumnami:</span>
+<span class="sd">                    * match_id: Identyfikator meczu</span>
+<span class="sd">                    * match_date: Data meczu</span>
+<span class="sd">                    * home_team_id: ID drużyny gospodarzy</span>
+<span class="sd">                    * away_team_id: ID drużyny gości</span>
+<span class="sd">                    * rm_goals: Bramki Real Madryt</span>
+<span class="sd">                    * opponent_goals: Bramki przeciwnika</span>
+<span class="sd">                    * result: Wynik meczu</span>
+<span class="sd">                    * odds_*: Kursy bukmacherskie</span>
+<span class="sd">                    </span>
+<span class="sd">                - opp_matches (pd.DataFrame): Wszystkie mecze La Liga z kolumnami:</span>
+<span class="sd">                    * match_id: Identyfikator meczu</span>
+<span class="sd">                    * match_date: Data meczu</span>
+<span class="sd">                    * home_team_id: ID gospodarzy</span>
+<span class="sd">                    * away_team_id: ID gości</span>
+<span class="sd">                    * home_goals: Bramki gospodarzy</span>
+<span class="sd">                    * away_goals: Bramki gości</span>
+<span class="sd">                    * season: Sezon rozgrywkowy</span>
+<span class="sd">        </span>
+<span class="sd">        Data Sources:</span>
+<span class="sd">            - Real Madrid: Data/Real/RM_all_matches_stats.csv</span>
+<span class="sd">            - Wszystkie mecze: Data/Mecze/all_season/merged_matches/all_matches.csv</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Używa FileUtils.load_csv_safe() dla bezpiecznego ładowania</span>
+<span class="sd">            - Dane Real Madryt zawierają pełne statystyki meczowe</span>
+<span class="sd">            - Dane przeciwników służą do analizy form i trendów</span>
+<span class="sd">            - W przypadku błędu ładowania zwraca None dla problematycznego pliku</span>
+<span class="sd">            - Pliki muszą istnieć w określonych lokalizacjach</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: Gdy nie można znaleźć wymaganych plików CSV</span>
+<span class="sd">            </span>
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; loader = DataLoader()</span>
+<span class="sd">            &gt;&gt;&gt; rm_data, opp_data = loader.load_match_data()</span>
+<span class="sd">            &gt;&gt;&gt; print(f&quot;Mecze RM: {len(rm_data)}&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; print(f&quot;Mecze La Liga: {len(opp_data)}&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam ładowanie danych meczowych&quot;</span><span class="p">)</span>
+        
+        <span class="n">rm_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s1">&#39;Data&#39;</span><span class="p">,</span> <span class="s1">&#39;Real&#39;</span><span class="p">)</span>
+        <span class="n">opp_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s1">&#39;Data&#39;</span><span class="p">,</span> <span class="s1">&#39;Mecze&#39;</span><span class="p">,</span> <span class="s1">&#39;all_season&#39;</span><span class="p">,</span> <span class="s1">&#39;merged_matches&#39;</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">rm_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rm_path</span><span class="p">,</span> <span class="s1">&#39;RM_all_matches_stats.csv&#39;</span><span class="p">)</span>
+            <span class="n">rm_matches</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">rm_file_path</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">rm_matches</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">rm_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać danych meczowych Real Madryt&quot;</span><span class="p">)</span>
+                <span class="n">rm_matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rm_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów Real Madryt&quot;</span><span class="p">)</span>
+                
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd przy ładowaniu danych Real Madryt: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">rm_matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">opp_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">opp_path</span><span class="p">,</span> <span class="s1">&#39;all_matches.csv&#39;</span><span class="p">)</span>
+            <span class="n">opp_matches</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">opp_file_path</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">opp_matches</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">opp_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać danych przeciwników - ograniczona analiza&quot;</span><span class="p">)</span>
+                <span class="n">opp_matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Wczytano </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">opp_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów przeciwników&quot;</span><span class="p">)</span>
+                
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd przy ładowaniu danych przeciwników: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">opp_matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Zakończono ładowanie danych meczowych&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rm_matches</span><span class="p">,</span> <span class="n">opp_matches</span></div>
+
+    
+<div class="viewcode-block" id="DataLoader.prepare_columns">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader.prepare_columns">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">columns_to_add</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przygotowuje DataFrame dodając wymagane kolumny dla statystyk przeciwników.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame bazowy do rozszerzenia</span>
+<span class="sd">            columns_to_add (list): Lista nazw kolumn do dodania, np.:</span>
+<span class="sd">                - OP_PPM_L5: Średnie punkty przeciwnika z ostatnich 5 meczów</span>
+<span class="sd">                - OP_FORM_L5: Forma przeciwnika z ostatnich 5 meczów</span>
+<span class="sd">                - OP_GPM_HOME: Średnie bramki przeciwnika u siebie</span>
+<span class="sd">                - OP_GPM_AWAY: Średnie bramki przeciwnika na wyjeździe</span>
+<span class="sd">                - OP_PPM_SEA: Średnie punkty przeciwnika w sezonie</span>
+<span class="sd">                </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z dodanymi kolumnami zainicjalizowanymi wartościami pd.NA</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Używa pd.NA jako wartość domyślną (lepsze od np.nan w pandas &gt;= 1.0)</span>
+<span class="sd">            - Nie nadpisuje istniejących kolumn jeśli już występują</span>
+<span class="sd">            - Operacja modyfikuje oryginalny DataFrame (in-place)</span>
+<span class="sd">            - Przygotowuje strukturę do późniejszego wypełnienia statystykami</span>
+<span class="sd">            - Obsługuje gracefully przypadek pustej listy kolumn</span>
+<span class="sd">            </span>
+<span class="sd">        Process:</span>
+<span class="sd">            1. Iteruje przez listę kolumn do dodania</span>
+<span class="sd">            2. Sprawdza czy kolumna już istnieje w DataFrame</span>
+<span class="sd">            3. Dodaje nową kolumnę z wartościami pd.NA jeśli nie istnieje</span>
+<span class="sd">            4. Loguje liczbę dodanych kolumn</span>
+<span class="sd">            </span>
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; loader = DataLoader()</span>
+<span class="sd">            &gt;&gt;&gt; df = pd.DataFrame({&#39;MATCH_ID&#39;: [1, 2, 3]})</span>
+<span class="sd">            &gt;&gt;&gt; cols = [&#39;OP_PPM_L5&#39;, &#39;OP_FORM_L5&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; df_prepared = loader.prepare_columns(df, cols)</span>
+<span class="sd">            &gt;&gt;&gt; print(df_prepared.columns.tolist())</span>
+<span class="sd">            [&#39;MATCH_ID&#39;, &#39;OP_PPM_L5&#39;, &#39;OP_FORM_L5&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">columns_to_add</span><span class="p">:</span>
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Brak kolumn do dodania&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">df</span>
+            
+        <span class="n">added_columns</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns_to_add</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span>
+                <span class="n">added_columns</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumna </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2"> już istnieje - pomijam&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dodano </span><span class="si">{</span><span class="n">added_columns</span><span class="si">}</span><span class="s2"> nowych kolumn dla statystyk przeciwników&quot;</span><span class="p">)</span>
+        <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dodane kolumny: </span><span class="si">{</span><span class="p">[</span><span class="n">col</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">columns_to_add</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">df</span></div>
+
+    
+<div class="viewcode-block" id="DataLoader.get_data_summary">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.data_loader.DataLoader.get_data_summary">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zwraca podsumowanie stanu załadowanych danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik z metrykami danych:</span>
+<span class="sd">                - analyzer_status: Status analizatora Real Madryt</span>
+<span class="sd">                - data_sources: Informacje o źródłach danych</span>
+<span class="sd">                - loading_status: Status operacji ładowania</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;analyzer_status&quot;</span><span class="p">:</span> <span class="s2">&quot;initialized&quot;</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;analyzer&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;not_initialized&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;data_sources&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;rm_data_path&quot;</span><span class="p">:</span> <span class="s2">&quot;Data/Real/RM_all_matches_stats.csv&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;opponents_data_path&quot;</span><span class="p">:</span> <span class="s2">&quot;Data/Mecze/all_season/merged_matches/all_matches.csv&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;loading_capability&quot;</span><span class="p">:</span> <span class="s2">&quot;ready&quot;</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

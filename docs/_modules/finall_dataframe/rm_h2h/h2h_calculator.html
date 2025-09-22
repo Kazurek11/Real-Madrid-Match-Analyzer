@@ -1,0 +1,383 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_h2h.h2h_calculator &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_h2h.h2h_calculator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.rm_h2h.h2h_calculator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Kalkulatory statystyk Head-to-Head między Real Madryt a przeciwnikami.</span>
+
+<span class="sd">Ten moduł zawiera funkcje do obliczania statystyk bezpośrednich starć</span>
+<span class="sd">między Real Madryt a przeciwnikami, obejmujące wyniki, bilans bramkowy</span>
+<span class="sd">oraz średnie punkty na mecz z różnych okresów czasowych.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">warning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">WIN_POINTS</span><span class="p">,</span> <span class="n">DRAW_POINTS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">REAL_MADRID_ID</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.validators</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_h2h_dataframe</span>
+
+<div class="viewcode-block" id="get_h2h_matches">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.h2h_calculator.get_h2h_matches">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_h2h_matches</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">opp_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">last_n</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Pobiera mecze bezpośrednie między Real Madryt a przeciwnikiem przed określoną datą.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): DataFrame z danymi meczów zawierający kolumny:</span>
+<span class="sd">            - match_date: Data meczu</span>
+<span class="sd">            - home_team_id: ID drużyny gospodarzy</span>
+<span class="sd">            - away_team_id: ID drużyny gości</span>
+<span class="sd">            - home_goals: Bramki gospodarzy</span>
+<span class="sd">            - away_goals: Bramki gości</span>
+<span class="sd">        opp_id (int): ID drużyny przeciwnika do analizy H2H</span>
+<span class="sd">        match_date (str/datetime): Data graniczna - pobiera mecze sprzed tej daty</span>
+<span class="sd">        last_n (int, optional): Liczba ostatnich meczów do pobrania.</span>
+<span class="sd">                               Jeśli None, pobiera wszystkie mecze H2H</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame or None: DataFrame z meczami H2H posortowanymi od najnowszych.</span>
+<span class="sd">                             Zwraca None jeśli brak meczów lub błąd walidacji.</span>
+<span class="sd">        </span>
+<span class="sd">    Process:</span>
+<span class="sd">        1. Waliduje format DataFrame pod kątem wymaganych kolumn</span>
+<span class="sd">        2. Filtruje mecze gdzie Real Madryt grał przeciwko opp_id przed match_date</span>
+<span class="sd">        3. Sortuje mecze od najnowszych do najstarszych</span>
+<span class="sd">        4. Ogranicza do last_n meczów jeśli parametr podany</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Real Madryt może być gospodarzem lub gościem</span>
+<span class="sd">        - Uwzględnia tylko mecze przed podaną datą (wykluczając aktualny mecz)</span>
+<span class="sd">        - Loguje ostrzeżenie jeśli brak meczów H2H</span>
+<span class="sd">        - Używa REAL_MADRID_ID z konfiguracji (standardowo ID=1)</span>
+<span class="sd">        </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; df = load_match_data()</span>
+<span class="sd">        &gt;&gt;&gt; h2h = get_h2h_matches(df, opp_id=3, match_date=&#39;2023-10-15&#39;, last_n=5)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Znaleziono {len(h2h)} meczów H2H&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_h2h_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="n">h2h_matches</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">match_date</span><span class="p">))</span> <span class="o">&amp;</span> 
+        <span class="p">(((</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opp_id</span><span class="p">))</span> <span class="o">|</span>
+         <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opp_id</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">)))</span>
+    <span class="p">]</span>
+    
+    <span class="k">if</span> <span class="n">h2h_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak meczów H2H między RM a drużyną </span><span class="si">{</span><span class="n">opp_id</span><span class="si">}</span><span class="s2"> przed </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="n">h2h_matches</span> <span class="o">=</span> <span class="n">h2h_matches</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;match_date&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">last_n</span><span class="p">:</span>
+        <span class="n">h2h_matches</span> <span class="o">=</span> <span class="n">h2h_matches</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">last_n</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">h2h_matches</span></div>
+
+
+<div class="viewcode-block" id="calculate_h2h_stats">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.h2h_calculator.calculate_h2h_stats">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_h2h_stats</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">opp_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">last_n</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza kompleksowe statystyki Head-to-Head z ostatnich meczów między RM a przeciwnikiem.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): DataFrame z danymi meczów z wymaganymi kolumnami</span>
+<span class="sd">        opp_id (int): ID drużyny przeciwnika</span>
+<span class="sd">        match_date (str/datetime): Data graniczna meczu</span>
+<span class="sd">        last_n (int): Liczba ostatnich meczów H2H do analizy (domyślnie 5)</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dict or None: Słownik ze statystykami H2H zawierający:</span>
+<span class="sd">            - win_ratio (float): Procent wygranych Real Madryt (0.0-1.0)</span>
+<span class="sd">            - points_per_match (float): Średnie punkty RM na mecz (0-3 punkty)</span>
+<span class="sd">            - goals_balance (int): Różnica bramkowa RM vs przeciwnik</span>
+<span class="sd">            </span>
+<span class="sd">        Zwraca None jeśli brak meczów H2H do analizy.</span>
+<span class="sd">        </span>
+<span class="sd">    Process:</span>
+<span class="sd">        1. Pobiera ostatnie mecze H2H używając get_h2h_matches()</span>
+<span class="sd">        2. Zlicza wygrane Real Madryt u siebie i na wyjeździe</span>
+<span class="sd">        3. Zlicza remisy między drużynami</span>
+<span class="sd">        4. Oblicza procent wygranych i średnie punkty na mecz</span>
+<span class="sd">        5. Kalkuluje bilans bramkowy (bramki RM - bramki przeciwnika)</span>
+<span class="sd">        </span>
+<span class="sd">    Calculation Details:</span>
+<span class="sd">        - Win Ratio: (wygrane_u_siebie + wygrane_na_wyjeździe) / total_mecze</span>
+<span class="sd">        - Points Per Match: (wygrane * 3 + remisy * 1) / total_mecze</span>
+<span class="sd">        - Goals Balance: suma_bramek_RM - suma_bramek_przeciwnika</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Używa WIN_POINTS=3 i DRAW_POINTS=1 z konfiguracji</span>
+<span class="sd">        - Obsługuje Real Madryt jako gospodarza i gościa</span>
+<span class="sd">        - Wszystkie wartości zwracane jako float/int dla spójności</span>
+<span class="sd">        </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; stats = calculate_h2h_stats(df, opp_id=3, match_date=&#39;2023-10-15&#39;, last_n=5)</span>
+<span class="sd">        &gt;&gt;&gt; if stats:</span>
+<span class="sd">        &gt;&gt;&gt;     print(f&quot;RM wygrywa {stats[&#39;win_ratio&#39;]:.1%} meczów H2H&quot;)</span>
+<span class="sd">        &gt;&gt;&gt;     print(f&quot;Średnio {stats[&#39;points_per_match&#39;]:.2f} punktów na mecz&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h2h_matches</span> <span class="o">=</span> <span class="n">get_h2h_matches</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">opp_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">last_n</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">h2h_matches</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">h2h_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="n">rm_home_wins</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">)</span> <span class="o">&amp;</span> 
+        <span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">])</span>
+    <span class="p">])</span>
+    
+    <span class="n">rm_away_wins</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">)</span> <span class="o">&amp;</span> 
+        <span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">])</span>
+    <span class="p">])</span>
+    
+    <span class="n">draws</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span>
+        <span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span>
+    <span class="p">])</span>
+    
+    <span class="n">total_matches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h2h_matches</span><span class="p">)</span>
+    <span class="n">total_wins</span> <span class="o">=</span> <span class="n">rm_home_wins</span> <span class="o">+</span> <span class="n">rm_away_wins</span>
+    
+    <span class="n">win_ratio</span> <span class="o">=</span> <span class="n">total_wins</span> <span class="o">/</span> <span class="n">total_matches</span>
+    <span class="n">points_per_match</span> <span class="o">=</span> <span class="p">(</span><span class="n">total_wins</span> <span class="o">*</span> <span class="n">WIN_POINTS</span> <span class="o">+</span> <span class="n">draws</span> <span class="o">*</span> <span class="n">DRAW_POINTS</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_matches</span>
+    
+    <span class="n">rm_goals</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">h2h_matches</span><span class="p">[</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">][</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span>
+        <span class="n">h2h_matches</span><span class="p">[</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">][</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="p">)</span>
+    
+    <span class="n">opp_goals</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">h2h_matches</span><span class="p">[</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">][</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span>
+        <span class="n">h2h_matches</span><span class="p">[</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">][</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="p">)</span>
+    
+    <span class="n">goals_balance</span> <span class="o">=</span> <span class="n">rm_goals</span> <span class="o">-</span> <span class="n">opp_goals</span>
+    
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;win_ratio&#39;</span><span class="p">:</span> <span class="n">win_ratio</span><span class="p">,</span>
+        <span class="s1">&#39;points_per_match&#39;</span><span class="p">:</span> <span class="n">points_per_match</span><span class="p">,</span>
+        <span class="s1">&#39;goals_balance&#39;</span><span class="p">:</span> <span class="n">goals_balance</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="calculate_h2h_overall_ppm">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.h2h_calculator.calculate_h2h_overall_ppm">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_h2h_overall_ppm</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">opp_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średnie punkty Real Madryt na mecz ze wszystkich meczów H2H w historii.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): DataFrame z danymi meczów zawierający kompletną historię</span>
+<span class="sd">        opp_id (int): ID drużyny przeciwnika do analizy</span>
+<span class="sd">        match_date (str/datetime): Data graniczna - analizuje mecze sprzed tej daty</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float or None: Średnie punkty na mecz Real Madryt przeciwko temu przeciwnikowi</span>
+<span class="sd">                      w całej dostępnej historii. Zwraca None jeśli brak meczów H2H.</span>
+<span class="sd">        </span>
+<span class="sd">    Process:</span>
+<span class="sd">        1. Pobiera wszystkie mecze H2H z historii (bez ograniczenia last_n)</span>
+<span class="sd">        2. Zlicza wszystkie wygrane Real Madryt u siebie i na wyjeździe</span>
+<span class="sd">        3. Zlicza wszystkie remisy w historii starć</span>
+<span class="sd">        4. Oblicza średnie punkty używając systemu punktowego La Liga</span>
+<span class="sd">        </span>
+<span class="sd">    Calculation:</span>
+<span class="sd">        PPM = (total_wins * 3 + total_draws * 1) / total_matches_played</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Różni się od calculate_h2h_stats() tym, że analizuje całą historię</span>
+<span class="sd">        - Nie ma ograniczenia do ostatnich N meczów</span>
+<span class="sd">        - Używa tego samego systemu punktowego co Liga (3-1-0)</span>
+<span class="sd">        - Kluczowa metryka dla długoterminowej analizy H2H</span>
+<span class="sd">        - Pomaga ocenić historyczną dominację nad przeciwnikiem</span>
+<span class="sd">        </span>
+<span class="sd">    Use Cases:</span>
+<span class="sd">        - Porównanie z recent form (ostatnie 5 meczów)</span>
+<span class="sd">        - Ocena długoterminowych trendów H2H</span>
+<span class="sd">        - Analiza historycznej przewagi Real Madryt</span>
+<span class="sd">        </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; overall_ppm = calculate_h2h_overall_ppm(df, opp_id=3, match_date=&#39;2023-10-15&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; if overall_ppm:</span>
+<span class="sd">        &gt;&gt;&gt;     print(f&quot;RM średnio zdobywa {overall_ppm:.2f} punktów przeciwko tej drużynie&quot;)</span>
+<span class="sd">        &gt;&gt;&gt;     if overall_ppm &gt; 2.0:</span>
+<span class="sd">        &gt;&gt;&gt;         print(&quot;Historyczna dominacja Real Madryt&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h2h_matches</span> <span class="o">=</span> <span class="n">get_h2h_matches</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">opp_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">h2h_matches</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">h2h_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="n">rm_home_wins</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">)</span> <span class="o">&amp;</span> 
+        <span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">])</span>
+    <span class="p">])</span>
+    
+    <span class="n">rm_away_wins</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">REAL_MADRID_ID</span><span class="p">)</span> <span class="o">&amp;</span> 
+        <span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">])</span>
+    <span class="p">])</span>
+    
+    <span class="n">draws</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h2h_matches</span><span class="p">[</span>
+        <span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">h2h_matches</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span>
+    <span class="p">])</span>
+    
+    <span class="n">total_matches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">h2h_matches</span><span class="p">)</span>
+    <span class="n">total_wins</span> <span class="o">=</span> <span class="n">rm_home_wins</span> <span class="o">+</span> <span class="n">rm_away_wins</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">total_wins</span> <span class="o">*</span> <span class="n">WIN_POINTS</span> <span class="o">+</span> <span class="n">draws</span> <span class="o">*</span> <span class="n">DRAW_POINTS</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_matches</span></div>
+
+
+<div class="viewcode-block" id="is_playing_before">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_h2h.html#finall_dataframe.rm_h2h.h2h_calculator.is_playing_before">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_playing_before</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sprawdza, czy Real Madryt grał wcześniej z przeciwnikiem przed określoną datą.</span>
+<span class="sd">    </span>
+<span class="sd">    Funkcja weryfikuje czy istnieją jakiekolwiek mecze bezpośrednie między Real Madryt</span>
+<span class="sd">    a przeciwnikiem w bazie danych przed podaną datą meczu. Jest używana do bezpiecznego</span>
+<span class="sd">    wypełnienia wartości NaN w końcowym datasecie.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): DataFrame z danymi meczów zawierający kolumny:</span>
+<span class="sd">            - match_date: Data meczu</span>
+<span class="sd">            - home_team_id: ID drużyny gospodarzy  </span>
+<span class="sd">            - away_team_id: ID drużyny gości</span>
+<span class="sd">        match_date (str/datetime): Data graniczna - sprawdza mecze sprzed tej daty</span>
+<span class="sd">        team_id (int): ID drużyny przeciwnika do sprawdzenia H2H z Real Madryt</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True jeśli istnieje przynajmniej jeden mecz H2H przed podaną datą,</span>
+<span class="sd">              False jeśli brak wcześniejszych meczów w bazie danych.</span>
+<span class="sd">              </span>
+<span class="sd">    Logic:</span>
+<span class="sd">        - Wartość True (1) oznacza: istnieją mecze H2H w przeszłości w bazie</span>
+<span class="sd">        - Wartość False (0) oznacza: brak wcześniejszych meczów H2H w bazie</span>
+<span class="sd">        </span>
+<span class="sd">    Usage in Dataset:</span>
+<span class="sd">        Kolumna H2H_EXISTS w finalnym datasecie:</span>
+<span class="sd">        - 0: Real Madryt wcześniej nie rozegrał z daną drużyną żadnego meczu</span>
+<span class="sd">        - 1: Istnieją mecze w przeszłości w bazie danych przed określoną datą</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Używa funkcji get_h2h_matches() do wyszukania historycznych meczów</span>
+<span class="sd">        - Kluczowa dla bezpiecznego wypełniania NaN w statystykach H2H</span>
+<span class="sd">        - Pozwala rozróżnić brak danych od braku historii meczów</span>
+<span class="sd">        - Real Madryt może być gospodarzem lub gościem w sprawdzanych meczach</span>
+<span class="sd">        </span>
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; df = load_match_data()</span>
+<span class="sd">        &gt;&gt;&gt; exists = is_playing_before(df, &#39;2023-10-15&#39;, team_id=3)</span>
+<span class="sd">        &gt;&gt;&gt; if exists:</span>
+<span class="sd">        &gt;&gt;&gt;     print(&quot;Real Madryt ma historię meczów z tą drużyną&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; else:</span>
+<span class="sd">        &gt;&gt;&gt;     print(&quot;Pierwszy mecz H2H z tą drużyną&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h2h_matches</span> <span class="o">=</span> <span class="n">get_h2h_matches</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">h2h_matches</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">h2h_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+        
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

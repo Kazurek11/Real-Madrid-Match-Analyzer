@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_team.stats_calculator &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_team.stats_calculator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.rm_team.stats_calculator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Kalkulator statystyk drużynowych i trenerskich.</span>
+
+<span class="sd">Moduł oblicza średnie ocen trenerów, statystyki ofensywne/defensywne</span>
+<span class="sd">oraz wydajność punktową dla Real Madryt i przeciwników na podstawie</span>
+<span class="sd">ostatnich meczów i poprzednich sezonów.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">warning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.const_variable</span><span class="w"> </span><span class="kn">import</span> <span class="n">SEASON_DATES</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RM_COACH_RATING</span><span class="p">,</span> <span class="n">WIN_POINTS</span><span class="p">,</span> <span class="n">DRAW_POINTS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_type_in_dataframe</span><span class="p">,</span> <span class="n">check_NaN_column_in_RM_matches</span>
+
+
+<div class="viewcode-block" id="StatsCalculator">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StatsCalculator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Kalkulator statystyk drużynowych i trenerskich.</span>
+<span class="sd">    </span>
+<span class="sd">    Oblicza średnie ocen trenerów, statystyki meczowe oraz wydajność</span>
+<span class="sd">    przeciwko różnym typom przeciwników na podstawie danych historycznych.</span>
+<span class="sd">    Obsługuje zarówno Real Madryt jak i drużyny przeciwników.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        rm_matches (pd.DataFrame): Dane meczów Real Madryt z preprocessowanymi kolumnami</span>
+<span class="sd">        opp_matches (pd.DataFrame): Dane wszystkich meczów La Liga</span>
+<span class="sd">        season_manager: Manager do zarządzania datami sezonów</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rm_matches</span><span class="p">,</span> <span class="n">opp_matches</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje kalkulator statystyk.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            rm_matches (pd.DataFrame): Dane meczów Real Madryt z kolumnami specyficznymi</span>
+<span class="sd">            opp_matches (pd.DataFrame): Dane wszystkich meczów La Liga</span>
+<span class="sd">            season_manager: Manager sezonów do określania dat rozpoczęcia/zakończenia</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - rm_matches zawiera preprocessowane dane z kolumnami &#39;real_result&#39;, &#39;goals&#39;</span>
+<span class="sd">            - opp_matches zawiera surowe dane wszystkich drużyn z home/away_goals</span>
+<span class="sd">            - season_manager zapewnia funkcje get_season() i get_previous_season()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span> <span class="o">=</span> <span class="n">rm_matches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opp_matches</span> <span class="o">=</span> <span class="n">opp_matches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span> <span class="o">=</span> <span class="n">season_manager</span>
+    
+<div class="viewcode-block" id="StatsCalculator.calculate_coach_rating_last_season">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_coach_rating_last_season">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_coach_rating_last_season</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coach_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza średnią ocenę trenera z poprzedniego sezonu.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            coach_id (int): ID trenera (nieużywane w obecnej implementacji)</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float/np.nan: Średnia ocena trenera lub NaN jeśli brak danych</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Dla pierwszego sezonu używa danych z SEASON_DATES[0]</span>
+<span class="sd">            - Filtruje mecze z niepustymi ocenami trenera (RM_COACH_RATING)</span>
+<span class="sd">            - Zwraca NaN jeśli brak ocen w poprzednim sezonie</span>
+<span class="sd">            - Konwertuje daty do datetime64[ns] jeśli potrzeba</span>
+<span class="sd">            - Loguje informacje o liczbie meczów i średniej ocenie</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_season</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span><span class="o">.</span><span class="n">get_season</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+        <span class="n">previous_season</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span><span class="o">.</span><span class="n">get_previous_season</span><span class="p">(</span><span class="n">current_season</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">previous_season</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak wcześniejszego sezonu dla daty </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2"> (pierwszy sezon)&quot;</span><span class="p">)</span>
+            <span class="n">first_season_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">SEASON_DATES</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> 
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">SEASON_DATES</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="p">]</span>
+            <span class="n">valid_matches</span> <span class="o">=</span> <span class="n">first_season_matches</span><span class="p">[</span><span class="n">first_season_matches</span><span class="p">[</span><span class="n">RM_COACH_RATING</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span>
+            
+            <span class="k">if</span> <span class="n">valid_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak ocen trenera w pierwszym sezonie dla daty </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                
+            <span class="n">coach_rating_avg</span> <span class="o">=</span> <span class="n">valid_matches</span><span class="p">[</span><span class="n">RM_COACH_RATING</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Średnia ocena trenera z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">valid_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów: </span><span class="si">{</span><span class="n">coach_rating_avg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">coach_rating_avg</span>
+            
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">previous_season</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;start_date&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">previous_season</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid previous season data for match date </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">check_type_in_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">,</span> <span class="s1">&#39;match_date&#39;</span><span class="p">,</span> <span class="s1">&#39;datetime64[ns]&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        
+        <span class="n">previous_season_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">previous_season</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">])</span> <span class="o">&amp;</span> 
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">previous_season</span><span class="p">[</span><span class="s2">&quot;end_date&quot;</span><span class="p">])</span>
+        <span class="p">]</span>
+        
+        <span class="n">valid_matches</span> <span class="o">=</span> <span class="n">previous_season_matches</span><span class="p">[</span><span class="n">previous_season_matches</span><span class="p">[</span><span class="n">RM_COACH_RATING</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span>
+        
+        <span class="k">if</span> <span class="n">valid_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak ocen trenera w poprzednim sezonie dla daty </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            
+        <span class="n">coach_rating_avg</span> <span class="o">=</span> <span class="n">valid_matches</span><span class="p">[</span><span class="n">RM_COACH_RATING</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Średnia ocena trenera z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">valid_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów poprzedniego sezonu: </span><span class="si">{</span><span class="n">coach_rating_avg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">coach_rating_avg</span></div>
+
+    
+<div class="viewcode-block" id="StatsCalculator.calculate_coach_rating_last_5">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_coach_rating_last_5">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_coach_rating_last_5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza średnią ocenę trenera z ostatnich 5 meczów.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float/False: Średnia ocena trenera z ostatnich 5 meczów lub False/0 przy błędzie</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Filtruje mecze przed match_date</span>
+<span class="sd">            - Sortuje malejąco po dacie i bierze pierwsze 5 meczów</span>
+<span class="sd">            - Sprawdza poprawność danych przez check_NaN_column_in_RM_matches</span>
+<span class="sd">            - Zwraca 0 jeśli brak meczów</span>
+<span class="sd">            - Używa kolumny RM_COACH_RATING do obliczeń</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filtered_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">match_date</span><span class="p">]</span>
+        <span class="n">sorted_matches</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;match_date&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">last_5_matches</span> <span class="o">=</span> <span class="n">sorted_matches</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">last_5_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">check_NaN_column_in_RM_matches</span><span class="p">(</span><span class="n">last_5_matches</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sum_of_coach_rating</span> <span class="o">=</span> <span class="n">last_5_matches</span><span class="p">[</span><span class="n">RM_COACH_RATING</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">sum_of_coach_rating</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">last_5_matches</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd przy obliczaniu oceny trenera z ostatnich 5 meczów: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="StatsCalculator.calculate_last_5_stats">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_last_5_stats">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_last_5_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="n">matches_count</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza statystyki z ostatnich X meczów dla określonej drużyny.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            team_id (int): ID drużyny (1 dla Real Madryt, inne dla przeciwników)</span>
+<span class="sd">            matches_count (int): Liczba ostatnich meczów do analizy (domyślnie 5)</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict/False: Słownik ze statystykami lub False przy błędzie</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Dla team_id=1 używa _calculate_real_madrid_last_5()</span>
+<span class="sd">            - Dla innych team_id używa _calculate_opponent_last_5()</span>
+<span class="sd">            - Zwracany słownik zawiera klucze z prefiksem RM_ lub OP_</span>
+<span class="sd">            - Statystyki obejmują: gole strzelone/stracone, różnicę bramek, PPM, PPM przeciwników</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">team_id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_real_madrid_last_5</span><span class="p">(</span><span class="n">match_date</span><span class="p">,</span> <span class="n">matches_count</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_opponent_last_5</span><span class="p">(</span><span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="n">matches_count</span><span class="p">)</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_real_madrid_last_5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">matches_count</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza statystyki ostatnich meczów dla Real Madryt.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            matches_count (int): Liczba ostatnich meczów do analizy</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict/False: Słownik ze statystykami RM lub False przy błędzie</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Używa kolumn specyficznych dla RM: &#39;goals&#39;, &#39;real_result&#39;</span>
+<span class="sd">            - Oblicza gole stracone na podstawie home/away_goals przeciwników</span>
+<span class="sd">            - Punkty na podstawie real_result (1=wygrana, 0.5=remis, 0=porażka)</span>
+<span class="sd">            - PPM przeciwników z kolumn PPM_H/PPM_A</span>
+<span class="sd">            - Zwraca średnie wartości podzielone przez liczbę meczów</span>
+<span class="sd">            - Klucze: RM_G_SCO_L5, RM_G_CON_L5, RM_GDIF_L5, RM_PPM_L5, RM_OPP_PPM_L5</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Obliczam statystyki ostatnich </span><span class="si">{</span><span class="n">matches_count</span><span class="si">}</span><span class="s2"> meczów dla Realu Madryt przed </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">filtered_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">match_date</span><span class="p">]</span>
+        <span class="n">sorted_matches</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;match_date&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">last_matches</span> <span class="o">=</span> <span class="n">sorted_matches</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">matches_count</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">last_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak meczów dla Realu Madryt przed datą </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">check_NaN_column_in_RM_matches</span><span class="p">(</span><span class="n">last_matches</span><span class="p">):</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono wartości NaN w danych dla Realu Madryt&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">matches_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">last_matches</span><span class="p">)</span>
+            <span class="n">rm_goals</span> <span class="o">=</span> <span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            
+            <span class="n">rm_conceded_goals</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> 
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="p">)</span>
+            
+            <span class="n">rm_difference</span> <span class="o">=</span> <span class="n">rm_goals</span> <span class="o">-</span> <span class="n">rm_conceded_goals</span>
+            
+            <span class="n">rm_points</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;real_result&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">WIN_POINTS</span><span class="p">)</span> <span class="o">+</span> 
+                <span class="p">(</span><span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;real_result&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.5</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">DRAW_POINTS</span><span class="p">)</span>
+            <span class="p">)</span>
+            
+            <span class="n">rm_opp_ppm</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s1">&#39;PPM_A&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> 
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s1">&#39;PPM_H&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie obliczono statystyki dla Realu Madryt&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s1">&#39;RM_G_SCO_L5&#39;</span><span class="p">:</span> <span class="n">rm_goals</span> <span class="o">/</span> <span class="n">matches_count</span><span class="p">,</span>
+                <span class="s1">&#39;RM_G_CON_L5&#39;</span><span class="p">:</span> <span class="n">rm_conceded_goals</span> <span class="o">/</span> <span class="n">matches_count</span><span class="p">,</span>
+                <span class="s1">&#39;RM_GDIF_L5&#39;</span><span class="p">:</span> <span class="n">rm_difference</span> <span class="o">/</span> <span class="n">matches_count</span><span class="p">,</span>
+                <span class="s1">&#39;RM_PPM_L5&#39;</span><span class="p">:</span> <span class="n">rm_points</span> <span class="o">/</span> <span class="n">matches_count</span><span class="p">,</span>
+                <span class="s1">&#39;RM_OPP_PPM_L5&#39;</span><span class="p">:</span> <span class="n">rm_opp_ppm</span> <span class="o">/</span> <span class="n">matches_count</span>
+            <span class="p">}</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił błąd podczas obliczania statystyk dla Realu Madryt: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_opponent_last_5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="n">matches_count</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza statystyki ostatnich meczów dla drużyny przeciwnika.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            team_id (int): ID drużyny przeciwnika</span>
+<span class="sd">            matches_count (int): Liczba ostatnich meczów do analizy</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict/np.nan: Słownik ze statystykami przeciwnika lub np.nan przy błędzie</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Używa danych opp_matches z wszystkimi meczami La Liga</span>
+<span class="sd">            - Filtruje mecze gdzie team_id występuje jako gospodarz lub gość</span>
+<span class="sd">            - Oblicza gole na podstawie home_goals/away_goals w zależności od roli</span>
+<span class="sd">            - Punkty na podstawie porównania wyników home_goals vs away_goals</span>
+<span class="sd">            - PPM przeciwników drużyny z kolumn PPM_H/PPM_A</span>
+<span class="sd">            - Klucze: OP_G_SCO_L5, OP_G_CON_L5, OP_GDIF_L5, OP_PPM_L5, OP_OPP_PPM_L5</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Obliczam statystyki ostatnich </span><span class="si">{</span><span class="n">matches_count</span><span class="si">}</span><span class="s2"> meczów dla zespołu ID=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2"> przed </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">filtered_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">opp_matches</span><span class="p">[</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">match_date</span><span class="p">)</span> <span class="o">&amp;</span> 
+                <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">))</span>
+            <span class="p">]</span>
+            <span class="n">sorted_matches</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;match_date&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">last_matches</span> <span class="o">=</span> <span class="n">sorted_matches</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">matches_count</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">last_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak meczów dla zespołu ID=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2"> przed datą </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">check_NaN_column_in_RM_matches</span><span class="p">(</span><span class="n">last_matches</span><span class="p">):</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono wartości NaN w danych dla zespołu ID=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            
+            <span class="n">matches_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">last_matches</span><span class="p">)</span>
+            
+            <span class="n">opp_goals</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">][</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> 
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">][</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="p">)</span>
+            
+            <span class="n">opp_conceded_goals</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">][</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> 
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">][</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="p">)</span>
+            
+            <span class="n">opp_difference</span> <span class="o">=</span> <span class="n">opp_goals</span> <span class="o">-</span> <span class="n">opp_conceded_goals</span>
+            
+            <span class="n">home_wins</span> <span class="o">=</span> <span class="n">last_matches</span><span class="p">[</span>
+                <span class="p">(</span><span class="n">last_matches</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">)</span> <span class="o">&amp;</span> 
+                <span class="p">(</span><span class="n">last_matches</span><span class="p">[</span><span class="s2">&quot;home_goals&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">last_matches</span><span class="p">[</span><span class="s2">&quot;away_goals&quot;</span><span class="p">])</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            
+            <span class="n">away_wins</span> <span class="o">=</span> <span class="n">last_matches</span><span class="p">[</span>
+                <span class="p">(</span><span class="n">last_matches</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">)</span> <span class="o">&amp;</span> 
+                <span class="p">(</span><span class="n">last_matches</span><span class="p">[</span><span class="s2">&quot;away_goals&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">last_matches</span><span class="p">[</span><span class="s2">&quot;home_goals&quot;</span><span class="p">])</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            
+            <span class="n">draws</span> <span class="o">=</span> <span class="n">last_matches</span><span class="p">[</span>
+                <span class="n">last_matches</span><span class="p">[</span><span class="s2">&quot;home_goals&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">last_matches</span><span class="p">[</span><span class="s2">&quot;away_goals&quot;</span><span class="p">]</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            
+            <span class="n">opp_points</span> <span class="o">=</span> <span class="p">(</span><span class="n">home_wins</span> <span class="o">+</span> <span class="n">away_wins</span><span class="p">)</span> <span class="o">*</span> <span class="n">WIN_POINTS</span> <span class="o">+</span> <span class="n">draws</span> <span class="o">*</span> <span class="n">DRAW_POINTS</span>
+            
+            <span class="n">point_per_match_of_rivalas_rival</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">][</span><span class="s1">&#39;PPM_A&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> 
+                <span class="n">last_matches</span><span class="p">[</span><span class="n">last_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_id</span><span class="p">][</span><span class="s1">&#39;PPM_H&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie obliczono statystyki dla zespołu ID=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s1">&#39;OP_G_SCO_L5&#39;</span><span class="p">:</span> <span class="n">opp_goals</span> <span class="o">/</span> <span class="n">matches_count</span><span class="p">,</span>
+                <span class="s1">&#39;OP_G_CON_L5&#39;</span><span class="p">:</span> <span class="n">opp_conceded_goals</span> <span class="o">/</span> <span class="n">matches_count</span><span class="p">,</span>
+                <span class="s1">&#39;OP_GDIF_L5&#39;</span><span class="p">:</span> <span class="n">opp_difference</span> <span class="o">/</span> <span class="n">matches_count</span><span class="p">,</span>
+                <span class="s1">&#39;OP_PPM_L5&#39;</span><span class="p">:</span> <span class="n">opp_points</span> <span class="o">/</span> <span class="n">matches_count</span><span class="p">,</span>
+                <span class="s1">&#39;OP_OPP_PPM_L5&#39;</span><span class="p">:</span> <span class="n">point_per_match_of_rivalas_rival</span> <span class="o">/</span> <span class="n">matches_count</span>
+            <span class="p">}</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił błąd podczas obliczania statystyk dla zespołu ID=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

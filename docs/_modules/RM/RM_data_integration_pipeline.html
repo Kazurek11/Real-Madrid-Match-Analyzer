@@ -1,0 +1,1080 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RM.RM_data_integration_pipeline &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=2827c288"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">RM.RM_data_integration_pipeline</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu RM.RM_data_integration_pipeline</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">RM_data_integration_pipeline.py - Real Madrid Data Integration &amp; Analytics Pipeline</span>
+
+<span class="sd">Kompleksowy system przetwarzania i integracji danych dotyczących meczów i zawodników Realu Madryt.</span>
+<span class="sd">Moduł implementuje zaawansowany pipeline do wczytywania, przetwarzania, dopasowywania i agregowania</span>
+<span class="sd">danych z różnych źródeł, umożliwiając prowadzenie szczegółowych analiz statystycznych</span>
+<span class="sd">zarówno na poziomie zespołu, jak i poszczególnych zawodników.</span>
+
+<span class="sd">Główne funkcjonalności:</span>
+<span class="sd">1. Wczytywanie i konsolidacja danych zawodników z wielu plików Excel</span>
+<span class="sd">2. Wczytywanie i integracja danych meczowych z wielu sezonów</span>
+<span class="sd">3. Standaryzacja nazw drużyn i harmonizacja formatów danych</span>
+<span class="sd">4. Dopasowanie rekordów graczy do konkretnych meczów na podstawie dat</span>
+<span class="sd">5. Przypisanie unikalnych identyfikatorów drużyn i meczów do wszystkich rekordów</span>
+<span class="sd">6. Agregacja statystyk zawodników do poziomu drużyny dla każdego meczu</span>
+<span class="sd">7. Generowanie spójnego zbioru danych z zagregowanymi statystykami meczowymi</span>
+<span class="sd">8. Zapis przetworzonych danych do pliku CSV</span>
+
+<span class="sd">Moduł wykorzystuje zaawansowane metody przetwarzania danych z biblioteki pandas</span>
+<span class="sd">oraz własne narzędzia do standaryzacji i łączenia danych, zapewniając wysoką</span>
+<span class="sd">jakość oraz spójność wyjściowych zbiorów danych.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.RM_players_analyzer</span><span class="w"> </span><span class="kn">import</span> <span class="n">RealMadridPlayersAnalyzer</span>
+
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">warning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.merge_all_season_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataMerger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.data_processor</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataProcessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.const_variable</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.get_RM_matches</span><span class="w"> </span><span class="kn">import</span> <span class="n">RealMadridMatches</span>
+
+
+<div class="viewcode-block" id="RM_merge_and_edit">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_data_integration_pipeline.RM_merge_and_edit">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RM_merge_and_edit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa zapewniająca kompleksowy proces integracji i analizy danych graczy oraz meczów Realu Madryt.</span>
+<span class="sd">    </span>
+<span class="sd">    Implementuje pełny proces ETL (Extract, Transform, Load) dla danych piłkarskich,</span>
+<span class="sd">    od wczytania surowych danych z plików źródłowych, przez ich przetworzenie i dopasowanie,</span>
+<span class="sd">    aż po agregację i eksport końcowego zbioru danych analitycznych.</span>
+<span class="sd">    </span>
+<span class="sd">    Atrybuty:</span>
+<span class="sd">        file_utils (FileUtils): Narzędzia do operacji na plikach i ścieżkach.</span>
+<span class="sd">        rm_analyzer (RealMadridPlayersAnalyzer): Analizator danych zawodników.</span>
+<span class="sd">        data_merger (DataMerger): Narzędzie do łączenia danych z wielu sezonów.</span>
+<span class="sd">        data_processor (DataProcessor): Procesor danych do operacji standaryzujących.</span>
+<span class="sd">        RM_player_data (pd.DataFrame): Dane zawodników Realu Madryt.</span>
+<span class="sd">        RM_match_data (pd.DataFrame): Dane meczów Realu Madryt.</span>
+<span class="sd">        dates_of_madrid_match (list): Lista dat meczów Realu Madryt.</span>
+<span class="sd">        update_RM_player_data (pd.DataFrame): Przefiltrowane dane zawodników po dopasowaniu.</span>
+<span class="sd">        coach_data (pd.DataFrame): Oceny ogolne trenera,drużyny przeciwnej i stylu gry RM.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Klasa jest zaprojektowana z myślą o automatycznym przetwarzaniu danych, minimalizując</span>
+<span class="sd">          potrzebę ręcznej ingerencji w proces</span>
+<span class="sd">        - Wszystkie kluczowe operacje są dokładnie logowane za pomocą modułu logger</span>
+<span class="sd">        - W przypadku wystąpienia błędów na dowolnym etapie, informacje diagnostyczne</span>
+<span class="sd">          są zapisywane do logów</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje klasę RM_merge_and_edit i wczytuje wszystkie niezbędne dane źródłowe.</span>
+<span class="sd">        </span>
+<span class="sd">        Proces inicjalizacji obejmuje:</span>
+<span class="sd">        1. Utworzenie instancji klas pomocniczych</span>
+<span class="sd">        2. Wczytanie i przetworzenie danych zawodników z plików Excel</span>
+<span class="sd">        3. Wczytanie i przetworzenie danych meczowych z wielu sezonów</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Proces jest wykonywany sekwencyjnie, najpierw wczytywane są dane graczy,</span>
+<span class="sd">              a następnie dane meczów</span>
+<span class="sd">            - W przypadku niepowodzenia wczytywania plików, odpowiednie atrybuty</span>
+<span class="sd">              są inicjalizowane pustymi DataFrame</span>
+<span class="sd">            - Cały proces jest szczegółowo logowany</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span> <span class="o">=</span> <span class="n">RealMadridPlayersAnalyzer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_merger</span> <span class="o">=</span> <span class="n">DataMerger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s2">&quot;Data&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_teamstyle_rival_data</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Inicjalizacja: Wczytywanie plików Excel z danymi graczy...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="o">.</span><span class="n">load_excel_files</span><span class="p">():</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać plików Excel z danymi graczy!&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">RM_player_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Inicjalizacja: Przetwarzanie danych graczy...&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">RM_player_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="o">.</span><span class="n">merge_and_process_data</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Inicjalizacja: Wczytywanie danych sezonów...&quot;</span><span class="p">)</span>
+        <span class="n">seasons_loaded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_merger</span><span class="o">.</span><span class="n">load_all_seasons</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">seasons_loaded</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać danych sezonów!&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Inicjalizacja: Wczytywanie danych meczów Realu Madryt...&quot;</span><span class="p">)</span>
+            <span class="n">rm_matches</span> <span class="o">=</span> <span class="n">RealMadridMatches</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_merger</span><span class="o">.</span><span class="n">all_matches</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span> <span class="o">=</span> <span class="n">rm_matches</span><span class="o">.</span><span class="n">get_real_madrid_matches</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dates_of_madrid_match</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="viewcode-block" id="RM_merge_and_edit.coach_teamstyle_rival_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_data_integration_pipeline.RM_merge_and_edit.coach_teamstyle_rival_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">coach_teamstyle_rival_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje, przetwarza i łączy dane dotyczące ocen trenerów i drużyn z plików Excel.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda wczytuje dane z dwóch źródeł - najnowszego pliku Excel z 2025 roku oraz</span>
+<span class="sd">        archiwalnego pliku z latami 2019-2024. Następnie standaryzuje nazwy kolumn,</span>
+<span class="sd">        łączy oba zbiory danych, usuwa niepotrzebne kolumny (m.in. dane opisowe i oceny</span>
+<span class="sd">        sędziów) oraz przetwarza kolumnę z datami na format datetime.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame zawierający połączone i przetworzone dane o ocenach</span>
+<span class="sd">                         trenerów i drużyn lub pusty DataFrame w przypadku błędu</span>
+<span class="sd">        </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: Wyjątek złapany i zalogowany w przypadku problemów z wczytywaniem</span>
+<span class="sd">                      plików lub przetwarzaniem danych</span>
+<span class="sd">                      </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Wykorzystuje FileUtils.load_excel_safe do bezpiecznego wczytywania plików Excel</span>
+<span class="sd">            - Standaryzuje nazwy kolumn z dwóch różnych formatów źródłowych</span>
+<span class="sd">            - Usuwa kolumny z ocenami sędziów, średnimi ocenami piłkarzy oraz danymi opisowymi</span>
+<span class="sd">            - Usuwa wiersze z brakującymi wartościami</span>
+<span class="sd">            - Konwertuje kolumnę match_date na format datetime</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wczytywanie danych o trenerach i ocenach drużynowych...&quot;</span><span class="p">)</span>
+            
+            <span class="n">data_1</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">load_excel_safe</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Excele&quot;</span><span class="p">,</span> <span class="s2">&quot;oceny_pilkarzy2_2025.xlsx&quot;</span><span class="p">),</span> 
+                <span class="n">sheet_name</span><span class="o">=</span><span class="s2">&quot;mecze_20250319&quot;</span>
+            <span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano dane z mecze_20250319, liczba wierszy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data_1</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">data_1</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="n">data_2</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">load_excel_safe</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Excele&quot;</span><span class="p">,</span> <span class="s2">&quot;real_players_match_19-24.xlsx&quot;</span><span class="p">),</span> 
+                <span class="n">sheet_name</span><span class="o">=</span><span class="s2">&quot;mecze20240911&quot;</span>
+            <span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano dane z mecze20240911, liczba wierszy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data_2</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">data_2</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">data_1</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data_2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać żadnych danych z plików Excel&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="n">data_1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Przetwarzanie danych z pliku 2025...&quot;</span><span class="p">)</span>
+                <span class="n">data_1</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;home_team&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;name.1&#39;</span><span class="p">:</span> <span class="s1">&#39;away_team&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;editor_madrid_manager_rating&#39;</span><span class="p">:</span> <span class="s1">&#39;RM_coach_rating_EDI&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;avg_madrid_manager_rating&#39;</span><span class="p">:</span> <span class="s1">&#39;RM_coach_rating_USR&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;editor_madrid_team_rating&#39;</span><span class="p">:</span> <span class="s1">&#39;RM_team_rating_EDI&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;avg_madrid_team_rating&#39;</span><span class="p">:</span> <span class="s1">&#39;RM_team_rating_USR&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;editor_opposing_team_rating&#39;</span><span class="p">:</span> <span class="s1">&#39;rival_rating_EDI&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;avg_opposing_team_rating&#39;</span><span class="p">:</span> <span class="s1">&#39;rival_rating_USR&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;editor_referee_rating&#39;</span><span class="p">:</span> <span class="s1">&#39;referee_rating_EDI&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;avg_referee_rating&#39;</span><span class="p">:</span> <span class="s1">&#39;referee_rating_USR&#39;</span>
+                <span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">data_2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Przetwarzanie danych z pliku 2019-2024...&quot;</span><span class="p">)</span>
+                <span class="n">data_2</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="s1">&#39;match_date&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;gospodarz&#39;</span><span class="p">:</span> <span class="s1">&#39;home_team&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;gość&#39;</span><span class="p">:</span> <span class="s1">&#39;away_team&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;bramki [gosp]&#39;</span><span class="p">:</span> <span class="s1">&#39;home_goals&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;bramki [gość]&#39;</span><span class="p">:</span> <span class="s1">&#39;away_goals&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;trener [red.]&#39;</span><span class="p">:</span> <span class="s1">&#39;RM_coach_rating_EDI&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;trener [userzy]&#39;</span><span class="p">:</span> <span class="s1">&#39;RM_coach_rating_USR&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;Real [red.]&#39;</span><span class="p">:</span> <span class="s1">&#39;RM_team_rating_EDI&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;Real [userzy]&#39;</span><span class="p">:</span> <span class="s1">&#39;RM_team_rating_USR&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;rywal [red.]&#39;</span><span class="p">:</span> <span class="s1">&#39;rival_rating_EDI&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;rywal [userzy]&#39;</span><span class="p">:</span> <span class="s1">&#39;rival_rating_USR&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;sędzia [red.]&#39;</span><span class="p">:</span> <span class="s1">&#39;referee_rating_EDI&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;sędzia [userzy]&#39;</span><span class="p">:</span> <span class="s1">&#39;referee_rating_USR&#39;</span>
+                <span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Łączenie danych z obu plików...&quot;</span><span class="p">)</span>
+            <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">data_1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">data_2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_2</span><span class="p">)</span>
+                
+            <span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Po połączeniu, liczba wierszy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Usuwanie niepotrzebnych kolumn...&quot;</span><span class="p">)</span>
+            <span class="n">columns_to_drop</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;avg_all_players_rating&#39;</span><span class="p">,</span> <span class="s1">&#39;editor_all_players_rating&#39;</span><span class="p">,</span> <span class="s1">&#39;madrid_manager_description&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;referee_description&#39;</span><span class="p">,</span> <span class="s1">&#39;śr. piłkarzy [red.]&#39;</span><span class="p">,</span> <span class="s1">&#39;śr. piłkarzy [userzy]&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;trener [opis]&#39;</span><span class="p">,</span> <span class="s1">&#39;sędzia [opis]&#39;</span><span class="p">,</span> <span class="s1">&#39;referee_rating_USR&#39;</span><span class="p">,</span> <span class="s1">&#39;referee_rating_EDI&#39;</span>
+            <span class="p">]</span>
+            
+            <span class="n">existing_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns_to_drop</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">existing_columns</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">existing_columns</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Usunięto kolumny: </span><span class="si">{</span><span class="n">existing_columns</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="n">initial_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Usunięto </span><span class="si">{</span><span class="n">initial_rows</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy z brakującymi wartościami&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="s1">&#39;match_date&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Konwersja kolumny &#39;match_date&#39; na format datetime...&quot;</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wykryto </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> nieprawidłowych dat&quot;</span><span class="p">)</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">])</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Po usunięciu nieprawidłowych dat pozostało </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zakończono przetwarzanie danych o trenerach i ocenach drużyn. Wynikowy DataFrame zawiera </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy i </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> kolumn&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania i przetwarzania danych o trenerach: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RM_merge_and_edit.append_team_id">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_data_integration_pipeline.RM_merge_and_edit.append_team_id">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">append_team_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dodaje identyfikatory drużyn do danych zawodników.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda wykorzystuje data_processor do przypisania odpowiednich identyfikatorów drużyn</span>
+<span class="sd">        do wszystkich rekordów zawodników. Identyfikatory te są niezbędne do późniejszego</span>
+<span class="sd">        łączenia danych z innymi zbiorami oraz do analizy.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Operacja modyfikuje bezpośrednio atrybut RM_player_data</span>
+<span class="sd">            - Wykorzystywana jest funkcjonalność add_team_ids_to_dataframe z DataProcessor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RM_player_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">add_team_ids_to_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RM_player_data</span><span class="p">)</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_dates_of_madrid_match</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pobiera i przetwarza daty meczów Realu Madryt z dataframe RM_match_data.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda zapewnia, że wszystkie daty są prawidłowo sformatowane jako obiekt datetime,</span>
+<span class="sd">        co jest krytyczne dla poprawnego dopasowania rekordów graczy do meczów.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Lista przetworzonych dat meczów Realu Madryt</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda sprawdza czy kolumna match_date istnieje w RM_match_data</span>
+<span class="sd">            - W razie potrzeby dokonuje konwersji dat do formatu datetime</span>
+<span class="sd">            - Usuwa rekordy z nieprawidłowymi datami (NaT)</span>
+<span class="sd">            - Wyniki pośrednie są zapisywane w atrybucie dates_of_madrid_match</span>
+<span class="sd">            - Wszystkie problemy są szczegółowo logowane</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;match_date&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Kolumna &#39;match_date&#39; nie istnieje w pliku &#39;self.RM_match_data&#39;.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_datetime64_any_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]):</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Konwersja kolumny match_date w RM_match_data na format datetime&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Usunięto </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> rekordów z nieprawidłowymi datami&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas konwersji dat w RM_match_data: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dates_of_madrid_match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dates_of_madrid_match</span>
+            
+    <span class="k">def</span><span class="w"> </span><span class="nf">_choose_the_same_event</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filtruje dane graczy, zachowując tylko rekordy odpowiadające datom meczów Realu Madryt.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda wykonuje kluczowy etap integracji danych - zapewnia, że analizujemy tylko rekordy</span>
+<span class="sd">        zawodników z dni, w których odbywały się mecze Realu Madryt, eliminując nieistotne dane.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda tworzy kopię danych graczy, aby uniknąć modyfikacji oryginalnego DataFrame</span>
+<span class="sd">            - Wykonuje standaryzację nazw drużyn w obu zbiorach danych</span>
+<span class="sd">            - Konwertuje i waliduje daty w obu zbiorach</span>
+<span class="sd">            - Filtruje dane graczy, pozostawiając tylko rekordy z datami meczów</span>
+<span class="sd">            - Wyniki są zapisywane w atrybucie update_RM_player_data</span>
+<span class="sd">            - Szczegółowe informacje o liczbie dopasowanych rekordów są logowane</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_player_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Brak danych do przetworzenia&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_player_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="n">updated</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">standardize_team_names</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        
+        <span class="n">updated</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">standardize_team_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;match_date&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Kolumna &#39;match_date&#39; nie istnieje w RM_player_data&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_datetime64_any_dtype</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]):</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Konwersja kolumny match_date w RM_player_data na format datetime&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Usunięto </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> rekordów z nieprawidłowymi datami&quot;</span><span class="p">)</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">])</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas konwersji dat w RM_player_data: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+        
+        <span class="n">match_dates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dates_of_madrid_match</span><span class="p">()</span>
+        
+        <span class="n">filtered_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">match_dates</span><span class="p">)]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span> <span class="o">=</span> <span class="n">filtered_data</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wybrano </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> rekordów pasujących do dat meczów z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> dostępnych&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zakres dat: </span><span class="si">{</span><span class="n">filtered_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">filtered_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+    <span class="k">def</span><span class="w"> </span><span class="nf">_match_coach_data_by_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dopasowuje dane trenera do odpowiednich meczów Realu Madryt, implementując zaawansowany</span>
+<span class="sd">        mechanizm dopasowania rekordów na podstawie dat i drużyn z pełną diagnostyką procesu.</span>
+<span class="sd">        </span>
+<span class="sd">        Proces dopasowania obejmuje następujące etapy:</span>
+<span class="sd">        </span>
+<span class="sd">        1. WALIDACJA WSTĘPNA:</span>
+<span class="sd">            - Sprawdzenie istnienia i niepustości zbiorów danych trenera i meczów</span>
+<span class="sd">            - Wczesne przerwanie wykonania przy braku wymaganych danych</span>
+<span class="sd">        </span>
+<span class="sd">        2. STANDARYZACJA NAZW DRUŻYN:</span>
+<span class="sd">            - Ujednolicenie nazw wszystkich drużyn w danych trenera</span>
+<span class="sd">            - Przekształcenie różnych wariantów zapisu (np. &quot;Real Madryt&quot; → &quot;Real Madrid CF&quot;)</span>
+<span class="sd">            - Zapewnienie spójności nazewnictwa między zbiorami danych</span>
+<span class="sd">        </span>
+<span class="sd">        3. DODAWANIE IDENTYFIKATORÓW DRUŻYN:</span>
+<span class="sd">            - Wzbogacenie danych trenera o identyfikatory liczbowe drużyn</span>
+<span class="sd">            - Przypisanie każdej drużynie jednoznacznego ID zgodnego z bazą referencyjną</span>
+<span class="sd">            - Umożliwienie łączenia zbiorów danych na podstawie ID zamiast nazw tekstowych</span>
+<span class="sd">        </span>
+<span class="sd">        4. NORMALIZACJA DAT:</span>
+<span class="sd">            - Konwersja formatów dat w obu zbiorach do wspólnego standardu</span>
+<span class="sd">            - Usunięcie komponentu czasowego z dat (normalizacja do poziomu dnia)</span>
+<span class="sd">            - Zapewnienie precyzyjnego dopasowania meczów bez zależności od godziny</span>
+<span class="sd">        </span>
+<span class="sd">        5. ANALIZA DIAGNOSTYCZNA ZBIORÓW:</span>
+<span class="sd">            - Raportowanie dostępnych kolumn w obu zbiorach</span>
+<span class="sd">            - Porównanie liczby unikalnych dat i ich zakresów</span>
+<span class="sd">            - Wczesne wykrywanie problemów z zakresami czasowymi danych</span>
+<span class="sd">        </span>
+<span class="sd">        6. ŁĄCZENIE DANYCH:</span>
+<span class="sd">            - Połączenie danych meczów i trenera na podstawie trzech kluczy: daty, gospodarza i gościa</span>
+<span class="sd">            - Zachowanie wszystkich rekordów meczów (połączenie typu left join)</span>
+<span class="sd">            - Utworzenie jednolitego zbioru zawierającego ID meczu oraz oceny trenera</span>
+<span class="sd">        </span>
+<span class="sd">        7. EKSTRAKCJA KOLUMN:</span>
+<span class="sd">            - Wybór tylko niezbędnych kolumn związanych z ocenami trenera i drużyn</span>
+<span class="sd">            - Dynamiczny wybór dostępnych kolumn ocen (EDI/USR dla trenera, drużyny RM i rywala)</span>
+<span class="sd">            - Utworzenie nowego, uproszczonego DataFrame z najistotniejszymi danymi</span>
+<span class="sd">        </span>
+<span class="sd">        8. ANALIZA REZULTATÓW:</span>
+<span class="sd">            - Obliczenie liczby meczów z poprawnie dopasowanymi danymi trenera</span>
+<span class="sd">            - Szczegółowa diagnostyka niedopasowanych meczów</span>
+<span class="sd">            - Identyfikacja potencjalnych dopasowań na podstawie samej daty</span>
+<span class="sd">            - Ostrzeżenia o niekompletnych dopasowaniach z pełnym raportowaniem</span>
+<span class="sd">        </span>
+<span class="sd">        9. AKTUALIZACJA DANYCH:</span>
+<span class="sd">            - Przypisanie przetworzonych danych trenera do atrybutu klasy</span>
+<span class="sd">            - Gotowość do dalszego przetwarzania w kolejnych etapach pipeline&#39;u</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            None: Funkcja modyfikuje atrybut self.coach_data, przypisując mu przefiltrowane</span>
+<span class="sd">                    i dopasowane dane z ocenami trenera i drużyn.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            Wyjątki są przechwytywane wewnętrznie i zapisywane do logów, </span>
+<span class="sd">            funkcja nie propaguje błędów dalej.</span>
+<span class="sd">        </span>
+<span class="sd">        Dependencies:</span>
+<span class="sd">            - DataProcessor: Do standaryzacji nazw drużyn i dodawania identyfikatorów</span>
+<span class="sd">            - pandas: Do operacji na DataFrame i łączenia zbiorów danych</span>
+<span class="sd">            - logger: Do szczegółowego raportowania każdego kroku procesu</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            Funkcja stosuje konserwatywne podejście do dopasowania danych, unikając automatycznego</span>
+<span class="sd">            przypisywania danych w przypadku niejednoznaczności, aby zapobiec przekłamaniom.</span>
+<span class="sd">            W przypadku niedopasowania, szczegółowa diagnostyka pomaga zidentyfikować problem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Brak danych trenera lub meczów do dopasowania&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczęcie dopasowywania danych trenera do meczów Realu Madryt...&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Standaryzacja nazw drużyn w danych trenera...&quot;</span><span class="p">)</span>
+        <span class="n">updated</span><span class="p">,</span> <span class="n">standardized_coach_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">standardize_team_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">updated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span> <span class="o">=</span> <span class="n">standardized_coach_data</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Zaktualizowano nazwy drużyn w danych trenera&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Nazwy drużyn w danych trenera są już zgodne ze standardem lub brak kolumn do aktualizacji&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dodawanie identyfikatorów drużyn do danych trenera...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;home_team&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s2">&quot;away_team&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">add_team_ids_to_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dodano identyfikatory drużyn do danych trenera&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak wymaganych kolumn home_team i/lub away_team w danych trenera&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="n">coach_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">match_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;match_id&quot;</span><span class="p">:</span>
+            <span class="n">match_data</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_datetime64_any_dtype</span><span class="p">(</span><span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]):</span>
+            <span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_datetime64_any_dtype</span><span class="p">(</span><span class="n">coach_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]):</span>
+            <span class="n">coach_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">coach_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        
+        <span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+        <span class="n">coach_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coach_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumny w danych meczów: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">match_data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumny w danych trenera: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">coach_data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">match_unique_dates</span> <span class="o">=</span> <span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+        <span class="n">coach_unique_dates</span> <span class="o">=</span> <span class="n">coach_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unikalne daty: </span><span class="si">{</span><span class="n">match_unique_dates</span><span class="si">}</span><span class="s2"> w meczach, </span><span class="si">{</span><span class="n">coach_unique_dates</span><span class="si">}</span><span class="s2"> w danych trenera&quot;</span><span class="p">)</span>
+        
+        <span class="n">match_date_range</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">match_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">match_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">coach_date_range</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">coach_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">coach_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zakres dat meczów: </span><span class="si">{</span><span class="n">match_date_range</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zakres dat trenera: </span><span class="si">{</span><span class="n">coach_date_range</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">initial_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">coach_data</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Początkowa liczba rekordów danych trenera: </span><span class="si">{</span><span class="n">initial_rows</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">merged_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">match_data</span><span class="p">,</span>
+            <span class="n">coach_data</span><span class="p">,</span>
+            <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">,</span> <span class="s2">&quot;home_team&quot;</span><span class="p">,</span> <span class="s2">&quot;away_team&quot;</span><span class="p">],</span>
+            <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span>
+        <span class="p">)</span>
+        
+        <span class="n">coach_columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;match_id&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_coach_rating_EDI&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_coach_rating_USR&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;RM_team_rating_EDI&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_team_rating_USR&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;rival_rating_EDI&quot;</span><span class="p">,</span> <span class="s2">&quot;rival_rating_USR&quot;</span>
+        <span class="p">]</span>
+        
+        <span class="n">available_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">coach_columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">merged_data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">available_columns</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak kolumn z ocenami trenera w danych po dopasowaniu&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="n">filtered_coach_data</span> <span class="o">=</span> <span class="n">merged_data</span><span class="p">[</span><span class="n">available_columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="n">matched_records</span> <span class="o">=</span> <span class="n">filtered_coach_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="n">available_columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">match_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_data</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dopasowano dane trenera dla </span><span class="si">{</span><span class="n">matched_records</span><span class="si">}</span><span class="s2"> z </span><span class="si">{</span><span class="n">match_count</span><span class="si">}</span><span class="s2"> meczów Realu Madryt&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">matched_records</span> <span class="o">&lt;</span> <span class="n">match_count</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dla </span><span class="si">{</span><span class="n">match_count</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">matched_records</span><span class="si">}</span><span class="s2"> meczów nie znaleziono danych trenera&quot;</span><span class="p">)</span>
+            
+            <span class="n">missing_mask</span> <span class="o">=</span> <span class="n">filtered_coach_data</span><span class="p">[</span><span class="n">available_columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">missing_matches</span> <span class="o">=</span> <span class="n">filtered_coach_data</span><span class="p">[</span><span class="n">missing_mask</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">missing_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">missing_match_ids</span> <span class="o">=</span> <span class="n">missing_matches</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">match_info</span> <span class="o">=</span> <span class="n">match_data</span><span class="p">[</span><span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">missing_match_ids</span><span class="p">)]</span>
+                <span class="n">match_info</span> <span class="o">=</span> <span class="n">match_info</span><span class="p">[[</span><span class="s2">&quot;match_id&quot;</span><span class="p">,</span> <span class="s2">&quot;match_date&quot;</span><span class="p">,</span> <span class="s2">&quot;home_team&quot;</span><span class="p">,</span> <span class="s2">&quot;away_team&quot;</span><span class="p">,</span> 
+                                        <span class="s2">&quot;home_team_id&quot;</span><span class="p">,</span> <span class="s2">&quot;away_team_id&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przykładowe mecze bez danych trenera:</span><span class="se">\n</span><span class="si">{</span><span class="n">match_info</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+                <span class="n">missing_dates</span> <span class="o">=</span> <span class="n">match_info</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">potential_matches</span> <span class="o">=</span> <span class="n">coach_data</span><span class="p">[</span><span class="n">coach_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)]</span>
+                
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">potential_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dla informacji: znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">potential_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> potencjalne dopasowania po samej dacie&quot;</span><span class="p">)</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Te dane NIE zostały automatycznie przypisane, aby uniknąć przekłamań&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span> <span class="o">=</span> <span class="n">filtered_coach_data</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Zakończono dopasowanie danych trenera do meczów Realu Madryt&quot;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_match_by_date</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przypisuje identyfikatory meczów do rekordów graczy na podstawie zgodności dat.</span>
+<span class="sd">        </span>
+<span class="sd">        Ta kluczowa metoda łączy dane graczy z danymi meczów, zapewniając że każdy</span>
+<span class="sd">        rekord zawodnika zostaje skojarzony z odpowiednim meczem. Mechanizm dopasowania</span>
+<span class="sd">        opiera się na zgodności dat, z dokładnością do dnia.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda tworzy kopię danych meczowych, aby uniknąć modyfikacji oryginału</span>
+<span class="sd">            - Normalizuje formaty dat w obu zbiorach danych do wspólnego standardu</span>
+<span class="sd">            - Wyodrębnia tylko część datową (bez czasu) dla precyzyjnego dopasowania</span>
+<span class="sd">            - Tworzy mapowanie między datami a identyfikatorami meczów</span>
+<span class="sd">            - Dla każdej grupy rekordów graczy z tą samą datą przypisuje odpowiedni identyfikator meczu</span>
+<span class="sd">            - Konwertuje kolumnę match_id na typ liczbowy</span>
+<span class="sd">            - Szczegółowo raportuje liczbę dopasowanych rekordów i problematycznych przypadków</span>
+<span class="sd">            - Bezpośrednio modyfikuje atrybut update_RM_player_data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Brak danych do dopasowania&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="n">match_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;match_id&quot;</span><span class="p">:</span>
+            <span class="n">match_data</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_datetime64_any_dtype</span><span class="p">(</span><span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]):</span>
+            <span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_datetime64_any_dtype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        
+        <span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date_only&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_date_only&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;match_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="n">date_match_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">match_data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;match_date_only&quot;</span><span class="p">]</span> 
+            <span class="n">date_match_mapping</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span>
+        
+        <span class="n">player_date_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;match_date_only&quot;</span><span class="p">)</span>
+        
+        <span class="n">matches_assigned</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">group_indices</span> <span class="ow">in</span> <span class="n">player_date_groups</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">date_match_mapping</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group_indices</span><span class="p">,</span> <span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">date_match_mapping</span><span class="p">[</span><span class="n">date</span><span class="p">]</span>
+                <span class="n">matches_assigned</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;match_id&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        
+        <span class="n">missing_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przypisano ID dla </span><span class="si">{</span><span class="n">matches_assigned</span><span class="si">}</span><span class="s2"> unikalnych dat meczów&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">missing_ids</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">missing_ids</span><span class="si">}</span><span class="s2"> rekordów pozostało bez przypisanego match_id&quot;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="RM_merge_and_edit.prepare_match_stats">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_data_integration_pipeline.RM_merge_and_edit.prepare_match_stats">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_match_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przygotowuje kompleksowy zbiór danych z zagregowanymi statystykami meczowymi i danymi trenerskimi.</span>
+<span class="sd">        </span>
+<span class="sd">        Ta metoda stanowi finalny etap przetwarzania danych, agregując statystyki</span>
+<span class="sd">        poszczególnych zawodników do poziomu całego zespołu dla każdego meczu oraz</span>
+<span class="sd">        dołączając dane o ocenach trenera i stylu gry drużyny.</span>
+<span class="sd">        Wynikowy DataFrame zawiera jeden wiersz na mecz z pełnymi statystykami zespołowymi.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z zagregowanymi statystykami meczowymi, ocenami trenera </span>
+<span class="sd">                         i drużyn, z match_id jako indeksem</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda sprawdza dostępność niezbędnych danych i kolumn przed rozpoczęciem przetwarzania</span>
+<span class="sd">            - Dynamicznie określa dostępne kolumny do agregacji</span>
+<span class="sd">            - Dla różnych typów statystyk stosuje odpowiednie funkcje agregujące:</span>
+<span class="sd">              * Suma dla wartości kumulatywnych (strzały, podania, faule itd.)</span>
+<span class="sd">              * Średnia dla ocen (editor_rating, user_rating)</span>
+<span class="sd">              * Maksimum dla czasu trwania meczu</span>
+<span class="sd">            - Łączy statystyki zespołowe z podstawowymi danymi o meczach</span>
+<span class="sd">            - Dołącza dane ocen trenera, stylu gry i ocen drużyny przeciwnej</span>
+<span class="sd">            - Oblicza dodatkowe wskaźniki, np. liczbę ocenionych zawodników</span>
+<span class="sd">            - Zaokrągla wartości numeryczne dla lepszej czytelności</span>
+<span class="sd">            - Sortuje wyniki według dat meczów (od najnowszych)</span>
+<span class="sd">            - Szczegółowo raportuje liczbę przetworzonych meczów i kolumn</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Brak danych graczy do przetworzenia&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+            
+        <span class="k">if</span> <span class="s2">&quot;match_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Brak kolumny match_id w danych graczy&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Agregowanie statystyk drużynowych z danych graczy...&quot;</span><span class="p">)</span>
+        
+        <span class="n">sum_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;total_shots&quot;</span><span class="p">,</span> <span class="s2">&quot;shots_on_target&quot;</span><span class="p">,</span> <span class="s2">&quot;key_passes&quot;</span><span class="p">,</span> <span class="s2">&quot;fouls&quot;</span><span class="p">,</span> <span class="s2">&quot;fouled&quot;</span><span class="p">,</span> <span class="s2">&quot;goals&quot;</span><span class="p">,</span> <span class="s2">&quot;assists&quot;</span><span class="p">]</span>
+        <span class="n">mean_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;editor_rating&quot;</span><span class="p">,</span> <span class="s2">&quot;user_rating&quot;</span><span class="p">]</span>
+        
+        <span class="n">available_sum_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">sum_columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        <span class="n">available_mean_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">mean_columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        
+        <span class="n">agg_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">available_sum_columns</span><span class="p">:</span>
+            <span class="n">agg_dict</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sum&#39;</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">available_mean_columns</span><span class="p">:</span>
+            <span class="n">agg_dict</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;player_min&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">agg_dict</span><span class="p">[</span><span class="s2">&quot;player_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;max&#39;</span>
+        
+        <span class="n">match_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;match_id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">agg_dict</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;player_min&quot;</span> <span class="ow">in</span> <span class="n">match_stats</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">match_stats</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;player_min&quot;</span><span class="p">:</span> <span class="s2">&quot;match_duration [min]&quot;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Łączenie z danymi meczów...&quot;</span><span class="p">)</span>
+        
+        <span class="n">match_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;match_id&quot;</span><span class="p">:</span>
+            <span class="n">match_data</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        
+        <span class="n">match_columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;match_id&quot;</span><span class="p">,</span> <span class="s2">&quot;round&quot;</span><span class="p">,</span> <span class="s2">&quot;match_date&quot;</span><span class="p">,</span> <span class="s2">&quot;home_team_id&quot;</span><span class="p">,</span> <span class="s2">&quot;away_team_id&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;home_team&quot;</span><span class="p">,</span> <span class="s2">&quot;away_team&quot;</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span> <span class="s2">&quot;result&quot;</span><span class="p">,</span> <span class="s2">&quot;home_goals&quot;</span><span class="p">,</span> <span class="s2">&quot;away_goals&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;home_odds&quot;</span><span class="p">,</span> <span class="s2">&quot;draw_odds&quot;</span><span class="p">,</span> <span class="s2">&quot;away_odds&quot;</span><span class="p">,</span> <span class="s2">&quot;home_position&quot;</span><span class="p">,</span> <span class="s2">&quot;away_position&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;season&quot;</span><span class="p">,</span> <span class="s2">&quot;is_home&quot;</span><span class="p">,</span> <span class="s2">&quot;real_result&quot;</span><span class="p">,</span> <span class="s2">&quot;home_odds_fair&quot;</span><span class="p">,</span> <span class="s2">&quot;draw_odds_fair&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;away_odds_fair&quot;</span><span class="p">,</span> <span class="s2">&quot;PPM_H&quot;</span><span class="p">,</span> <span class="s2">&quot;PPM_A&quot;</span>
+        <span class="p">]</span>
+        
+        <span class="n">match_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">match_columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">match_data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        
+        <span class="n">final_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">match_data</span><span class="p">[</span><span class="n">match_columns</span><span class="p">],</span> <span class="n">match_stats</span><span class="p">,</span> 
+                             <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;match_id&quot;</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">debug_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;is_value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wartości w kolumnie is_value: </span><span class="si">{</span><span class="n">debug_info</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;is_value_numeric&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;is_value&quot;</span><span class="p">],</span> 
+                <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span>
+            <span class="p">)</span>
+            
+            <span class="n">rated_players</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;is_value_numeric&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="p">]</span>
+            <span class="n">is_value_count</span> <span class="o">=</span> <span class="n">rated_players</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;match_id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zliczono oceny dla </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">is_value_count</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów&quot;</span><span class="p">)</span>
+            
+            <span class="n">match_id_to_count</span> <span class="o">=</span> <span class="n">is_value_count</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+            <span class="n">final_data</span><span class="p">[</span><span class="s2">&quot;player_rated_count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">match_id_to_count</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">final_data</span><span class="p">[</span><span class="s2">&quot;player_rated_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">missing_count</span> <span class="o">=</span> <span class="n">final_data</span><span class="p">[</span><span class="s2">&quot;player_rated_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak danych o liczbie ocenionych graczy dla </span><span class="si">{</span><span class="n">missing_count</span><span class="si">}</span><span class="s2"> meczów - uzupełniam zerami&quot;</span><span class="p">)</span>
+                <span class="n">final_data</span><span class="p">[</span><span class="s2">&quot;player_rated_count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">final_data</span><span class="p">[</span><span class="s2">&quot;player_rated_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas liczenia ocenionych graczy: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">final_data</span><span class="p">[</span><span class="s2">&quot;player_rated_count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">if</span> <span class="s2">&quot;is_value&quot;</span> <span class="ow">in</span> <span class="n">final_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">final_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;is_value&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;coach_data&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="s2">&quot;match_id&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dołączanie danych trenera i ocen zespołów...&quot;</span><span class="p">)</span>
+            
+            <span class="n">coach_columns</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;RM_coach_rating_EDI&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_coach_rating_USR&quot;</span><span class="p">,</span> 
+                <span class="s2">&quot;RM_team_rating_EDI&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_team_rating_USR&quot;</span><span class="p">,</span> 
+                <span class="s2">&quot;rival_rating_EDI&quot;</span><span class="p">,</span> <span class="s2">&quot;rival_rating_USR&quot;</span>
+            <span class="p">]</span>
+            
+            <span class="n">available_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">coach_columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">available_columns</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+                
+                <span class="n">coach_duplicates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">coach_duplicates</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="n">dup_count</span> <span class="o">=</span> <span class="n">coach_duplicates</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wykryto </span><span class="si">{</span><span class="n">dup_count</span><span class="si">}</span><span class="s2"> rekordów z duplikującymi się match_id w danych trenera&quot;</span><span class="p">)</span>
+                    
+                    <span class="n">coach_data_agg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;match_id&quot;</span><span class="p">)[</span><span class="n">available_columns</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+                    <span class="n">coach_data_for_merge</span> <span class="o">=</span> <span class="n">coach_data_agg</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">coach_data_for_merge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="p">[[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">available_columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                
+                <span class="n">final_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+                    <span class="n">final_data</span><span class="p">,</span> 
+                    <span class="n">coach_data_for_merge</span><span class="p">,</span>
+                    <span class="n">on</span><span class="o">=</span><span class="s2">&quot;match_id&quot;</span><span class="p">,</span>
+                    <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+                    <span class="n">validate</span><span class="o">=</span><span class="s2">&quot;1:1&quot;</span>
+                <span class="p">)</span>
+                
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dołączono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">available_columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> kolumn z danymi trenera i ocen zespołów&quot;</span><span class="p">)</span>
+                <span class="n">missing_coach_records</span> <span class="o">=</span> <span class="n">final_data</span><span class="p">[</span><span class="n">available_columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">if</span> <span class="n">available_columns</span> <span class="k">else</span> <span class="mi">0</span>
+                
+                <span class="k">if</span> <span class="n">missing_coach_records</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dla </span><span class="si">{</span><span class="n">missing_coach_records</span><span class="si">}</span><span class="s2"> meczów brak danych trenera/zespołu&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wszystkie mecze mają przypisane dane trenera i zespołu&quot;</span><span class="p">)</span>
+        
+        
+        <span class="n">final_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">round_numeric_columns</span><span class="p">(</span><span class="n">final_data</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">final_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;match_date&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przygotowano kompleksowy DataFrame z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">final_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczami i </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">final_data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> kolumnami&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">final_data</span></div>
+
+    
+<div class="viewcode-block" id="RM_merge_and_edit.get_players_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_data_integration_pipeline.RM_merge_and_edit.get_players_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_players_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zwraca DataFrame z podstawowymi danymi graczy, w tym ID graczy i ich nazwiska.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda ekstrahuje unikalną listę graczy z przetworzonych danych,</span>
+<span class="sd">        zapewniając mapowanie między nazwiskami a identyfikatorami.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame zawierający kolumny &#39;player_id&#39; i &#39;player_name&#39;</span>
+<span class="sd">                         lub None w przypadku braku danych.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;merged_data&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">merged_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">merged_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak dostępnych danych graczy&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+            
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">player_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merged_data</span><span class="p">[</span><span class="s2">&quot;player_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+            <span class="n">player_ids</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">player_names</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            
+            <span class="n">players_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s2">&quot;player_id&quot;</span><span class="p">:</span> <span class="n">player_ids</span><span class="p">,</span>
+                <span class="s2">&quot;player_name&quot;</span><span class="p">:</span> <span class="n">player_names</span>
+            <span class="p">})</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wygenerowano dane dla </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">players_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> graczy&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">players_df</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas generowania danych graczy: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+        
+<div class="viewcode-block" id="RM_merge_and_edit.save_individual_players_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_data_integration_pipeline.RM_merge_and_edit.save_individual_players_data">[dokumentacja]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_individual_players_data</span><span class="p">(</span><span class="n">processor</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zapisuje dane indywidualnych graczy do pliku CSV z określoną kolejnością kolumn,</span>
+<span class="sd">        uzupełniając brakujące identyfikatory wszystkich drużyn na podstawie danych z pliku rywale.csv.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            processor (RM_merge_and_edit): Instancja klasy procesora danych z przetworzonymi danymi graczy</span>
+<span class="sd">            output_path (str, optional): Ścieżka docelowa pliku. Jeśli nie podano, używa domyślnej lokalizacji</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli zapis zakończył się sukcesem, False w przeciwnym wypadku</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Zapisywanie danych indywidualnych graczy z przypisanymi meczami...&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">processor</span><span class="o">.</span><span class="n">update_RM_player_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">processor</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak danych indywidualnych graczy do zapisania&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="k">if</span> <span class="s2">&quot;player_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">processor</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Brak kolumny player_id w danych graczy&quot;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">name_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">players_data</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="o">.</span><span class="n">get_players_data</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">players_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;player_name&#39;</span> <span class="ow">in</span> <span class="n">players_data</span> <span class="ow">and</span> <span class="s1">&#39;player_id&#39;</span> <span class="ow">in</span> <span class="n">players_data</span><span class="p">:</span>
+                        <span class="n">name_mapping</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">players_data</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">],</span> <span class="n">players_data</span><span class="p">[</span><span class="s1">&#39;player_id&#39;</span><span class="p">]))</span>
+                    
+                    <span class="n">processor</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;player_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;player_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">name_mapping</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można przypisać identyfikatorów graczy: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">players_output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_individual_stats.csv&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">players_output_file</span> <span class="o">=</span> <span class="n">output_path</span>
+                    
+            <span class="n">total_players</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">)</span>
+            <span class="n">players_with_match_id</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">players_without_match_id</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przygotowywanie do zapisu danych </span><span class="si">{</span><span class="n">total_players</span><span class="si">}</span><span class="s2"> graczy:&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">players_with_match_id</span><span class="si">}</span><span class="s2"> graczy z przypisanym ID meczu&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">players_without_match_id</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">players_without_match_id</span><span class="si">}</span><span class="s2"> graczy bez przypisanego ID meczu&quot;</span><span class="p">)</span>
+            
+            <span class="n">player_data</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">update_RM_player_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="n">teams_mapping_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;id_nazwa&quot;</span><span class="p">,</span> <span class="s2">&quot;rywale.csv&quot;</span><span class="p">)</span>
+            <span class="n">teams_mapping</span> <span class="o">=</span> <span class="kc">None</span>
+            
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">teams_mapping</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">teams_mapping_path</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano mapowanie drużyn z </span><span class="si">{</span><span class="n">teams_mapping_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">teams_mapping</span><span class="p">)</span><span class="si">}</span><span class="s2"> drużyn&quot;</span><span class="p">)</span>
+                
+                <span class="n">name_to_id</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">teams_mapping</span><span class="p">[</span><span class="s1">&#39;team_name&#39;</span><span class="p">],</span> <span class="n">teams_mapping</span><span class="p">[</span><span class="s1">&#39;team_id&#39;</span><span class="p">]))</span>
+                
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono mapowanie dla </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">name_to_id</span><span class="p">)</span><span class="si">}</span><span class="s2"> drużyn&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można wczytać mapowania drużyn: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">teams_mapping</span> <span class="o">=</span> <span class="kc">None</span>
+            
+            <span class="k">if</span> <span class="n">teams_mapping</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">home_missing_mask</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span> <span class="o">|</span> 
+                    <span class="p">(</span><span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">|</span> 
+                    <span class="p">(</span><span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">home_missing_mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">team_name</span><span class="p">,</span> <span class="n">team_id</span> <span class="ow">in</span> <span class="n">name_to_id</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">team_rows</span> <span class="o">=</span> <span class="n">home_missing_mask</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;home_team&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_name</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">team_rows</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                            <span class="n">player_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">team_rows</span><span class="p">,</span> <span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">team_id</span>
+                            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uzupełniono home_team_id=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2"> dla &#39;</span><span class="si">{</span><span class="n">team_name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">team_rows</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> rekordów&quot;</span><span class="p">)</span>
+                    
+                    <span class="n">still_missing</span> <span class="o">=</span> <span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">still_missing</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się uzupełnić home_team_id dla </span><span class="si">{</span><span class="n">still_missing</span><span class="si">}</span><span class="s2"> rekordów&quot;</span><span class="p">)</span>
+                        <span class="n">missing_teams</span> <span class="o">=</span> <span class="n">player_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">(),</span> <span class="s2">&quot;home_team&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+                        <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Drużyny bez mapowania: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">missing_teams</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+                <span class="n">away_missing_mask</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span> <span class="o">|</span> 
+                    <span class="p">(</span><span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">|</span> 
+                    <span class="p">(</span><span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">away_missing_mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">team_name</span><span class="p">,</span> <span class="n">team_id</span> <span class="ow">in</span> <span class="n">name_to_id</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">team_rows</span> <span class="o">=</span> <span class="n">away_missing_mask</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;away_team&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team_name</span><span class="p">)</span> 
+                        <span class="k">if</span> <span class="n">team_rows</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                            <span class="n">player_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">team_rows</span><span class="p">,</span> <span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">team_id</span>
+                            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uzupełniono away_team_id=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2"> dla &#39;</span><span class="si">{</span><span class="n">team_name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">team_rows</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2"> rekordów&quot;</span><span class="p">)</span>
+                    
+                    <span class="n">still_missing</span> <span class="o">=</span> <span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">still_missing</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się uzupełnić away_team_id dla </span><span class="si">{</span><span class="n">still_missing</span><span class="si">}</span><span class="s2"> rekordów&quot;</span><span class="p">)</span>
+                        <span class="n">missing_teams</span> <span class="o">=</span> <span class="n">player_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">player_data</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">(),</span> <span class="s2">&quot;away_team&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+                        <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Drużyny bez mapowania: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">missing_teams</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="n">sorted_player_data</span> <span class="o">=</span> <span class="n">player_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+                <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">,</span> <span class="s2">&quot;match_id&quot;</span><span class="p">,</span> <span class="s2">&quot;is_first_squad&quot;</span><span class="p">,</span> <span class="s2">&quot;player_min&quot;</span><span class="p">],</span> 
+                <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+            <span class="p">)</span>
+            
+            <span class="n">all_columns</span> <span class="o">=</span> <span class="n">sorted_player_data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">ordered_columns</span> <span class="o">=</span> <span class="p">[]</span>
+            
+            <span class="n">priority_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">,</span> <span class="s2">&quot;match_date&quot;</span><span class="p">,</span> <span class="s2">&quot;home_team_id&quot;</span><span class="p">,</span> <span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">priority_columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">all_columns</span><span class="p">:</span>
+                    <span class="n">ordered_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+                    <span class="n">all_columns</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+            
+            <span class="n">ordered_columns</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">all_columns</span><span class="p">)</span>
+            
+            <span class="n">reordered_data</span> <span class="o">=</span> <span class="n">sorted_player_data</span><span class="p">[</span><span class="n">ordered_columns</span><span class="p">]</span>
+            <span class="n">reordered_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;match_date&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="n">success</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">reordered_data</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">players_output_file</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zapisano dane indywidualne graczy do pliku: </span><span class="si">{</span><span class="n">players_output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba zapisanych rekordów graczy: </span><span class="si">{</span><span class="n">total_players</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba kolumn: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">reordered_data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zakres dat zapisanych danych: </span><span class="si">{</span><span class="n">reordered_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">reordered_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pierwszych 6 kolumn w pliku: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ordered_columns</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się zapisać danych graczy do pliku: </span><span class="si">{</span><span class="n">players_output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił błąd podczas zapisywania danych indywidualnych graczy: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+</div>
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_data_integration_pipeline.main">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funkcja główna realizująca pełen cykl przetwarzania danych dla Realu Madryt.</span>
+<span class="sd">    </span>
+<span class="sd">    Funkcja koordynuje sekwencyjne wykonanie wszystkich etapów przetwarzania danych:</span>
+<span class="sd">    od wczytania źródłowych plików, przez przetwarzanie i dopasowywanie danych,</span>
+<span class="sd">    aż po finalne generowanie i zapis zagregowanych statystyk meczowych.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Funkcja implementuje pełną obsługę wyjątków, aby zapewnić stabilne działanie</span>
+<span class="sd">        - Wszystkie krytyczne etapy są szczegółowo logowane</span>
+<span class="sd">        - Mierzy i raportuje całkowity czas wykonania operacji</span>
+<span class="sd">        - W przypadku wystąpienia błędów na dowolnym etapie, szczegółowe informacje</span>
+<span class="sd">          diagnostyczne są zapisywane do logów</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;===== ROZPOCZĘCIE PRZETWARZANIA DANYCH REALU MADRYT =====&quot;</span><span class="p">)</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        
+        <span class="n">processor</span> <span class="o">=</span> <span class="n">RM_merge_and_edit</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">processor</span><span class="o">.</span><span class="n">RM_player_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać danych graczy. Sprawdź pliki Excel.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="k">if</span> <span class="n">processor</span><span class="o">.</span><span class="n">RM_match_data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">processor</span><span class="o">.</span><span class="n">RM_match_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać danych meczów. Sprawdź pliki sezonów.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano dane graczy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">RM_player_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> rekordów&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano dane meczów: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">RM_match_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> rekordów&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Krok 1: Dodawanie identyfikatorów drużyn do danych graczy...&quot;</span><span class="p">)</span>
+        <span class="n">processor</span><span class="o">.</span><span class="n">append_team_id</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Krok 2: Wybieranie rekordów graczy z pasującymi datami meczów...&quot;</span><span class="p">)</span>
+        <span class="n">processor</span><span class="o">.</span><span class="n">_choose_the_same_event</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Krok 3: Przypisywanie identyfikatorów meczów do danych graczy...&quot;</span><span class="p">)</span>
+        <span class="n">processor</span><span class="o">.</span><span class="n">_match_by_date</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Krok 4: Przypisywanie identyfikatorów meczów do danych trenera...&quot;</span><span class="p">)</span>
+        <span class="n">processor</span><span class="o">.</span><span class="n">_match_coach_data_by_date</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Krok 5: Przygotowanie zagregowanych statystyk meczowych...&quot;</span><span class="p">)</span>
+        <span class="n">match_stats</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">prepare_match_stats</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">match_stats</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">match_stats</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wygenerować statystyk meczowych!&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+            
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_all_matches_stats.csv&quot;</span><span class="p">)</span>
+        <span class="n">FileUtils</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">match_stats</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="n">output_file</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                              <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;match_date&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>    
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zapisano statystyki meczowe do pliku: </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba zapisanych meczów: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">match_stats</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba kolumn: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">match_stats</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Krok 6: Zapisywanie danych indywidualnych graczy z przypisanymi meczami...&quot;</span><span class="p">)</span>
+        <span class="n">RM_merge_and_edit</span><span class="o">.</span><span class="n">save_individual_players_data</span><span class="p">(</span><span class="n">processor</span><span class="p">)</span>
+        
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">execution_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;===== ZAKOŃCZONO PRZETWARZANIE DANYCH (czas: </span><span class="si">{</span><span class="n">execution_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> s) =====&quot;</span><span class="p">)</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił błąd podczas przetwarzania danych: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

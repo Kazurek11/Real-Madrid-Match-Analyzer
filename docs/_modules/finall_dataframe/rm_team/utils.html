@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_team.utils &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_team.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.rm_team.utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Funkcje narzędziowe do walidacji danych i sprawdzania typów.</span>
+
+<span class="sd">Moduł zawiera funkcje pomocnicze do sprawdzania typów kolumn,</span>
+<span class="sd">wykrywania wartości NaN, konwersji typów danych oraz dodawania</span>
+<span class="sd">brakujących kolumn do DataFrame&#39;ów używanych w analizie drużynowej.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span>
+
+
+<div class="viewcode-block" id="check_type_in_dataframe">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.utils.check_type_in_dataframe">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_type_in_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sprawdza typ kolumny w DataFrame i konwertuje jeśli potrzeba.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): DataFrame do sprawdzenia</span>
+<span class="sd">        column_name (str): Nazwa kolumny do sprawdzenia</span>
+<span class="sd">        expected_type (str): Oczekiwany typ danych (np. &#39;datetime64[ns]&#39;)</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True jeśli typ jest poprawny lub udało się skonwertować, False w przeciwnym razie</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Automatycznie próbuje konwertować datetime gdy expected_type=&#39;datetime64[ns]&#39;</span>
+<span class="sd">        - Modyfikuje DataFrame in-place przy konwersji datetime</span>
+<span class="sd">        - Loguje informacje o typach i próbach konwersji</span>
+<span class="sd">        - Zwraca False jeśli kolumna nie istnieje</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">actual_type</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
+        <span class="k">if</span> <span class="n">actual_type</span> <span class="o">!=</span> <span class="n">expected_type</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Typ kolumny </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2"> w DataFrame jest </span><span class="si">{</span><span class="n">actual_type</span><span class="si">}</span><span class="s2">, próbuję konwertować na </span><span class="si">{</span><span class="n">expected_type</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">expected_type</span> <span class="o">==</span> <span class="s1">&#39;datetime64[ns]&#39;</span><span class="p">:</span>
+                    <span class="n">df</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column_name</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie przekonwertowano kolumnę </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2"> na typ </span><span class="si">{</span><span class="n">expected_type</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się przekonwertować kolumny </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Typ kolumny </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2"> jest poprawny: </span><span class="si">{</span><span class="n">actual_type</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumna </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2"> nie istnieje w DataFrame.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="check_NAN_in_dataframe">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.utils.check_NAN_in_dataframe">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_NAN_in_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sprawdza obecność wartości NaN w określonej kolumnie DataFrame.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): DataFrame do sprawdzenia</span>
+<span class="sd">        column_name (str): Nazwa kolumny do sprawdzenia</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True jeśli kolumna zawiera NaN, False jeśli nie zawiera lub kolumna nie istnieje</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Używa pandas.isnull() do wykrywania NaN</span>
+<span class="sd">        - Loguje informacje o wynikach sprawdzenia</span>
+<span class="sd">        - Zwraca False i loguje błąd jeśli kolumna nie istnieje</span>
+<span class="sd">        - Nie modyfikuje danych, tylko sprawdza</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumna </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2"> zawiera wartości NaN.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumna </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2"> nie zawiera wartości NaN.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumna </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2"> nie istnieje w DataFrame.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="check_NaN_column_in_RM_matches">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.utils.check_NaN_column_in_RM_matches">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_NaN_column_in_RM_matches</span><span class="p">(</span><span class="n">dataframe</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sprawdza i uzupełnia wartości NaN w kluczowych kolumnach meczów RM.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataframe (pd.DataFrame): DataFrame z danymi meczów Real Madryt</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True jeśli nie znaleziono NaN, False jeśli znaleziono i uzupełniono</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Sprawdza kluczowe kolumny: daty, drużyny, gole, punkty, oceny</span>
+<span class="sd">        - Automatycznie uzupełnia NaN wartościami 0</span>
+<span class="sd">        - Modyfikuje DataFrame in-place przy uzupełnianiu</span>
+<span class="sd">        - Używa konfiguracji kolumn z config.py</span>
+<span class="sd">        - Loguje informacje o znalezionych i uzupełnionych NaN</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RM_COACH_RATING</span><span class="p">,</span> <span class="n">RM_TEAM_RATING</span><span class="p">,</span> <span class="n">OPP_RATING</span>
+    
+    <span class="n">not_null_columns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;match_date&#39;</span><span class="p">,</span> <span class="s1">&#39;home_team&#39;</span><span class="p">,</span> <span class="s1">&#39;away_team&#39;</span><span class="p">,</span> <span class="s1">&#39;home_goals&#39;</span><span class="p">,</span> 
+        <span class="s1">&#39;away_goals&#39;</span><span class="p">,</span> <span class="s1">&#39;home_points&#39;</span><span class="p">,</span> <span class="s1">&#39;away_points&#39;</span><span class="p">,</span> 
+        <span class="n">RM_COACH_RATING</span><span class="p">,</span> <span class="n">RM_TEAM_RATING</span><span class="p">,</span> <span class="n">OPP_RATING</span>
+    <span class="p">]</span>
+    <span class="n">any_nan_found</span> <span class="o">=</span> <span class="kc">False</span>
+    
+    <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">not_null_columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumna </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2"> zawiera wartości NaN. Uzupełniam je zerami.&quot;</span><span class="p">)</span>
+            <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">any_nan_found</span> <span class="o">=</span> <span class="kc">True</span>
+            
+    <span class="k">return</span> <span class="ow">not</span> <span class="n">any_nan_found</span></div>
+
+
+
+<div class="viewcode-block" id="add_missing_columns">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.utils.add_missing_columns">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_missing_columns</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columns_to_add</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dodaje brakujące kolumny do DataFrame z wartościami NaN.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.DataFrame): DataFrame do rozszerzenia</span>
+<span class="sd">        columns_to_add (list): Lista nazw kolumn do dodania</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: DataFrame z dodanymi kolumnami lub oryginalny jeśli brak nowych</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Sprawdza które kolumny z listy nie istnieją w df</span>
+<span class="sd">        - Inicjalizuje nowe kolumny z wartościami np.nan</span>
+<span class="sd">        - Zachowuje indeks oryginalnego DataFrame</span>
+<span class="sd">        - Używa pd.concat() do łączenia kolumn</span>
+<span class="sd">        - Zwraca oryginalny DataFrame jeśli wszystkie kolumny już istnieją</span>
+<span class="sd">        - Nowe kolumny są dodawane po prawej stronie</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">new_columns</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">columns_to_add</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">new_columns</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">new_columns</span><span class="p">:</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">new_columns</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">new_df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

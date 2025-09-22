@@ -1,0 +1,1545 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RM package &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=2827c288"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../genindex.html" />
+    <link rel="search" title="Szukaj" href="../search.html" />
+    <link rel="prev" title="helpers package" href="helpers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_processing.html">data_processing package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="finall_dataframe.html">finall_dataframe package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html">helpers package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">RM package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-RM.RM_data_integration_pipeline">RM.RM_data_integration_pipeline module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_data_integration_pipeline.RM_merge_and_edit"><code class="docutils literal notranslate"><span class="pre">RM_merge_and_edit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_data_integration_pipeline.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-RM.RM_old_data">RM.RM_old_data module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_old_data.RM_old_Data"><code class="docutils literal notranslate"><span class="pre">RM_old_Data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_old_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-RM.RM_players_analyzer">RM.RM_players_analyzer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer"><code class="docutils literal notranslate"><span class="pre">RealMadridPlayersAnalyzer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_players_analyzer.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rm-rm-preparation-files-module">RM.RM_preparation_files module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-RM.RM_rivals">RM.RM_rivals module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_rivals.Rival"><code class="docutils literal notranslate"><span class="pre">Rival</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_rivals.RivalManager"><code class="docutils literal notranslate"><span class="pre">RivalManager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_rivals.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RM.RM_rivals.real_data"><code class="docutils literal notranslate"><span class="pre">real_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-RM.check_id_in_files">RM.check_id_in_files module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#RM.check_id_in_files.check_match_id_consistency"><code class="docutils literal notranslate"><span class="pre">check_match_id_consistency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RM.check_id_in_files.set_match_id"><code class="docutils literal notranslate"><span class="pre">set_match_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#RM.check_id_in_files.set_team_id"><code class="docutils literal notranslate"><span class="pre">set_team_id()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-RM.const_variable">RM.const_variable module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-RM">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+      <li class="breadcrumb-item active">RM package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/RM.rst.txt" rel="nofollow"> Zobacz źródło strony</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rm-package">
+<h1>RM package<a class="headerlink" href="#rm-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-RM.RM_data_integration_pipeline">
+<span id="rm-rm-data-integration-pipeline-module"></span><h2>RM.RM_data_integration_pipeline module<a class="headerlink" href="#module-RM.RM_data_integration_pipeline" title="Link to this heading"></a></h2>
+<p>RM_data_integration_pipeline.py - Real Madrid Data Integration &amp; Analytics Pipeline</p>
+<p>Kompleksowy system przetwarzania i integracji danych dotyczących meczów i zawodników Realu Madryt.
+Moduł implementuje zaawansowany pipeline do wczytywania, przetwarzania, dopasowywania i agregowania
+danych z różnych źródeł, umożliwiając prowadzenie szczegółowych analiz statystycznych
+zarówno na poziomie zespołu, jak i poszczególnych zawodników.</p>
+<p>Główne funkcjonalności:
+1. Wczytywanie i konsolidacja danych zawodników z wielu plików Excel
+2. Wczytywanie i integracja danych meczowych z wielu sezonów
+3. Standaryzacja nazw drużyn i harmonizacja formatów danych
+4. Dopasowanie rekordów graczy do konkretnych meczów na podstawie dat
+5. Przypisanie unikalnych identyfikatorów drużyn i meczów do wszystkich rekordów
+6. Agregacja statystyk zawodników do poziomu drużyny dla każdego meczu
+7. Generowanie spójnego zbioru danych z zagregowanymi statystykami meczowymi
+8. Zapis przetworzonych danych do pliku CSV</p>
+<p>Moduł wykorzystuje zaawansowane metody przetwarzania danych z biblioteki pandas
+oraz własne narzędzia do standaryzacji i łączenia danych, zapewniając wysoką
+jakość oraz spójność wyjściowych zbiorów danych.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="RM.RM_data_integration_pipeline.RM_merge_and_edit">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RM.RM_data_integration_pipeline.</span></span><span class="sig-name descname"><span class="pre">RM_merge_and_edit</span></span><a class="reference internal" href="../_modules/RM/RM_data_integration_pipeline.html#RM_merge_and_edit"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_data_integration_pipeline.RM_merge_and_edit" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa zapewniająca kompleksowy proces integracji i analizy danych graczy oraz meczów Realu Madryt.</p>
+<p>Implementuje pełny proces ETL (Extract, Transform, Load) dla danych piłkarskich,
+od wczytania surowych danych z plików źródłowych, przez ich przetworzenie i dopasowanie,
+aż po agregację i eksport końcowego zbioru danych analitycznych.</p>
+<dl class="simple">
+<dt>Atrybuty:</dt><dd><p>file_utils (FileUtils): Narzędzia do operacji na plikach i ścieżkach.
+rm_analyzer (RealMadridPlayersAnalyzer): Analizator danych zawodników.
+data_merger (DataMerger): Narzędzie do łączenia danych z wielu sezonów.
+data_processor (DataProcessor): Procesor danych do operacji standaryzujących.
+RM_player_data (pd.DataFrame): Dane zawodników Realu Madryt.
+RM_match_data (pd.DataFrame): Dane meczów Realu Madryt.
+dates_of_madrid_match (list): Lista dat meczów Realu Madryt.
+update_RM_player_data (pd.DataFrame): Przefiltrowane dane zawodników po dopasowaniu.
+coach_data (pd.DataFrame): Oceny ogolne trenera,drużyny przeciwnej i stylu gry RM.</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Klasa jest zaprojektowana z myślą o automatycznym przetwarzaniu danych, minimalizując
+potrzebę ręcznej ingerencji w proces</p></li>
+<li><p>Wszystkie kluczowe operacje są dokładnie logowane za pomocą modułu logger</p></li>
+<li><p>W przypadku wystąpienia błędów na dowolnym etapie, informacje diagnostyczne
+są zapisywane do logów</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_data_integration_pipeline.RM_merge_and_edit.append_team_id">
+<span class="sig-name descname"><span class="pre">append_team_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_data_integration_pipeline.html#RM_merge_and_edit.append_team_id"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_data_integration_pipeline.RM_merge_and_edit.append_team_id" title="Link to this definition"></a></dt>
+<dd><p>Dodaje identyfikatory drużyn do danych zawodników.</p>
+<p>Metoda wykorzystuje data_processor do przypisania odpowiednich identyfikatorów drużyn
+do wszystkich rekordów zawodników. Identyfikatory te są niezbędne do późniejszego
+łączenia danych z innymi zbiorami oraz do analizy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Operacja modyfikuje bezpośrednio atrybut RM_player_data</p></li>
+<li><p>Wykorzystywana jest funkcjonalność add_team_ids_to_dataframe z DataProcessor</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_data_integration_pipeline.RM_merge_and_edit.coach_teamstyle_rival_data">
+<span class="sig-name descname"><span class="pre">coach_teamstyle_rival_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/RM/RM_data_integration_pipeline.html#RM_merge_and_edit.coach_teamstyle_rival_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_data_integration_pipeline.RM_merge_and_edit.coach_teamstyle_rival_data" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje, przetwarza i łączy dane dotyczące ocen trenerów i drużyn z plików Excel.</p>
+<p>Metoda wczytuje dane z dwóch źródeł - najnowszego pliku Excel z 2025 roku oraz
+archiwalnego pliku z latami 2019-2024. Następnie standaryzuje nazwy kolumn,
+łączy oba zbiory danych, usuwa niepotrzebne kolumny (m.in. dane opisowe i oceny
+sędziów) oraz przetwarza kolumnę z datami na format datetime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>DataFrame zawierający połączone i przetworzone dane o ocenach</dt><dd><p>trenerów i drużyn lub pusty DataFrame w przypadku błędu</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-odd">Wyrzuca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – Wyjątek złapany i zalogowany w przypadku problemów z wczytywaniem
+    plików lub przetwarzaniem danych</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wykorzystuje FileUtils.load_excel_safe do bezpiecznego wczytywania plików Excel</p></li>
+<li><p>Standaryzuje nazwy kolumn z dwóch różnych formatów źródłowych</p></li>
+<li><p>Usuwa kolumny z ocenami sędziów, średnimi ocenami piłkarzy oraz danymi opisowymi</p></li>
+<li><p>Usuwa wiersze z brakującymi wartościami</p></li>
+<li><p>Konwertuje kolumnę match_date na format datetime</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_data_integration_pipeline.RM_merge_and_edit.get_players_data">
+<span class="sig-name descname"><span class="pre">get_players_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_data_integration_pipeline.html#RM_merge_and_edit.get_players_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_data_integration_pipeline.RM_merge_and_edit.get_players_data" title="Link to this definition"></a></dt>
+<dd><p>Zwraca DataFrame z podstawowymi danymi graczy, w tym ID graczy i ich nazwiska.</p>
+<p>Metoda ekstrahuje unikalną listę graczy z przetworzonych danych,
+zapewniając mapowanie między nazwiskami a identyfikatorami.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>DataFrame zawierający kolumny «player_id» i «player_name»</dt><dd><p>lub None w przypadku braku danych.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_data_integration_pipeline.RM_merge_and_edit.prepare_match_stats">
+<span class="sig-name descname"><span class="pre">prepare_match_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_data_integration_pipeline.html#RM_merge_and_edit.prepare_match_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_data_integration_pipeline.RM_merge_and_edit.prepare_match_stats" title="Link to this definition"></a></dt>
+<dd><p>Przygotowuje kompleksowy zbiór danych z zagregowanymi statystykami meczowymi i danymi trenerskimi.</p>
+<p>Ta metoda stanowi finalny etap przetwarzania danych, agregując statystyki
+poszczególnych zawodników do poziomu całego zespołu dla każdego meczu oraz
+dołączając dane o ocenach trenera i stylu gry drużyny.
+Wynikowy DataFrame zawiera jeden wiersz na mecz z pełnymi statystykami zespołowymi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>DataFrame z zagregowanymi statystykami meczowymi, ocenami trenera</dt><dd><p>i drużyn, z match_id jako indeksem</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Metoda sprawdza dostępność niezbędnych danych i kolumn przed rozpoczęciem przetwarzania</p></li>
+<li><p>Dynamicznie określa dostępne kolumny do agregacji</p></li>
+<li><p>Dla różnych typów statystyk stosuje odpowiednie funkcje agregujące:
+* Suma dla wartości kumulatywnych (strzały, podania, faule itd.)
+* Średnia dla ocen (editor_rating, user_rating)
+* Maksimum dla czasu trwania meczu</p></li>
+<li><p>Łączy statystyki zespołowe z podstawowymi danymi o meczach</p></li>
+<li><p>Dołącza dane ocen trenera, stylu gry i ocen drużyny przeciwnej</p></li>
+<li><p>Oblicza dodatkowe wskaźniki, np. liczbę ocenionych zawodników</p></li>
+<li><p>Zaokrągla wartości numeryczne dla lepszej czytelności</p></li>
+<li><p>Sortuje wyniki według dat meczów (od najnowszych)</p></li>
+<li><p>Szczegółowo raportuje liczbę przetworzonych meczów i kolumn</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_data_integration_pipeline.RM_merge_and_edit.save_individual_players_data">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_individual_players_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_data_integration_pipeline.html#RM_merge_and_edit.save_individual_players_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_data_integration_pipeline.RM_merge_and_edit.save_individual_players_data" title="Link to this definition"></a></dt>
+<dd><p>Zapisuje dane indywidualnych graczy do pliku CSV z określoną kolejnością kolumn,
+uzupełniając brakujące identyfikatory wszystkich drużyn na podstawie danych z pliku rywale.csv.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>processor</strong> (<a class="reference internal" href="#RM.RM_data_integration_pipeline.RM_merge_and_edit" title="RM.RM_data_integration_pipeline.RM_merge_and_edit"><em>RM_merge_and_edit</em></a>) – Instancja klasy procesora danych z przetworzonymi danymi graczy</p></li>
+<li><p><strong>output_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Ścieżka docelowa pliku. Jeśli nie podano, używa domyślnej lokalizacji</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli zapis zakończył się sukcesem, False w przeciwnym wypadku</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="RM.RM_data_integration_pipeline.main">
+<span class="sig-prename descclassname"><span class="pre">RM.RM_data_integration_pipeline.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_data_integration_pipeline.html#main"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_data_integration_pipeline.main" title="Link to this definition"></a></dt>
+<dd><p>Funkcja główna realizująca pełen cykl przetwarzania danych dla Realu Madryt.</p>
+<p>Funkcja koordynuje sekwencyjne wykonanie wszystkich etapów przetwarzania danych:
+od wczytania źródłowych plików, przez przetwarzanie i dopasowywanie danych,
+aż po finalne generowanie i zapis zagregowanych statystyk meczowych.</p>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Funkcja implementuje pełną obsługę wyjątków, aby zapewnić stabilne działanie</p></li>
+<li><p>Wszystkie krytyczne etapy są szczegółowo logowane</p></li>
+<li><p>Mierzy i raportuje całkowity czas wykonania operacji</p></li>
+<li><p>W przypadku wystąpienia błędów na dowolnym etapie, szczegółowe informacje
+diagnostyczne są zapisywane do logów</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="module-RM.RM_old_data">
+<span id="rm-rm-old-data-module"></span><h2>RM.RM_old_data module<a class="headerlink" href="#module-RM.RM_old_data" title="Link to this heading"></a></h2>
+<p>Moduł do przetwarzania i analizy historycznych danych piłkarzy Realu Madryt.</p>
+<p>Ten moduł umożliwia wczytanie, przefiltrowanie, przetworzenie i zapisanie historycznych
+danych statystycznych piłkarzy Realu Madryt z różnych sezonów. Służy jako kluczowy
+komponent w procesie przygotowania danych treningowych do modeli analitycznych
+i predykcyjnych.</p>
+<p>Główne funkcje modułu:
+1. Wczytanie historycznych danych piłkarzy z plików Excel
+2. Filtrowanie danych według dat granicznych (pełne dane vs dane z ocenami edytora)
+3. Przygotowanie i czyszczenie zestawów danych
+4. Mapowanie i standaryzacja nazw drużyn zgodnie ze słownikiem mapowań
+5. Dodawanie identyfikatorów drużyn na podstawie ich nazw
+6. Filtrowanie drużyn nieobecnych w pliku mapowania ID
+7. Zapisanie przetworzonych danych w ustrukturyzowanym formacie CSV</p>
+<p>Zastosowanie:
+Dane wyjściowe tego modułu są wykorzystywane do:
+- Wyciągnięcia średnich statystyk historycznych piłkarzy
+- Określenia form zawodników przed określonymi meczami
+- Analizy trendów wydajności zawodników w czasie
+- Trenowania modeli prognostycznych dla przyszłych występów
+- Uzupełniania brakujących danych w aktualnych zestawach danych</p>
+<p>Moduł zapisuje dwa kluczowe pliki:
+- «RM_old_complete_data.csv»: Pełne dane od określonej daty kompletności z mapowaniem ID drużyn
+- «RM_old_editor_data.csv»: Dane z ocenami edytora, potencjalnie z szerszego zakresu dat, z mapowaniem ID drużyn</p>
+<dl>
+<dt>Przykłady użycia:</dt><dd><p># Podstawowe użycie z domyślnymi parametrami
+processor = RM_old_Data()
+processor.process_and_save_data()</p>
+<p># Użycie z niestandardowymi datami granicznymi
+processor = RM_old_Data(</p>
+<blockquote>
+<div><p>date=”2021-01-01”,
+complete_data_date=”2020-06-01”</p>
+</div></blockquote>
+<p>)
+processor.process_and_save_data(„ścieżka/do/katalogu/wyjściowego”)</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RM.RM_old_data.</span></span><span class="sig-name descname"><span class="pre">RM_old_Data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complete_data_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa do przetwarzania historycznych danych piłkarzy Realu Madryt.</p>
+<p>Ta klasa umożliwia wczytanie, przetworzenie i zapisanie danych historycznych
+z dwóch różnych zakresów dat w celu utworzenia bazy dla analizy wcześniejszych
+występów zawodników. Dane te są kluczowe dla analizy form piłkarzy, trendów
+wydajności i jako czynniki predykcyjne w modelach statystycznych.</p>
+<p>Główne zadania klasy:
+- Wczytanie danych historycznych z plików Excel
+- Filtrowanie według dat granicznych i wartości ocen edytora
+- Przetwarzanie danych z zachowaniem ich integralności
+- Standaryzacja nazw drużyn i dodawanie identyfikatorów drużyn
+- Filtrowanie drużyn nieobecnych w pliku mapowania ID
+- Zapisywanie zestawów danych w ustrukturyzowanym formacie CSV</p>
+<dl class="simple">
+<dt>Atrybuty:</dt><dd><p>date (datetime): Data graniczna - pierwszy mecz do analizy w projekcie
+complete_data_date (datetime): Data od której wszystkie dane są kompletne
+rm_analyzer (RealMadridPlayersAnalyzer): Obiekt analizatora danych piłkarzy
+data_processor (DataProcessor): Procesor do standaryzacji nazw drużyn i dodawania ID
+df_history (pd.DataFrame): Wczytane dane historyczne
+complete_df (pd.DataFrame): Przefiltrowane dane kompletne
+editor_df (pd.DataFrame): Dane z oceną edytora</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Obiekt wymaga dostępu do plików Excel z danymi historycznymi</p></li>
+<li><p>Działanie opiera się na klasie RealMadridPlayersAnalyzer do wczytywania danych</p></li>
+<li><p>Do standaryzacji nazw drużyn i dodawania ID wykorzystuje klasę DataProcessor</p></li>
+<li><p>Proces przetwarzania tworzy dwa osobne pliki CSV o różnej zawartości</p></li>
+<li><p>Do prawidłowego działania wymaga poprawnej struktury katalogów projektu</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data.filter_data_by_date">
+<span class="sig-name descname"><span class="pre">filter_data_by_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data.filter_data_by_date"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data.filter_data_by_date" title="Link to this definition"></a></dt>
+<dd><p>Filtruje DataFrame według daty.</p>
+<p>Tworzy kopię DataFrame zawierającą tylko wiersze, których data
+meczu jest większa lub równa podanej dacie granicznej. Jest to
+metoda pomocnicza wykorzystywana przez inne funkcje klasy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do filtrowania</p></li>
+<li><p><strong>date</strong> (<em>datetime</em>) – Data graniczna do filtrowania (&gt;= date)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Przefiltrowany DataFrame zawierający tylko mecze od podanej daty</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Funkcja zachowuje się bezpiecznie, zwracając pusty DataFrame dla pustych danych wejściowych</p></li>
+<li><p>Tworzy kopię danych wejściowych, aby uniknąć modyfikacji oryginalnego DataFrame</p></li>
+<li><p>Zakłada istnienie kolumny «match_date» w formacie datetime</p></li>
+<li><p>Loguje informacje o liczbie wierszy po filtrowaniu dla celów diagnostycznych</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data.initialize_analyzer">
+<span class="sig-name descname"><span class="pre">initialize_analyzer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data.initialize_analyzer"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data.initialize_analyzer" title="Link to this definition"></a></dt>
+<dd><p>Inicjalizuje analizator danych piłkarzy Realu Madryt.</p>
+<p>Tworzy instancję klasy RealMadridPlayersAnalyzer, która jest niezbędna
+do wczytywania i wstępnego przetwarzania danych z plików Excel. Metoda
+obsługuje wszelkie wyjątki, które mogą wystąpić podczas inicjalizacji.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Brak</strong></p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli inicjalizacja się powiodła, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Metoda jest wywoływana automatycznie przez load_data() jeśli analizator nie istnieje</p></li>
+<li><p>W przypadku błędu szczegółowe informacje są zapisywane w logach</p></li>
+<li><p>Sukces jest wymagany do dalszego przetwarzania danych</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data.initialize_data_processor">
+<span class="sig-name descname"><span class="pre">initialize_data_processor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data.initialize_data_processor"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data.initialize_data_processor" title="Link to this definition"></a></dt>
+<dd><p>Inicjalizuje procesor danych do standaryzacji nazw drużyn i dodawania ID.</p>
+<p>Tworzy instancję klasy DataProcessor, która jest używana do normalizacji nazw drużyn
+i dodawania identyfikatorów drużyn na podstawie ich nazw. Metoda obsługuje
+wszelkie wyjątki, które mogą wystąpić podczas inicjalizacji.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Brak</strong></p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli inicjalizacja się powiodła, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Metoda jest wywoływana automatycznie przez process_team_names_and_ids()
+jeśli procesor nie istnieje</p></li>
+<li><p>W przypadku błędu szczegółowe informacje są zapisywane w logach</p></li>
+<li><p>Wczytuje szablon mapowania ID drużyn dla późniejszego użycia</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data.load_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data.load_data" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje dane historyczne z plików Excel za pomocą analizatora.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data.prepare_complete_data">
+<span class="sig-name descname"><span class="pre">prepare_complete_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data.prepare_complete_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data.prepare_complete_data" title="Link to this definition"></a></dt>
+<dd><p>Przygotowuje zestaw danych z okresu, gdy wszystkie kolumny są kompletne.</p>
+<p>Filtruje dane historyczne według daty granicznej kompletności (complete_data_date),
+resetuje indeksy, usuwa niepotrzebne kolumny i uzupełnia brakujące wartości.
+Ten zestaw danych zawiera tylko rekordy od daty, od której wszystkie kolumny
+są uzupełnione.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Brak</strong></p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z kompletnymi danymi od daty określonej jako complete_data_date</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wymaga wcześniejszego wywołania load_data()</p></li>
+<li><p>Automatycznie filtruje dane według daty kompletności</p></li>
+<li><p>Usuwa kolumnę „player_description” jako niepotrzebną do analizy</p></li>
+<li><p>Wypełnia pozostałe brakujące wartości zerami</p></li>
+<li><p>Zapisuje wyniki w atrybucie complete_df instancji</p></li>
+<li><p>Loguje liczbę przygotowanych wierszy danych</p></li>
+<li><p>W przypadku braku danych zwraca pusty DataFrame</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data.prepare_editor_data">
+<span class="sig-name descname"><span class="pre">prepare_editor_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data.prepare_editor_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data.prepare_editor_data" title="Link to this definition"></a></dt>
+<dd><p>Przygotowuje zestaw danych z uzupełnionymi ocenami edytora.</p>
+<p>Filtruje dane historyczne, zostawiając tylko wiersze z poprawnymi
+ocenami edytora, niezależnie od daty meczu. Ten zestaw danych
+może potencjalnie zawierać mecze z szerszego zakresu dat niż zestaw
+kompletnych danych, ale wszystkie będą miały oceny edytora.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Brak</strong></p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z danymi zawierającymi oceny edytora</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wymaga wcześniejszego wywołania load_data()</p></li>
+<li><p>Filtruje tylko wiersze z poprawnie uzupełnionymi ocenami edytora</p></li>
+<li><p>Zarówno wartości NaN jak i ciąg „NaN” są traktowane jako brakujące dane</p></li>
+<li><p>Usuwa kolumnę „player_description” jako niepotrzebną do analizy</p></li>
+<li><p>Uzupełnia brakujące wartości w kolumnach numerycznych zerami</p></li>
+<li><p>Zapisuje wyniki w atrybucie editor_df instancji</p></li>
+<li><p>Loguje liczbę przygotowanych wierszy danych</p></li>
+<li><p>W przypadku braku danych zwraca pusty DataFrame</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data.process_and_save_data">
+<span class="sig-name descname"><span class="pre">process_and_save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data.process_and_save_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data.process_and_save_data" title="Link to this definition"></a></dt>
+<dd><p>Przetwarza dane i zapisuje je do plików w określonym katalogu.</p>
+<p>Wykonuje pełny proces przetwarzania danych historycznych: wczytanie,
+przygotowanie dwóch różnych zestawów danych, standaryzację nazw drużyn,
+dodanie identyfikatorów drużyn i zapisanie ich do plików CSV.
+Jest to główna metoda klasy, która koordynuje cały proces przetwarzania.</p>
+<p>Ta metoda wykonuje sekwencyjnie:
+1. Wczytanie danych historycznych
+2. Przygotowanie zestawu kompletnych danych
+3. Przygotowanie zestawu danych z ocenami edytora
+4. Standaryzację nazw drużyn w obu zestawach danych
+5. Filtrowanie drużyn nieobecnych w pliku mapowania ID
+6. Dodanie identyfikatorów drużyn na podstawie ich nazw
+7. Zapisanie obu zestawów do plików CSV</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Katalog docelowy dla plików wynikowych.
+Jeśli None, używa domyślnej ścieżki: „{project_root}/Data/Real/Old/”</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli wszystkie operacje się powiodły, False jeśli wystąpiły błędy</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Jest to główna metoda wykonawcza klasy</p></li>
+<li><p>Wykonuje sekwencyjnie wszystkie etapy przetwarzania</p></li>
+<li><p>Przerywa proces w przypadku błędu wczytywania danych</p></li>
+<li><p>Zapisuje dwa pliki: „RM_old_complete_data.csv” i „RM_old_editor_data.csv”</p></li>
+<li><p>Zwraca True tylko jeśli oba pliki zostały pomyślnie zapisane</p></li>
+<li><p>Loguje szczegółowe informacje o każdym etapie procesu</p></li>
+<li><p>W przypadku błędu zapisuje pełny traceback do logów</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data.process_team_names_and_ids">
+<span class="sig-name descname"><span class="pre">process_team_names_and_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data.process_team_names_and_ids"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data.process_team_names_and_ids" title="Link to this definition"></a></dt>
+<dd><p>Przetwarza nazwy drużyn i dodaje ich identyfikatory do DataFrame.</p>
+<p>Wykorzystuje DataProcessor do standaryzacji nazw drużyn zgodnie z ustalonym
+słownikiem mapowań oraz do dodania identyfikatorów drużyn na podstawie ich nazw.
+Dodatkowo usuwa wiersze z drużynami, które nie są wymienione w pliku mapowania.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do przetworzenia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Przetworzony DataFrame z ustandaryzowanymi nazwami drużyn</dt><dd><p>i dodanymi identyfikatorami lub oryginalny DataFrame w przypadku błędu</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Inicjalizuje DataProcessor, jeśli nie istnieje</p></li>
+<li><p>Wykonuje standaryzację nazw drużyn dla kolumn zawierających nazwy drużyn</p></li>
+<li><p>Usuwa wiersze z drużynami nieobecnymi w pliku mapowania ID</p></li>
+<li><p>Dodaje identyfikatory drużyn na podstawie ich nazw</p></li>
+<li><p>Nie modyfikuje oryginalnego DataFrame w przypadku błędu</p></li>
+<li><p>Loguje informacje o procesie i ewentualnych błędach</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_old_data.RM_old_Data.save_data_to_file">
+<span class="sig-name descname"><span class="pre">save_data_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#RM_old_Data.save_data_to_file"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.RM_old_Data.save_data_to_file" title="Link to this definition"></a></dt>
+<dd><p>Zapisuje DataFrame do pliku CSV w określonej lokalizacji.</p>
+<p>Zapisuje przygotowany zestaw danych do pliku CSV w określonej lokalizacji,
+wykorzystując bezpieczną metodę zapisu z klasy FileUtils. Metoda automatycznie
+tworzy katalogi, jeśli nie istnieją, i obsługuje potencjalne błędy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do zapisania</p></li>
+<li><p><strong>file_name</strong> (<em>str</em>) – Nazwa pliku wynikowego (np. „RM_old_complete_data.csv”)</p></li>
+<li><p><strong>output_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Katalog docelowy. Jeśli None, używa domyślnej ścieżki:
+„{project_root}/Data/Real/Old/”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli zapis się powiódł, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Bezpiecznie obsługuje przypadki pustych DataFrame</p></li>
+<li><p>Automatycznie tworzy katalogi w ścieżce, jeśli nie istnieją</p></li>
+<li><p>Używa FileUtils.save_csv_safe do bezpiecznego zapisu</p></li>
+<li><p>Nie zapisuje indeksu w pliku CSV</p></li>
+<li><p>Loguje szczegółowe informacje o zapisanym pliku</p></li>
+<li><p>W przypadku błędu zapisuje szczegółowe informacje diagnostyczne</p></li>
+<li><p>Jeśli nie podano output_dir, używa domyślnej ścieżki projektu</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="RM.RM_old_data.main">
+<span class="sig-prename descclassname"><span class="pre">RM.RM_old_data.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_old_data.html#main"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_old_data.main" title="Link to this definition"></a></dt>
+<dd><p>Funkcja główna do uruchamiania przetwarzania danych historycznych.</p>
+<p>Tworzy instancję klasy RM_old_Data z domyślnymi parametrami i wykonuje
+pełny proces przetwarzania i zapisywania danych. Dodatkowo wykorzystuje
+DataProcessor do standaryzacji nazw drużyn, filtrowania nieistniejących drużyn
+i dodawania identyfikatorów drużyn do wygenerowanych plików. Obsługuje
+wszelkie wyjątki, które mogą wystąpić podczas procesu.</p>
+<p>Główne etapy wykonywane przez funkcję:
+1. Utworzenie instancji RM_old_Data z domyślnymi parametrami
+2. Wczytanie, przetworzenie i przygotowanie danych historycznych
+3. Standaryzacja nazw drużyn zgodnie ze słownikiem mapowań
+4. Filtrowanie drużyn nieobecnych w pliku mapowania ID (np. Manchester City)
+5. Dodanie identyfikatorów drużyn na podstawie ich nazw
+6. Zapisanie dwóch plików danych: kompletnych i z ocenami edytora</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Brak</strong></p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Funkcja jest wywoływana, gdy skrypt jest uruchamiany bezpośrednio</p></li>
+<li><p>Używa domyślnych parametrów dla dat granicznych</p></li>
+<li><p>Wykorzystuje DataProcessor do przetwarzania nazw drużyn i ID</p></li>
+<li><p>Loguje informacje o sukcesie lub błędach wykonania</p></li>
+<li><p>Filtruje drużyny nieobecne w pliku rywale.csv (np. Manchester City)</p></li>
+<li><p>W przypadku błędu zapisuje pełny traceback do logów</p></li>
+</ul>
+<dl class="simple">
+<dt>Przykład:</dt><dd><p># Uruchomienie z linii poleceń
+python RM_old_data.py</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-RM.RM_players_analyzer">
+<span id="rm-rm-players-analyzer-module"></span><h2>RM.RM_players_analyzer module<a class="headerlink" href="#module-RM.RM_players_analyzer" title="Link to this heading"></a></h2>
+<p>RM_players_analyzer.py - Moduł do analizy danych piłkarzy Realu Madryt.</p>
+<p>Ten skrypt przetwarza dane z plików Excel zawierających statystyki meczowe piłkarzy
+Realu Madryt, wykonuje analizę ich występów, ocen i czasu gry oraz generuje
+podsumowanie w postaci plików CSV.</p>
+<p>Funkcjonalności:
+- Wczytywanie i łączenie danych z wielu plików Excel (sezony 2019-2025)
+- Kategoryzacja meczów na rozgrywki La Liga, Liga Mistrzów i inne
+- Obliczanie czasu gry zawodników w różnych sezonach i rozgrywkach
+- Analizowanie ocen zawodników przyznawanych przez użytkowników i edytorów
+- Śledzenie informacji o kontuzjach i dostępności zawodników
+- Generowanie profili zawodników z przypisaniem pozycji boiskowych
+- Eksport przetworzonych danych do plików CSV</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RM.RM_players_analyzer.</span></span><span class="sig-name descname"><span class="pre">RealMadridPlayersAnalyzer</span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa do analizy danych piłkarzy Realu Madryt.</p>
+<p>Przetwarza dane z plików Excel zawierających statystyki meczowe, generuje
+kompleksowe profile zawodników z uwzględnieniem występów w różnych rozgrywkach,
+oblicza czas gry i średnie oceny w poszczególnych sezonach oraz zapisuje
+wyniki do plików CSV.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.file_utils">
+<span class="sig-name descname"><span class="pre">file_utils</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.file_utils" title="Link to this definition"></a></dt>
+<dd><p>Instancja klasy pomocniczej do operacji na plikach</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="helpers.html#helpers.file_utils.FileUtils" title="helpers.file_utils.FileUtils">FileUtils</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.project_root">
+<span class="sig-name descname"><span class="pre">project_root</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.project_root" title="Link to this definition"></a></dt>
+<dd><p>Ścieżka do głównego katalogu projektu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.excel_path_2025">
+<span class="sig-name descname"><span class="pre">excel_path_2025</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.excel_path_2025" title="Link to this definition"></a></dt>
+<dd><p>Ścieżka do pliku Excel z ocenami na sezon 2024/2025</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.excel_path_2019_2024">
+<span class="sig-name descname"><span class="pre">excel_path_2019_2024</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.excel_path_2019_2024" title="Link to this definition"></a></dt>
+<dd><p>Ścieżka do pliku Excel z ocenami z lat 2019-2024</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.output_dir">
+<span class="sig-name descname"><span class="pre">output_dir</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.output_dir" title="Link to this definition"></a></dt>
+<dd><p>Ścieżka do katalogu wynikowego</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.df_2025">
+<span class="sig-name descname"><span class="pre">df_2025</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.df_2025" title="Link to this definition"></a></dt>
+<dd><p>DataFrame z danymi z sezonu 2024/2025</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.df_2019v2024">
+<span class="sig-name descname"><span class="pre">df_2019v2024</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.df_2019v2024" title="Link to this definition"></a></dt>
+<dd><p>DataFrame z danymi z sezonów 2019-2024</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.all_data">
+<span class="sig-name descname"><span class="pre">all_data</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.all_data" title="Link to this definition"></a></dt>
+<dd><p>Połączone dane ze wszystkich sezonów</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.LL_matches">
+<span class="sig-name descname"><span class="pre">LL_matches</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.LL_matches" title="Link to this definition"></a></dt>
+<dd><p>DataFrame z meczami La Liga</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.CL_matches">
+<span class="sig-name descname"><span class="pre">CL_matches</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.CL_matches" title="Link to this definition"></a></dt>
+<dd><p>DataFrame z meczami Ligi Mistrzów</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.other_matches">
+<span class="sig-name descname"><span class="pre">other_matches</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.other_matches" title="Link to this definition"></a></dt>
+<dd><p>DataFrame z pozostałymi meczami</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.real_player_csv">
+<span class="sig-name descname"><span class="pre">real_player_csv</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.real_player_csv" title="Link to this definition"></a></dt>
+<dd><p>DataFrame z profilami zawodników</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.season_names">
+<span class="sig-name descname"><span class="pre">season_names</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.season_names" title="Link to this definition"></a></dt>
+<dd><p>Lista identyfikatorów sezonów</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.injured_players">
+<span class="sig-name descname"><span class="pre">injured_players</span></span><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.injured_players" title="Link to this definition"></a></dt>
+<dd><p>Lista kontuzjowanych zawodników</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.calculate_player_ratings">
+<span class="sig-name descname"><span class="pre">calculate_player_ratings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">season_LL_dataframes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">season_CL_dataframes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.calculate_player_ratings"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.calculate_player_ratings" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnie oceny zawodników dla różnych sezonów i rozgrywek.</p>
+<p>Metoda oblicza średnie oceny zawodników (przyznawane przez edytorów i użytkowników)
+dla każdego sezonu i każdej kategorii rozgrywek. Dodatkowo tworzy łączne
+podsumowanie ocen dla wszystkich sezonów.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>season_LL_dataframes</strong> (<em>Dict</em>) – Słownik DataFrame’ów dla sezonów La Liga</p></li>
+<li><p><strong>season_CL_dataframes</strong> (<em>Dict</em>) – Słownik DataFrame’ów dla sezonów Champions League</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wylicza średnie oceny z pominięciem zerowych wartości</p></li>
+<li><p>Tworzy osobne kolumny dla ocen edytorów i użytkowników</p></li>
+<li><p>Rozróżnia między rozgrywkami La Liga i Ligi Mistrzów</p></li>
+<li><p>Oblicza średnie oceny łącznie dla wszystkich sezonów</p></li>
+<li><p>Zamienia wartości NaN na 0 dla czytelności</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.calculate_playing_time">
+<span class="sig-name descname"><span class="pre">calculate_playing_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">season_LL_dataframes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">season_CL_dataframes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.calculate_playing_time"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.calculate_playing_time" title="Link to this definition"></a></dt>
+<dd><p>Oblicza czas gry dla zawodników w różnych sezonach i rozgrywkach.</p>
+<p>Metoda sumuje minuty gry dla każdego zawodnika w poszczególnych sezonach
+i rozgrywkach (La Liga, Champions League) oraz tworzy podsumowanie łącznego
+czasu gry. Wyniki są zapisywane jako nowe kolumny w DataFrame’ie real_player_csv.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>season_LL_dataframes</strong> (<em>Dict</em>) – Słownik DataFrame’ów dla sezonów La Liga</p></li>
+<li><p><strong>season_CL_dataframes</strong> (<em>Dict</em>) – Słownik DataFrame’ów dla sezonów Champions League</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Tworzy kolumny z czasem gry dla każdego sezonu i każdej rozgrywki</p></li>
+<li><p>Sumuje minuty gry dla każdego zawodnika w każdej kategorii</p></li>
+<li><p>Weryfikuje poprawność obliczeń przez porównanie sum</p></li>
+<li><p>Zastępuje wartości NaN zerami dla wszystkich kolumn czasu</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.categorize_teams">
+<span class="sig-name descname"><span class="pre">categorize_teams</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.categorize_teams"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.categorize_teams" title="Link to this definition"></a></dt>
+<dd><p>Dzieli mecze na kategorie (La Liga, Liga Mistrzów, inne).</p>
+<p>Metoda kategoryzuje mecze na podstawie nazw drużyn, przypisując je do jednej
+z trzech kategorii: La Liga, Liga Mistrzów lub inne rozgrywki. Tworzy osobne
+DataFrame’y dla każdej kategorii i dodaje kolumnę z oznaczeniem typu rozgrywek.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wczytuje listę rywali z La Liga z pliku CSV</p></li>
+<li><p>Identyfikuje drużyny z Ligi Mistrzów przez wykluczenie</p></li>
+<li><p>Dodaje kolumnę «competition_category» z oznaczeniem rozgrywek</p></li>
+<li><p>Loguje liczby meczów w poszczególnych kategoriach</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.check_file_exists">
+<span class="sig-name descname"><span class="pre">check_file_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.check_file_exists"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.check_file_exists" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza czy plik istnieje i zwraca informację.</p>
+<p>Metoda weryfikuje istnienie pliku pod podaną ścieżką i loguje informację
+o jego dostępności.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Ścieżka do pliku</p></li>
+<li><p><strong>description</strong> (<em>str</em>) – Opis pliku (używany w komunikatach logowania)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli plik istnieje, False w przeciwnym przypadku</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wynik weryfikacji jest zapisywany do dziennika za pomocą funkcji info()</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.create_season_splits">
+<span class="sig-name descname"><span class="pre">create_season_splits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.create_season_splits"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.create_season_splits" title="Link to this definition"></a></dt>
+<dd><p>Tworzy podziały danych na sezony dla La Liga i Champions League.</p>
+<p>Metoda dzieli dane meczowe na poszczególne sezony dla rozgrywek La Liga i Ligi Mistrzów,
+tworząc słowniki z DataFrame’ami dla każdego sezonu. Filtrowanie odbywa się na podstawie
+dat rozpoczęcia i zakończenia każdego sezonu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Słowniki DataFrame’ów dla każdego sezonu (La Liga, Champions League)</dt><dd><p>lub puste słowniki w przypadku błędu</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[Dict, Dict]</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Definiuje dokładne daty granic dla każdego sezonu</p></li>
+<li><p>Tworzy osobne słowniki dla meczów La Liga i Champions League</p></li>
+<li><p>Loguje informacje o liczbie meczów w każdym sezonie i rozgrywkach</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.load_excel_files">
+<span class="sig-name descname"><span class="pre">load_excel_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.load_excel_files"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.load_excel_files" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje dane z plików Excel.</p>
+<p>Metoda próbuje wczytać dane z plików Excel zawierających statystyki piłkarzy.
+Sprawdza dostępność plików i w przypadku ich braku, wyświetla ostrzeżenia.
+W przypadku problemów ze znalezieniem arkuszy, próbuje znaleźć alternatywne
+arkusze.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.mark_player_availability">
+<span class="sig-name descname"><span class="pre">mark_player_availability</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.mark_player_availability"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.mark_player_availability" title="Link to this definition"></a></dt>
+<dd><p>Oznacza aktualnych i kontuzjowanych zawodników.</p>
+<p>Metoda dodaje do profili zawodników informacje o ich aktualnej dostępności
+i statusie w zespole. Oznacza aktualnych graczy oraz zawodników kontuzjowanych
+na podstawie predefiniowanej listy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Tworzy kolumnę «acctual_player» oznaczającą czy zawodnik jest aktywny w bieżącym sezonie</p></li>
+<li><p>Tworzy kolumnę «current_availability» informującą o dostępności zawodnika</p></li>
+<li><p>Wartość 0 w «current_availability» oznacza kontuzję lub brak w aktualnym składzie</p></li>
+<li><p>Lista kontuzjowanych zawodników jest zdefiniowana jako atrybut klasy</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.mark_seasons_played">
+<span class="sig-name descname"><span class="pre">mark_seasons_played</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.mark_seasons_played"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.mark_seasons_played" title="Link to this definition"></a></dt>
+<dd><p>Oznacza sezony, w których zawodnik brał udział.</p>
+<p>Metoda tworzy boolowskie oznaczenia dla każdego sezonu, wskazujące czy
+dany zawodnik występował w tym sezonie (w którejkolwiek z rozgrywek).
+Dodatkowo oblicza i zapisuje liczbę sezonów, w których każdy zawodnik grał.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Tworzy kolumny typu «season_XX_YY» z wartościami 0/1 dla każdego sezonu</p></li>
+<li><p>Sumuje liczbę sezonów z aktywnym udziałem zawodnika</p></li>
+<li><p>Wartość 1 oznacza, że zawodnik grał w danym sezonie w La Liga lub Lidze Mistrzów</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.merge_and_process_data">
+<span class="sig-name descname"><span class="pre">merge_and_process_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.merge_and_process_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.merge_and_process_data" title="Link to this definition"></a></dt>
+<dd><p>Łączy i przetwarza dane z różnych plików.</p>
+<p>Metoda analizuje strukturę wczytanych DataFrame’ów, weryfikuje obecność
+wymaganych kolumn, łączy dane z różnych źródeł, a następnie dokonuje
+niezbędnych przekształceń (np. konwersja dat, wypełnianie brakujących wartości).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Przetworzony DataFrame z danymi o meczach lub pusty DataFrame</dt><dd><p>w przypadku błędu</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Sprawdza zgodność struktur DataFrame’ów przed połączeniem</p></li>
+<li><p>Filtruje dane od poczatyku 2020 roku</p></li>
+<li><p>Sortuje wyniki według daty meczu</p></li>
+<li><p>Usuwa niepotrzebne kolumny i wypełnia brakujące wartości</p></li>
+<li><p>Loguje szczegółowe informacje o procesie i błędach</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.name_to_id">
+<span class="sig-name descname"><span class="pre">name_to_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.name_to_id"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.name_to_id" title="Link to this definition"></a></dt>
+<dd><p>Funkcja na podstawie nazwiska piłkarza pobiera jego ID z pliku CSV.
+Args: name (str): Nazwisko piłkarza
+Returns: bool: True jeśli ID zostało znalezione, False w przeciwnym przypadku</p>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Używa metody load_csv_safe z klasy FileUtils do bezpiecznego wczytania pliku</p></li>
+<li><p>Sprawdza czy kolumna «player_name» istnieje w DataFrame</p></li>
+<li><p>Zwraca ID zawodnika lub False jeśli nie znaleziono</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.prepare_player_profiles">
+<span class="sig-name descname"><span class="pre">prepare_player_profiles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.prepare_player_profiles"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.prepare_player_profiles" title="Link to this definition"></a></dt>
+<dd><p>Tworzy profile zawodników z pozycjami i ID.</p>
+<p>Metoda tworzy kompleksowe profile zawodników na podstawie unikalnych nazwisk
+z danych meczowych. Przypisuje każdemu zawodnikowi unikalny identyfikator oraz
+jedną lub więcej pozycji boiskowych na podstawie predefiniowanych list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Tworzy DataFrame z unikalnymi zawodnikami i przypisuje im ID</p></li>
+<li><p>Definiuje listy zawodników dla każdej pozycji boiskowej</p></li>
+<li><p>Jeden zawodnik może mieć przypisanych wiele pozycji</p></li>
+<li><p>Loguje informacje o liczbie utworzonych profili</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.process_all">
+<span class="sig-name descname"><span class="pre">process_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.process_all"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.process_all" title="Link to this definition"></a></dt>
+<dd><p>Wykonuje cały proces przetwarzania danych.</p>
+<p>Metoda realizuje kompletny proces analizy danych zawodników, wywołując
+sekwencyjnie wszystkie niezbędne metody klasy. Jeśli którykolwiek krok
+zakończy się niepowodzeniem, proces zostaje przerwany.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli cały proces zakończył się pomyślnie, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wykonuje wszystkie kroki analizy w odpowiedniej kolejności</p></li>
+<li><p>Sprawdza wyniki każdego kroku i przerywa proces w razie błędu</p></li>
+<li><p>Loguje informacje o rozpoczęciu i zakończeniu całego procesu</p></li>
+<li><p>Używane metody: load_excel_files, merge_and_process_data, categorize_teams,
+prepare_player_profiles, create_season_splits, calculate_playing_time,
+mark_seasons_played, calculate_player_ratings, mark_player_availability, save_results</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.save_results">
+<span class="sig-name descname"><span class="pre">save_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.save_results"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.save_results" title="Link to this definition"></a></dt>
+<dd><p>Zapisuje przetworzone dane do plików CSV.</p>
+<p>Metoda zapisuje przetworzone dane zawodników do pliku CSV w katalogu
+wynikowym. Formatuje wartości liczbowe z dwoma miejscami po przecinku.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli operacja się powiodła, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Zapisuje dane do pliku RM_players_stats.csv w katalogu output_dir</p></li>
+<li><p>Używa formatu float_format=”%.2f” dla czytelności numerów</p></li>
+<li><p>Pomija indeksy podczas zapisu (index=False)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.search_injured_player">
+<span class="sig-name descname"><span class="pre">search_injured_player</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.search_injured_player"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.search_injured_player" title="Link to this definition"></a></dt>
+<dd><p>Pobiera i kategoryzuje aktualnie kontuzjowanych graczy z pliku CSV.</p>
+<p>Funkcja wczytuje dane z pliku RM_players.csv i filtruje je, aby znaleźć zawodników,
+którzy są aktualnie w drużynie (actual_player == 1), ale są niedostępni
+(current_availability == 0) z powodu kontuzji lub innych przyczyn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Lista nazwisk kontuzjowanych/niedostępnych zawodników.</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+<dt class="field-odd">Wyrzuca<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – Gdy plik CSV nie istnieje.</p></li>
+<li><p><strong>ValueError</strong> – Gdy dane w pliku CSV mają nieprawidłowy format.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Używa metody load_csv_safe z klasy FileUtils do bezpiecznego wczytania pliku</p></li>
+<li><p>Filtruje tylko graczy którzy są w aktualnym składzie (actual_player == 1)</p></li>
+<li><p>Zwraca tylko tych graczy, którzy są obecnie niedostępni (current_availability == 0)</p></li>
+<li><p>W przypadku problemów z wczytaniem pliku, FileUtils.load_csv_safe obsłuży błędy</p></li>
+<li><p>Jeśli plik istnieje ale nie zawiera wymaganych kolumn, zwraca pustą listę</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.RealMadridPlayersAnalyzer.validate_dataframe">
+<span class="sig-name descname"><span class="pre">validate_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#RealMadridPlayersAnalyzer.validate_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.RealMadridPlayersAnalyzer.validate_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza czy DataFrame ma wymagane kolumny.</p>
+<p>Metoda weryfikuje czy podany DataFrame zawiera wszystkie kolumny niezbędne
+do przeprowadzenia analizy. Jeśli brakuje wymaganych kolumn, loguje
+szczegółowe informacje o braku.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do sprawdzenia</p></li>
+<li><p><strong>required_columns</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Lista wymaganych kolumn</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Nazwa DataFrame (używana w komunikatach logowania)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli wszystkie wymagane kolumny istnieją, False w przeciwnym przypadku</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Sprawdza czy DataFrame nie jest pusty</p></li>
+<li><p>Identyfikuje i loguje brakujące kolumny</p></li>
+<li><p>W przypadku błędów używa modułu logger</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="RM.RM_players_analyzer.main">
+<span class="sig-prename descclassname"><span class="pre">RM.RM_players_analyzer.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_players_analyzer.html#main"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_players_analyzer.main" title="Link to this definition"></a></dt>
+<dd><p>Główna funkcja uruchamiająca przetwarzanie danych piłkarzy Realu Madryt.</p>
+<p>Funkcja tworzy instancję klasy RealMadridPlayersAnalyzer i uruchamia proces
+analizy. Na podstawie wyniku procesu wyświetla odpowiedni komunikat o statusie
+zakończenia programu.</p>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Tworzy instancję analizatora</p></li>
+<li><p>Wywołuje metodę process_all() wykonującą całą analizę</p></li>
+<li><p>Wyświetla komunikat o powodzeniu lub niepowodzeniu programu</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="rm-rm-preparation-files-module">
+<h2>RM.RM_preparation_files module<a class="headerlink" href="#rm-rm-preparation-files-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-RM.RM_rivals">
+<span id="rm-rm-rivals-module"></span><h2>RM.RM_rivals module<a class="headerlink" href="#module-RM.RM_rivals" title="Link to this heading"></a></h2>
+<p>Skrypt do tworzenia struktury katalogów dla rywali Real Madryt.</p>
+<p>Funkcjonalność:
+- Wczytuje dane identyfikacyjne rywali z pliku CSV
+- Tworzy unikalne katalogi dla każdej drużyny w formacie ID_NAZWA
+- Katalogi są tworzone w głównej strukturze projektu
+- Wykorzystuje zaawansowane logowanie do śledzenia operacji
+- Zaimplementowano podejście obiektowe z klasami Rival i RivalManager
+- Tworzy pliki z bezpośrednimi spotkaniami (head-to-head)
+- Tworzy pliki z aktualną formą rywali (ostatnie 6 meczów)</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="RM.RM_rivals.Rival">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RM.RM_rivals.</span></span><span class="sig-name descname"><span class="pre">Rival</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rival_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#Rival"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.Rival" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa reprezentująca rywala Real Madryt.
+Przechowuje dane identyfikacyjne i ścieżkę do katalogu z danymi rywala.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.Rival.create_folder">
+<span class="sig-name descname"><span class="pre">create_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#Rival.create_folder"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.Rival.create_folder" title="Link to this definition"></a></dt>
+<dd><p>Tworzy folder dla rywala w podanej ścieżce bazowej.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>base_path</strong> (<em>str</em>) – Ścieżka bazowa dla folderów rywali</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli folder został utworzony lub już istnieje, False w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.Rival.create_form_file">
+<span class="sig-name descname"><span class="pre">create_form_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_sezonu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#Rival.create_form_file"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.Rival.create_form_file" title="Link to this definition"></a></dt>
+<dd><p>Tworzy plik z aktualną formą rywala (6 ostatnich meczów).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path_sezonu</strong> (<em>str</em><em>, </em><em>optional</em>) – Ścieżka do pliku CSV z danymi sezonu.
+Jeśli None, używa domyślnych danych.</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli plik został utworzony, False w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.Rival.create_h2h_file">
+<span class="sig-name descname"><span class="pre">create_h2h_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#Rival.create_h2h_file"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.Rival.create_h2h_file" title="Link to this definition"></a></dt>
+<dd><p>Tworzy plik z historią meczów bezpośrednich (head-to-head) w folderze rywala.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True jeśli plik został utworzony, False w przypadku błędu</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.Rival.get_folder_name">
+<span class="sig-name descname"><span class="pre">get_folder_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#Rival.get_folder_name"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.Rival.get_folder_name" title="Link to this definition"></a></dt>
+<dd><p>Zwraca nazwę folderu dla rywala w formacie ID_NAZWA.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.Rival.refresh_data">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">refresh_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#Rival.refresh_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.Rival.refresh_data" title="Link to this definition"></a></dt>
+<dd><p>Odświeża dane rywali z pliku.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="RM.RM_rivals.RivalManager">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">RM.RM_rivals.</span></span><span class="sig-name descname"><span class="pre">RivalManager</span></span><a class="reference internal" href="../_modules/RM/RM_rivals.html#RivalManager"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.RivalManager" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa zarządzająca rywalami Real Madryt.
+Odpowiada za wczytywanie danych, tworzenie obiektów Rival i zarządzanie katalogami.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.RivalManager.create_all_folders">
+<span class="sig-name descname"><span class="pre">create_all_folders</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#RivalManager.create_all_folders"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.RivalManager.create_all_folders" title="Link to this definition"></a></dt>
+<dd><p>Tworzy foldery dla wszystkich rywali.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Liczba pomyślnie utworzonych folderów</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.RivalManager.create_all_form_files">
+<span class="sig-name descname"><span class="pre">create_all_form_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_sezonu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#RivalManager.create_all_form_files"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.RivalManager.create_all_form_files" title="Link to this definition"></a></dt>
+<dd><p>Tworzy pliki z aktualną formą dla wszystkich rywali (poza Realem Madryt).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path_sezonu</strong> (<em>str</em><em>, </em><em>optional</em>) – Ścieżka do pliku CSV z danymi sezonu.</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Liczba pomyślnie utworzonych plików formy</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.RivalManager.create_all_h2h_files">
+<span class="sig-name descname"><span class="pre">create_all_h2h_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#RivalManager.create_all_h2h_files"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.RivalManager.create_all_h2h_files" title="Link to this definition"></a></dt>
+<dd><p>Tworzy pliki z historią meczów bezpośrednich (H2H) dla wszystkich rywali.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Liczba pomyślnie utworzonych plików H2H</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.RivalManager.load_rivals_data">
+<span class="sig-name descname"><span class="pre">load_rivals_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#RivalManager.load_rivals_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.RivalManager.load_rivals_data" title="Link to this definition"></a></dt>
+<dd><p>Wczytuje dane o rywalach z pliku CSV i tworzy obiekty Rival.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Ścieżka do pliku CSV z danymi rywali</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli dane zostały wczytane poprawnie, False w przypadku błędu</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="RM.RM_rivals.RivalManager.set_base_path">
+<span class="sig-name descname"><span class="pre">set_base_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#RivalManager.set_base_path"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.RivalManager.set_base_path" title="Link to this definition"></a></dt>
+<dd><p>Ustawia ścieżkę bazową dla folderów rywali.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="RM.RM_rivals.main">
+<span class="sig-prename descclassname"><span class="pre">RM.RM_rivals.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#main"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.main" title="Link to this definition"></a></dt>
+<dd><p>Główna funkcja skryptu tworząca foldery dla wszystkich rywali,
+pliki z bezpośrednimi spotkaniami (H2H) oraz pliki z aktualną formą.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="RM.RM_rivals.real_data">
+<span class="sig-prename descclassname"><span class="pre">RM.RM_rivals.</span></span><span class="sig-name descname"><span class="pre">real_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/RM_rivals.html#real_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.RM_rivals.real_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-RM.check_id_in_files">
+<span id="rm-check-id-in-files-module"></span><h2>RM.check_id_in_files module<a class="headerlink" href="#module-RM.check_id_in_files" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="RM.check_id_in_files.check_match_id_consistency">
+<span class="sig-prename descclassname"><span class="pre">RM.check_id_in_files.</span></span><span class="sig-name descname"><span class="pre">check_match_id_consistency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/check_id_in_files.html#check_match_id_consistency"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.check_id_in_files.check_match_id_consistency" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza spójność wartości match_id w trzech plikach:
+- all_matches.csv
+- RM_matches.csv
+- filtered_real_madrid_data_20_25.csv</p>
+<p>Bierze pod uwagę, że filtered_real_madrid_data zawiera wiele wierszy na mecz
+(jeden dla każdego zawodnika).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>project_filepath</strong> (<em>str</em>) – Ścieżka do głównego katalogu projektu</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli wszystkie ID są spójne, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="RM.check_id_in_files.set_match_id">
+<span class="sig-prename descclassname"><span class="pre">RM.check_id_in_files.</span></span><span class="sig-name descname"><span class="pre">set_match_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_save</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/check_id_in_files.html#set_match_id"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.check_id_in_files.set_match_id" title="Link to this definition"></a></dt>
+<dd><p>Ustawia match_id dla pliku „path_to_file”:
+- sprawdza czy taki plik istnieje w katalogu „Data”
+- sprawdza czy istnieje w pliku kolumna „match_id”, jeżeli nie to ustawia domyślne wartości dla match_id
+- zapisuje plik w „path_to_save”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_to_file</strong> (<em>str</em>) – Ścieżka do pliku do przetworzenia</p></li>
+<li><p><strong>path_to_save</strong> (<em>str</em>) – Ścieżka do zapisu pliku</p></li>
+<li><p><strong>type</strong> (<em>int</em>) – „1” - oznacza działanie funkcji w sposób grupowania po meczach Realu
+„2” - oznacza działanie funkcji w sposób ogólny (indeksuje wszystkie spotkania w bazie)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli wszystko przebiegło dobrze i plik został zapisany, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="RM.check_id_in_files.set_team_id">
+<span class="sig-prename descclassname"><span class="pre">RM.check_id_in_files.</span></span><span class="sig-name descname"><span class="pre">set_team_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_save</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/RM/check_id_in_files.html#set_team_id"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#RM.check_id_in_files.set_team_id" title="Link to this definition"></a></dt>
+<dd><p>Ustawia home_team_id oraz away_team_id dla pliku „path_to_file”:
+- sprawdza czy taki plik istnieje w katalogu „Data”
+- sprawdza czy istnieje w pliku kolumna „home_team” oraz „away_team” jeżeli nie to funkcja się kończy
+- pobiera dane o rywalach z pliku „Data/id_nazwa/rywale.csv”
+- na podstawie tych danych ustawia home_team_id oraz away_team_id
+- zapisuje plik w „path_to_save”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_to_file</strong> (<em>str</em>) – Ścieżka do pliku do przetworzenia</p></li>
+<li><p><strong>path_to_save</strong> (<em>str</em>) – Ścieżka do zapisu pliku</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli wszystko przebiegło dobrze i plik został zapisany, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-RM.const_variable">
+<span id="rm-const-variable-module"></span><h2>RM.const_variable module<a class="headerlink" href="#module-RM.const_variable" title="Link to this heading"></a></h2>
+</section>
+<section id="module-RM">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-RM" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="helpers.html" class="btn btn-neutral float-left" title="helpers package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Poprzedni</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

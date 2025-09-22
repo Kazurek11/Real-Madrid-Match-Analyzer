@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RM.RM_old_data &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=2827c288"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">RM.RM_old_data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu RM.RM_old_data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Moduł do przetwarzania i analizy historycznych danych piłkarzy Realu Madryt.</span>
+
+<span class="sd">Ten moduł umożliwia wczytanie, przefiltrowanie, przetworzenie i zapisanie historycznych</span>
+<span class="sd">danych statystycznych piłkarzy Realu Madryt z różnych sezonów. Służy jako kluczowy</span>
+<span class="sd">komponent w procesie przygotowania danych treningowych do modeli analitycznych</span>
+<span class="sd">i predykcyjnych.</span>
+
+<span class="sd">Główne funkcje modułu:</span>
+<span class="sd">1. Wczytanie historycznych danych piłkarzy z plików Excel</span>
+<span class="sd">2. Filtrowanie danych według dat granicznych (pełne dane vs dane z ocenami edytora)</span>
+<span class="sd">3. Przygotowanie i czyszczenie zestawów danych</span>
+<span class="sd">4. Mapowanie i standaryzacja nazw drużyn zgodnie ze słownikiem mapowań</span>
+<span class="sd">5. Dodawanie identyfikatorów drużyn na podstawie ich nazw</span>
+<span class="sd">6. Filtrowanie drużyn nieobecnych w pliku mapowania ID</span>
+<span class="sd">7. Zapisanie przetworzonych danych w ustrukturyzowanym formacie CSV</span>
+
+<span class="sd">Zastosowanie:</span>
+<span class="sd">Dane wyjściowe tego modułu są wykorzystywane do:</span>
+<span class="sd">- Wyciągnięcia średnich statystyk historycznych piłkarzy</span>
+<span class="sd">- Określenia form zawodników przed określonymi meczami</span>
+<span class="sd">- Analizy trendów wydajności zawodników w czasie</span>
+<span class="sd">- Trenowania modeli prognostycznych dla przyszłych występów</span>
+<span class="sd">- Uzupełniania brakujących danych w aktualnych zestawach danych</span>
+
+<span class="sd">Moduł zapisuje dwa kluczowe pliki:</span>
+<span class="sd">- &#39;RM_old_complete_data.csv&#39;: Pełne dane od określonej daty kompletności z mapowaniem ID drużyn</span>
+<span class="sd">- &#39;RM_old_editor_data.csv&#39;: Dane z ocenami edytora, potencjalnie z szerszego zakresu dat, z mapowaniem ID drużyn</span>
+
+<span class="sd">Przykłady użycia:</span>
+<span class="sd">    # Podstawowe użycie z domyślnymi parametrami</span>
+<span class="sd">    processor = RM_old_Data()</span>
+<span class="sd">    processor.process_and_save_data()</span>
+<span class="sd">    </span>
+<span class="sd">    # Użycie z niestandardowymi datami granicznymi</span>
+<span class="sd">    processor = RM_old_Data(</span>
+<span class="sd">        date=&quot;2021-01-01&quot;, </span>
+<span class="sd">        complete_data_date=&quot;2020-06-01&quot;</span>
+<span class="sd">    )</span>
+<span class="sd">    processor.process_and_save_data(&quot;ścieżka/do/katalogu/wyjściowego&quot;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.RM_players_analyzer</span><span class="w"> </span><span class="kn">import</span> <span class="n">RealMadridPlayersAnalyzer</span>
+
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">warning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.merge_all_season_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataMerger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.data_processor</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataProcessor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.const_variable</span><span class="w"> </span><span class="kn">import</span> <span class="n">SEASON_DATES</span>
+<div class="viewcode-block" id="RM_old_Data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RM_old_Data</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa do przetwarzania historycznych danych piłkarzy Realu Madryt.</span>
+<span class="sd">    </span>
+<span class="sd">    Ta klasa umożliwia wczytanie, przetworzenie i zapisanie danych historycznych</span>
+<span class="sd">    z dwóch różnych zakresów dat w celu utworzenia bazy dla analizy wcześniejszych</span>
+<span class="sd">    występów zawodników. Dane te są kluczowe dla analizy form piłkarzy, trendów</span>
+<span class="sd">    wydajności i jako czynniki predykcyjne w modelach statystycznych.</span>
+<span class="sd">    </span>
+<span class="sd">    Główne zadania klasy:</span>
+<span class="sd">    - Wczytanie danych historycznych z plików Excel</span>
+<span class="sd">    - Filtrowanie według dat granicznych i wartości ocen edytora</span>
+<span class="sd">    - Przetwarzanie danych z zachowaniem ich integralności</span>
+<span class="sd">    - Standaryzacja nazw drużyn i dodawanie identyfikatorów drużyn</span>
+<span class="sd">    - Filtrowanie drużyn nieobecnych w pliku mapowania ID</span>
+<span class="sd">    - Zapisywanie zestawów danych w ustrukturyzowanym formacie CSV</span>
+<span class="sd">    </span>
+<span class="sd">    Atrybuty:</span>
+<span class="sd">        date (datetime): Data graniczna - pierwszy mecz do analizy w projekcie</span>
+<span class="sd">        complete_data_date (datetime): Data od której wszystkie dane są kompletne </span>
+<span class="sd">        rm_analyzer (RealMadridPlayersAnalyzer): Obiekt analizatora danych piłkarzy</span>
+<span class="sd">        data_processor (DataProcessor): Procesor do standaryzacji nazw drużyn i dodawania ID</span>
+<span class="sd">        df_history (pd.DataFrame): Wczytane dane historyczne</span>
+<span class="sd">        complete_df (pd.DataFrame): Przefiltrowane dane kompletne</span>
+<span class="sd">        editor_df (pd.DataFrame): Dane z oceną edytora</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Obiekt wymaga dostępu do plików Excel z danymi historycznymi</span>
+<span class="sd">        - Działanie opiera się na klasie RealMadridPlayersAnalyzer do wczytywania danych</span>
+<span class="sd">        - Do standaryzacji nazw drużyn i dodawania ID wykorzystuje klasę DataProcessor</span>
+<span class="sd">        - Proces przetwarzania tworzy dwa osobne pliki CSV o różnej zawartości</span>
+<span class="sd">        - Do prawidłowego działania wymaga poprawnej struktury katalogów projektu</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">complete_data_date</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizacja klasy przetwarzającej historyczne dane Realu Madryt.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            date (str lub datetime, optional): Data graniczna do analizy.</span>
+<span class="sd">                Domyślnie używa pierwszej daty z SEASON_DATES.</span>
+<span class="sd">            complete_data_date (str lub datetime, optional): Data od której dane są </span>
+<span class="sd">                kompletne. Domyślnie &quot;2020-01-04&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="k">if</span> <span class="n">date</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">SEASON_DATES</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">complete_data_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">complete_data_date</span><span class="p">)</span> <span class="k">if</span> <span class="n">complete_data_date</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="s2">&quot;2020-01-04&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">complete_df</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zainicjowano obiekt RM_old_Data z datą graniczną: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data kompletnych danych: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">complete_data_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="RM_old_Data.initialize_analyzer">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data.initialize_analyzer">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_analyzer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje analizator danych piłkarzy Realu Madryt.</span>
+<span class="sd">        </span>
+<span class="sd">        Tworzy instancję klasy RealMadridPlayersAnalyzer, która jest niezbędna</span>
+<span class="sd">        do wczytywania i wstępnego przetwarzania danych z plików Excel. Metoda</span>
+<span class="sd">        obsługuje wszelkie wyjątki, które mogą wystąpić podczas inicjalizacji.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            Brak</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli inicjalizacja się powiodła, False w przeciwnym razie</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda jest wywoływana automatycznie przez load_data() jeśli analizator nie istnieje</span>
+<span class="sd">            - W przypadku błędu szczegółowe informacje są zapisywane w logach</span>
+<span class="sd">            - Sukces jest wymagany do dalszego przetwarzania danych</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span> <span class="o">=</span> <span class="n">RealMadridPlayersAnalyzer</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się utworzyć instancji RealMadridPlayersAnalyzer&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Poprawnie zainicjalizowano analizator danych&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił błąd podczas inicjalizacji analizatora: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="RM_old_Data.initialize_data_processor">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data.initialize_data_processor">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_data_processor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje procesor danych do standaryzacji nazw drużyn i dodawania ID.</span>
+<span class="sd">        </span>
+<span class="sd">        Tworzy instancję klasy DataProcessor, która jest używana do normalizacji nazw drużyn</span>
+<span class="sd">        i dodawania identyfikatorów drużyn na podstawie ich nazw. Metoda obsługuje </span>
+<span class="sd">        wszelkie wyjątki, które mogą wystąpić podczas inicjalizacji.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            Brak</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli inicjalizacja się powiodła, False w przeciwnym razie</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda jest wywoływana automatycznie przez process_team_names_and_ids() </span>
+<span class="sd">              jeśli procesor nie istnieje</span>
+<span class="sd">            - W przypadku błędu szczegółowe informacje są zapisywane w logach</span>
+<span class="sd">            - Wczytuje szablon mapowania ID drużyn dla późniejszego użycia</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">file_utils</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+            <span class="n">project_root</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">load_team_id_template</span><span class="p">():</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Nie można załadować szablonu ID drużyn. Mapowanie ID może być niekompletne.&quot;</span><span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Poprawnie zainicjalizowano procesor danych&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił błąd podczas inicjalizacji procesora danych: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="RM_old_Data.load_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data.load_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje dane historyczne z plików Excel za pomocą analizatora.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_analyzer</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="p">,</span> <span class="s1">&#39;df_2019v2024&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="o">.</span><span class="n">df_2019v2024</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="o">.</span><span class="n">df_2019v2024</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dane zostały już wczytane, liczba wierszy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="o">.</span><span class="n">load_excel_files</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">success</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="p">,</span> <span class="s1">&#39;df_2019v2024&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="o">.</span><span class="n">df_2019v2024</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_analyzer</span><span class="o">.</span><span class="n">df_2019v2024</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dane zostały wczytane, liczba wierszy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać danych z lat 2019-2024&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+            
+            <span class="n">before_filter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">]</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Po filtrowaniu według daty pozostało </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">)</span><span class="si">}</span><span class="s2"> z </span><span class="si">{</span><span class="n">before_filter</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+            
+            <span class="n">ratings_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span><span class="s2">&quot;editor_rating&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba wierszy z oceną edytora: </span><span class="si">{</span><span class="n">ratings_count</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">ratings_count</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">% danych)&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">ratings_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak ocen edytora po filtrowaniu według daty. Pomijam filtrowanie według ocen edytora.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">before_rating_filter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span><span class="s2">&quot;editor_rating&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Po filtrowaniu według ocen edytora pozostało </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">)</span><span class="si">}</span><span class="s2"> z </span><span class="si">{</span><span class="n">before_rating_filter</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił błąd podczas wczytywania danych: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="RM_old_Data.process_team_names_and_ids">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data.process_team_names_and_ids">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_team_names_and_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przetwarza nazwy drużyn i dodaje ich identyfikatory do DataFrame.</span>
+<span class="sd">        </span>
+<span class="sd">        Wykorzystuje DataProcessor do standaryzacji nazw drużyn zgodnie z ustalonym </span>
+<span class="sd">        słownikiem mapowań oraz do dodania identyfikatorów drużyn na podstawie ich nazw.</span>
+<span class="sd">        Dodatkowo usuwa wiersze z drużynami, które nie są wymienione w pliku mapowania.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame do przetworzenia</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Przetworzony DataFrame z ustandaryzowanymi nazwami drużyn</span>
+<span class="sd">                         i dodanymi identyfikatorami lub oryginalny DataFrame w przypadku błędu</span>
+<span class="sd">                         </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Inicjalizuje DataProcessor, jeśli nie istnieje</span>
+<span class="sd">            - Wykonuje standaryzację nazw drużyn dla kolumn zawierających nazwy drużyn</span>
+<span class="sd">            - Usuwa wiersze z drużynami nieobecnymi w pliku mapowania ID</span>
+<span class="sd">            - Dodaje identyfikatory drużyn na podstawie ich nazw</span>
+<span class="sd">            - Nie modyfikuje oryginalnego DataFrame w przypadku błędu</span>
+<span class="sd">            - Loguje informacje o procesie i ewentualnych błędach</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak danych do przetworzenia nazw drużyn i ID&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">df</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_data_processor</span><span class="p">():</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Nie można zainicjalizować procesora danych. Nazwy drużyn i ID nie będą przetworzone.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">df</span>
+                
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Standaryzacja nazw drużyn...&quot;</span><span class="p">)</span>
+            <span class="n">updated</span><span class="p">,</span> <span class="n">standardized_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">standardize_team_names</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">updated</span> <span class="ow">or</span> <span class="n">standardized_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Brak zmian w nazwach drużyn lub błąd podczas standaryzacji.&quot;</span><span class="p">)</span>
+                <span class="n">standardized_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="p">,</span> <span class="s1">&#39;name_to_id&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">name_to_id</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">load_team_id_template</span><span class="p">():</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Nie można załadować szablonu ID drużyn. Filtrowanie drużyn może być niemożliwe.&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">standardized_df</span>
+            
+            <span class="n">team_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;team_name&quot;</span><span class="p">,</span> <span class="s2">&quot;opponent_name&quot;</span><span class="p">,</span> <span class="s2">&quot;home_team&quot;</span><span class="p">,</span> <span class="s2">&quot;away_team&quot;</span><span class="p">]</span>
+            <span class="n">filter_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">team_columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">standardized_df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">filter_columns</span><span class="p">:</span>
+                <span class="n">valid_teams</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">name_to_id</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                
+                <span class="n">rows_before</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">standardized_df</span><span class="p">)</span>
+                
+                <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">standardized_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                
+                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">filter_columns</span><span class="p">:</span>
+                    <span class="n">mask</span> <span class="o">=</span> <span class="n">filtered_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">valid_teams</span><span class="p">)</span>
+                    <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">filtered_df</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">rows_before</span><span class="p">:</span>
+                        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Usunięto </span><span class="si">{</span><span class="n">rows_before</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy z drużynami nieobecnymi w pliku mapowania ID dla kolumny </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">rows_before</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">filtered_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Po filtrowaniu drużyn nie pozostały żadne wiersze. Sprawdź mapowanie drużyn.&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">standardized_df</span>
+                
+                <span class="n">standardized_df</span> <span class="o">=</span> <span class="n">filtered_df</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Brak kolumn z nazwami drużyn do filtrowania.&quot;</span><span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dodawanie identyfikatorów drużyn...&quot;</span><span class="p">)</span>
+            <span class="n">team_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;team_name&quot;</span><span class="p">,</span> <span class="s2">&quot;opponent_name&quot;</span><span class="p">,</span> <span class="s2">&quot;home_team&quot;</span><span class="p">,</span> <span class="s2">&quot;away_team&quot;</span><span class="p">]</span>
+            <span class="n">has_team_columns</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">col</span> <span class="ow">in</span> <span class="n">standardized_df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">team_columns</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">has_team_columns</span><span class="p">:</span>
+                <span class="n">result_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">add_team_ids_to_dataframe</span><span class="p">(</span><span class="n">standardized_df</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dodano identyfikatory drużyn do DataFrame&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">result_df</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Nie udało się dodać identyfikatorów drużyn&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="s2">&quot;W DataFrame brak kolumn z nazwami drużyn do mapowania ID&quot;</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">standardized_df</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił błąd podczas przetwarzania nazw drużyn i ID: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">df</span></div>
+
+    
+<div class="viewcode-block" id="RM_old_Data.filter_data_by_date">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data.filter_data_by_date">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_data_by_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filtruje DataFrame według daty.</span>
+<span class="sd">        </span>
+<span class="sd">        Tworzy kopię DataFrame zawierającą tylko wiersze, których data</span>
+<span class="sd">        meczu jest większa lub równa podanej dacie granicznej. Jest to</span>
+<span class="sd">        metoda pomocnicza wykorzystywana przez inne funkcje klasy.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame do filtrowania</span>
+<span class="sd">            date (datetime): Data graniczna do filtrowania (&gt;= date)</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Przefiltrowany DataFrame zawierający tylko mecze od podanej daty</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Funkcja zachowuje się bezpiecznie, zwracając pusty DataFrame dla pustych danych wejściowych</span>
+<span class="sd">            - Tworzy kopię danych wejściowych, aby uniknąć modyfikacji oryginalnego DataFrame</span>
+<span class="sd">            - Zakłada istnienie kolumny &#39;match_date&#39; w formacie datetime</span>
+<span class="sd">            - Loguje informacje o liczbie wierszy po filtrowaniu dla celów diagnostycznych</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak danych do filtrowania&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        
+        <span class="n">filtered_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">date</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Po filtrowaniu według daty </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> pozostało </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filtered_df</span></div>
+
+    
+<div class="viewcode-block" id="RM_old_Data.prepare_complete_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data.prepare_complete_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_complete_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przygotowuje zestaw danych z okresu, gdy wszystkie kolumny są kompletne.</span>
+<span class="sd">        </span>
+<span class="sd">        Filtruje dane historyczne według daty granicznej kompletności (complete_data_date),</span>
+<span class="sd">        resetuje indeksy, usuwa niepotrzebne kolumny i uzupełnia brakujące wartości.</span>
+<span class="sd">        Ten zestaw danych zawiera tylko rekordy od daty, od której wszystkie kolumny</span>
+<span class="sd">        są uzupełnione.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            Brak</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z kompletnymi danymi od daty określonej jako complete_data_date</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Wymaga wcześniejszego wywołania load_data()</span>
+<span class="sd">            - Automatycznie filtruje dane według daty kompletności</span>
+<span class="sd">            - Usuwa kolumnę &quot;player_description&quot; jako niepotrzebną do analizy</span>
+<span class="sd">            - Wypełnia pozostałe brakujące wartości zerami</span>
+<span class="sd">            - Zapisuje wyniki w atrybucie complete_df instancji</span>
+<span class="sd">            - Loguje liczbę przygotowanych wierszy danych</span>
+<span class="sd">            - W przypadku braku danych zwraca pusty DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak wczytanych danych historycznych&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">complete_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_data_by_date</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_data_date</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">complete_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">complete_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_df</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">complete_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;player_description&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">complete_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przygotowano zestaw kompletnych danych, liczba wierszy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">complete_df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete_df</span></div>
+
+    
+<div class="viewcode-block" id="RM_old_Data.prepare_editor_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data.prepare_editor_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_editor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przygotowuje zestaw danych z uzupełnionymi ocenami edytora.</span>
+<span class="sd">        </span>
+<span class="sd">        Filtruje dane historyczne, zostawiając tylko wiersze z poprawnymi</span>
+<span class="sd">        ocenami edytora, niezależnie od daty meczu. Ten zestaw danych</span>
+<span class="sd">        może potencjalnie zawierać mecze z szerszego zakresu dat niż zestaw</span>
+<span class="sd">        kompletnych danych, ale wszystkie będą miały oceny edytora.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            Brak</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z danymi zawierającymi oceny edytora</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Wymaga wcześniejszego wywołania load_data()</span>
+<span class="sd">            - Filtruje tylko wiersze z poprawnie uzupełnionymi ocenami edytora</span>
+<span class="sd">            - Zarówno wartości NaN jak i ciąg &quot;NaN&quot; są traktowane jako brakujące dane</span>
+<span class="sd">            - Usuwa kolumnę &quot;player_description&quot; jako niepotrzebną do analizy</span>
+<span class="sd">            - Uzupełnia brakujące wartości w kolumnach numerycznych zerami</span>
+<span class="sd">            - Zapisuje wyniki w atrybucie editor_df instancji</span>
+<span class="sd">            - Loguje liczbę przygotowanych wierszy danych</span>
+<span class="sd">            - W przypadku braku danych zwraca pusty DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak wczytanych danych historycznych&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span><span class="s2">&quot;editor_rating&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> 
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_history</span><span class="p">[</span><span class="s2">&quot;editor_rating&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;NaN&quot;</span><span class="p">)</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span><span class="o">.</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;player_description&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+        
+        <span class="n">numeric_columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span><span class="p">[</span><span class="n">numeric_columns</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span><span class="p">[</span><span class="n">numeric_columns</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przygotowano zestaw danych z ocenami edytora, liczba wierszy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">editor_df</span></div>
+
+    
+<div class="viewcode-block" id="RM_old_Data.save_data_to_file">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data.save_data_to_file">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_data_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zapisuje DataFrame do pliku CSV w określonej lokalizacji.</span>
+<span class="sd">        </span>
+<span class="sd">        Zapisuje przygotowany zestaw danych do pliku CSV w określonej lokalizacji,</span>
+<span class="sd">        wykorzystując bezpieczną metodę zapisu z klasy FileUtils. Metoda automatycznie</span>
+<span class="sd">        tworzy katalogi, jeśli nie istnieją, i obsługuje potencjalne błędy.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame do zapisania</span>
+<span class="sd">            file_name (str): Nazwa pliku wynikowego (np. &quot;RM_old_complete_data.csv&quot;)</span>
+<span class="sd">            output_dir (str, optional): Katalog docelowy. Jeśli None, używa domyślnej ścieżki:</span>
+<span class="sd">                &quot;{project_root}/Data/Real/Old/&quot;</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli zapis się powiódł, False w przeciwnym razie</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Bezpiecznie obsługuje przypadki pustych DataFrame</span>
+<span class="sd">            - Automatycznie tworzy katalogi w ścieżce, jeśli nie istnieją</span>
+<span class="sd">            - Używa FileUtils.save_csv_safe do bezpiecznego zapisu</span>
+<span class="sd">            - Nie zapisuje indeksu w pliku CSV</span>
+<span class="sd">            - Loguje szczegółowe informacje o zapisanym pliku</span>
+<span class="sd">            - W przypadku błędu zapisuje szczegółowe informacje diagnostyczne</span>
+<span class="sd">            - Jeśli nie podano output_dir, używa domyślnej ścieżki projektu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak danych do zapisania dla pliku </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">output_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="s2">&quot;Old&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+                
+            <span class="n">success</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span>
+                <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+                <span class="n">file_path</span><span class="o">=</span><span class="n">output_path</span><span class="p">,</span>
+                <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zapisano dane do pliku: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba zapisanych wierszy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba kolumn: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się zapisać danych do pliku: </span><span class="si">{</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił błąd podczas zapisywania pliku </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="RM_old_Data.process_and_save_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.RM_old_Data.process_and_save_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_and_save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przetwarza dane i zapisuje je do plików w określonym katalogu.</span>
+<span class="sd">        </span>
+<span class="sd">        Wykonuje pełny proces przetwarzania danych historycznych: wczytanie,</span>
+<span class="sd">        przygotowanie dwóch różnych zestawów danych, standaryzację nazw drużyn,</span>
+<span class="sd">        dodanie identyfikatorów drużyn i zapisanie ich do plików CSV.</span>
+<span class="sd">        Jest to główna metoda klasy, która koordynuje cały proces przetwarzania.</span>
+<span class="sd">        </span>
+<span class="sd">        Ta metoda wykonuje sekwencyjnie:</span>
+<span class="sd">        1. Wczytanie danych historycznych</span>
+<span class="sd">        2. Przygotowanie zestawu kompletnych danych</span>
+<span class="sd">        3. Przygotowanie zestawu danych z ocenami edytora</span>
+<span class="sd">        4. Standaryzację nazw drużyn w obu zestawach danych</span>
+<span class="sd">        5. Filtrowanie drużyn nieobecnych w pliku mapowania ID</span>
+<span class="sd">        6. Dodanie identyfikatorów drużyn na podstawie ich nazw</span>
+<span class="sd">        7. Zapisanie obu zestawów do plików CSV</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            output_dir (str, optional): Katalog docelowy dla plików wynikowych.</span>
+<span class="sd">                Jeśli None, używa domyślnej ścieżki: &quot;{project_root}/Data/Real/Old/&quot;</span>
+<span class="sd">                </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli wszystkie operacje się powiodły, False jeśli wystąpiły błędy</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Jest to główna metoda wykonawcza klasy</span>
+<span class="sd">            - Wykonuje sekwencyjnie wszystkie etapy przetwarzania</span>
+<span class="sd">            - Przerywa proces w przypadku błędu wczytywania danych</span>
+<span class="sd">            - Zapisuje dwa pliki: &quot;RM_old_complete_data.csv&quot; i &quot;RM_old_editor_data.csv&quot;</span>
+<span class="sd">            - Zwraca True tylko jeśli oba pliki zostały pomyślnie zapisane</span>
+<span class="sd">            - Loguje szczegółowe informacje o każdym etapie procesu</span>
+<span class="sd">            - W przypadku błędu zapisuje pełny traceback do logów</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczęto przetwarzanie historycznych danych Realu Madryt&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">():</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać danych. Przerwano przetwarzanie.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="n">complete_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_complete_data</span><span class="p">()</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Standaryzacja nazw drużyn, filtrowanie nieznanych drużyn i dodawanie ID w danych kompletnych...&quot;</span><span class="p">)</span>
+            <span class="n">complete_data_processed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_team_names_and_ids</span><span class="p">(</span><span class="n">complete_data</span><span class="p">)</span>
+            
+            <span class="n">complete_saved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_data_to_file</span><span class="p">(</span>
+                <span class="n">complete_data_processed</span><span class="p">,</span> 
+                <span class="s2">&quot;RM_old_complete_data.csv&quot;</span><span class="p">,</span> 
+                <span class="n">output_dir</span>
+            <span class="p">)</span>
+            
+            <span class="n">editor_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_editor_data</span><span class="p">()</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Standaryzacja nazw drużyn, filtrowanie nieznanych drużyn i dodawanie ID w danych z ocenami edytora...&quot;</span><span class="p">)</span>
+            <span class="n">editor_data_processed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_team_names_and_ids</span><span class="p">(</span><span class="n">editor_data</span><span class="p">)</span>
+            
+            <span class="n">editor_saved</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_data_to_file</span><span class="p">(</span>
+                <span class="n">editor_data_processed</span><span class="p">,</span> 
+                <span class="s2">&quot;RM_old_editor_data.csv&quot;</span><span class="p">,</span> 
+                <span class="n">output_dir</span>
+            <span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">complete_saved</span> <span class="ow">and</span> <span class="n">editor_saved</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Przetwarzanie zakończone sukcesem. Zapisano oba pliki danych z mapowaniem nazw drużyn i ID.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Przetwarzanie zakończone z ostrzeżeniami. Sprawdź logi.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił nieoczekiwany błąd podczas przetwarzania danych: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_old_data.main">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funkcja główna do uruchamiania przetwarzania danych historycznych.</span>
+<span class="sd">    </span>
+<span class="sd">    Tworzy instancję klasy RM_old_Data z domyślnymi parametrami i wykonuje</span>
+<span class="sd">    pełny proces przetwarzania i zapisywania danych. Dodatkowo wykorzystuje</span>
+<span class="sd">    DataProcessor do standaryzacji nazw drużyn, filtrowania nieistniejących drużyn</span>
+<span class="sd">    i dodawania identyfikatorów drużyn do wygenerowanych plików. Obsługuje</span>
+<span class="sd">    wszelkie wyjątki, które mogą wystąpić podczas procesu.</span>
+<span class="sd">    </span>
+<span class="sd">    Główne etapy wykonywane przez funkcję:</span>
+<span class="sd">    1. Utworzenie instancji RM_old_Data z domyślnymi parametrami</span>
+<span class="sd">    2. Wczytanie, przetworzenie i przygotowanie danych historycznych</span>
+<span class="sd">    3. Standaryzacja nazw drużyn zgodnie ze słownikiem mapowań</span>
+<span class="sd">    4. Filtrowanie drużyn nieobecnych w pliku mapowania ID (np. Manchester City)</span>
+<span class="sd">    5. Dodanie identyfikatorów drużyn na podstawie ich nazw</span>
+<span class="sd">    6. Zapisanie dwóch plików danych: kompletnych i z ocenami edytora</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        Brak</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">        </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Funkcja jest wywoływana, gdy skrypt jest uruchamiany bezpośrednio</span>
+<span class="sd">        - Używa domyślnych parametrów dla dat granicznych</span>
+<span class="sd">        - Wykorzystuje DataProcessor do przetwarzania nazw drużyn i ID</span>
+<span class="sd">        - Loguje informacje o sukcesie lub błędach wykonania</span>
+<span class="sd">        - Filtruje drużyny nieobecne w pliku rywale.csv (np. Manchester City)</span>
+<span class="sd">        - W przypadku błędu zapisuje pełny traceback do logów</span>
+<span class="sd">        </span>
+<span class="sd">    Przykład:</span>
+<span class="sd">        # Uruchomienie z linii poleceń</span>
+<span class="sd">        python RM_old_data.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;=== ROZPOCZĘCIE PRZETWARZANIA HISTORYCZNYCH DANYCH REALU MADRYT ===&quot;</span><span class="p">)</span>
+        
+        <span class="n">file_utils</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+        <span class="n">project_root</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Inicjalizacja procesora danych...&quot;</span><span class="p">)</span>
+        <span class="n">data_processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data_processor</span><span class="o">.</span><span class="n">load_team_id_template</span><span class="p">():</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Nie można załadować mapowań ID drużyn. Upewnij się, że plik rywale.csv istnieje.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano mapowania dla </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data_processor</span><span class="o">.</span><span class="n">name_to_id</span><span class="p">)</span><span class="si">}</span><span class="s2"> drużyn&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Inicjalizacja procesora danych historycznych Realu Madryt...&quot;</span><span class="p">)</span>
+        <span class="n">processor</span> <span class="o">=</span> <span class="n">RM_old_Data</span><span class="p">(</span><span class="n">date</span><span class="o">=</span><span class="n">SEASON_DATES</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczęcie pełnego procesu przetwarzania danych...&quot;</span><span class="p">)</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">process_and_save_data</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Walidacja danych po zapisie...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">success</span> <span class="ow">and</span> <span class="n">processor</span><span class="o">.</span><span class="n">initialize_data_processor</span><span class="p">():</span>
+            <span class="n">old_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="s2">&quot;Old&quot;</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;RM_old_complete_data.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_old_editor_data.csv&quot;</span><span class="p">]:</span>
+                <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">old_data_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sprawdzanie spójności ID w pliku: </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">errors</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">validate_team_ids_in_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+                        <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="si">}</span><span class="s2"> błędów ID w pliku </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">err_msg</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+                            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Wiersz </span><span class="si">{</span><span class="n">idx</span><span class="o">+</span><span class="mi">2</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">err_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+                            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ... oraz </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="si">}</span><span class="s2"> innych błędów&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> ma poprawne ID drużyn&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;=== PROGRAM ZAKOŃCZONY SUKCESEM ===&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dane zostały przetworzone i zapisane w plikach CSV&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wszystkie drużyny mają odpowiednie identyfikatory z pliku rywale.csv&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Drużyny nieobecne w pliku mapowania (np. Manchester City) zostały usunięte&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;=== PROGRAM ZAKOŃCZONY Z BŁĘDAMI ===&quot;</span><span class="p">)</span>
+            
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił nieoczekiwany błąd: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+        <span class="n">error</span><span class="p">(</span><span class="s2">&quot;=== PROGRAM ZAKOŃCZONY Z BŁĘDEM KRYTYCZNYM ===&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

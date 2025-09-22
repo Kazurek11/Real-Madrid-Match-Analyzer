@@ -1,0 +1,971 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_h2h package &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=2827c288"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../genindex.html" />
+    <link rel="search" title="Szukaj" href="../search.html" />
+    <link rel="next" title="finall_dataframe.rm_players package" href="finall_dataframe.rm_players.html" />
+    <link rel="prev" title="finall_dataframe.opp_team package" href="finall_dataframe.opp_team.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_processing.html">data_processing package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="finall_dataframe.html">finall_dataframe package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="finall_dataframe.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html">finall_dataframe.opp_team package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">finall_dataframe.rm_h2h package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html">finall_dataframe.rm_players package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_team.html">finall_dataframe.rm_team package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.html#module-finall_dataframe.main">finall_dataframe.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.html#module-finall_dataframe">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html">helpers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RM.html">RM package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+          <li class="breadcrumb-item"><a href="finall_dataframe.html">finall_dataframe package</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_h2h package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/finall_dataframe.rm_h2h.rst.txt" rel="nofollow"> Zobacz źródło strony</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="finall-dataframe-rm-h2h-package">
+<h1>finall_dataframe.rm_h2h package<a class="headerlink" href="#finall-dataframe-rm-h2h-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-finall_dataframe.rm_h2h.analyzer">
+<span id="finall-dataframe-rm-h2h-analyzer-module"></span><h2>finall_dataframe.rm_h2h.analyzer module<a class="headerlink" href="#module-finall_dataframe.rm_h2h.analyzer" title="Link to this heading"></a></h2>
+<p>Główny analizator Head-to-Head dla meczów Real Madryt.</p>
+<p>Ten moduł oblicza statystyki historycznych starć między Real Madryt
+a przeciwnikami, obejmujące wyniki ostatnich 5 spotkań, średnie punkty
+na mecz w całej historii oraz kursy bukmacherskie na zwycięstwo RM.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.analyzer.</span></span><span class="sig-name descname"><span class="pre">HeadToHeadAnalyzer</span></span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/analyzer.html#HeadToHeadAnalyzer"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Analizator statystyk Head-to-Head między Real Madryt a przeciwnikami.</p>
+<p>Oblicza kompleksowe statystyki historycznych starć obejmujące:
+- Procent wygranych w ostatnich 5 meczach
+- Różnicę bramkową w ostatnich 5 spotkaniach
+- Średnie punkty na mecz w ostatnich 5 i ogólnie
+- Kursy bukmacherskie na zwycięstwo Real Madryt</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.base_df">
+<span class="sig-name descname"><span class="pre">base_df</span></span><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.base_df" title="Link to this definition"></a></dt>
+<dd><p>Bazowy DataFrame z poprzednich analiz</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.df_first_date">
+<span class="sig-name descname"><span class="pre">df_first_date</span></span><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.df_first_date" title="Link to this definition"></a></dt>
+<dd><p>Data pierwszego meczu w analizie</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.Timestamp</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.data_loader">
+<span class="sig-name descname"><span class="pre">data_loader</span></span><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.data_loader" title="Link to this definition"></a></dt>
+<dd><p>Ładowarka danych meczowych</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#finall_dataframe.rm_h2h.data_loader.H2HDataLoader" title="finall_dataframe.rm_h2h.data_loader.H2HDataLoader">H2HDataLoader</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.rm_matches">
+<span class="sig-name descname"><span class="pre">rm_matches</span></span><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.rm_matches" title="Link to this definition"></a></dt>
+<dd><p>Mecze Real Madryt z pełnymi statystykami</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.opp_matches">
+<span class="sig-name descname"><span class="pre">opp_matches</span></span><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.opp_matches" title="Link to this definition"></a></dt>
+<dd><p>Mecze przeciwników z Liga</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.analyze">
+<span class="sig-name descname"><span class="pre">analyze</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/analyzer.html#HeadToHeadAnalyzer.analyze"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.analyze" title="Link to this definition"></a></dt>
+<dd><p>Główna metoda wykonująca kompletną analizę Head-to-Head.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Kompletny DataFrame z dodanymi statystykami H2H</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-odd">Wyrzuca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – Gdy bazowy DataFrame nie został wcześniej ustawiony</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<p>Proces analizy obejmuje:
+1. Przygotowanie DataFrame z kolumnami H2H
+2. Obliczenie statystyk dla wszystkich meczów
+3. Wypełnienie DataFrame obliczonymi wartościami
+4. Walidację wyników i utworzenie raportu</p>
+<p>Wynikowy DataFrame zawiera wszystkie poprzednie analizy plus:
+- 5 kolumn statystyk Head-to-Head
+- Kursy bukmacherskie na zwycięstwo RM
+- Historyczne wyniki przeciwko każdemu przeciwnikowi</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.calculate_h2h_statistics">
+<span class="sig-name descname"><span class="pre">calculate_h2h_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prepared_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/analyzer.html#HeadToHeadAnalyzer.calculate_h2h_statistics"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.calculate_h2h_statistics" title="Link to this definition"></a></dt>
+<dd><p>Oblicza statystyki Head-to-Head dla wszystkich meczów w okresie analizy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prepared_df</strong> (<em>pd.DataFrame</em>) – DataFrame przygotowany z kolumnami H2H</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Słownik {match_id: statystyki_h2h} dla wszystkich przetworzonych meczów</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Przetwarza tylko mecze po dacie df_first_date</p></li>
+<li><p>Loguje postęp co 10 przetworzonych meczów</p></li>
+<li><p>W przypadku błędów dla konkretnego meczu wypełnia kolumny wartościami NaN</p></li>
+<li><p>Identyfikuje przeciwnika na podstawie home_team_id/away_team_id</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.calculate_match_h2h_stats">
+<span class="sig-name descname"><span class="pre">calculate_match_h2h_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opponent_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/analyzer.html#HeadToHeadAnalyzer.calculate_match_h2h_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.calculate_match_h2h_stats" title="Link to this definition"></a></dt>
+<dd><p>Oblicza wszystkie statystyki Head-to-Head dla pojedynczego meczu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>match_id</strong> (<em>int</em>) – Unikalny identyfikator meczu</p></li>
+<li><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu</p></li>
+<li><p><strong>opponent_id</strong> (<em>int</em>) – ID drużyny przeciwnika</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Słownik ze statystykami H2H:</dt><dd><ul class="simple">
+<li><p>H2H_RM_W_L5: Procent wygranych w ostatnich 5 meczach</p></li>
+<li><p>H2H_RM_GDIF_L5: Średnia różnica bramkowa w ostatnich 5 meczach</p></li>
+<li><p>H2H_PPM_L5: Średnie punkty na mecz w ostatnich 5 spotkaniach</p></li>
+<li><p>H2H_PPM: Średnie punkty na mecz w całej historii starć</p></li>
+<li><p>H2H_EXISTS: Czy istnieją wcześniejsze mecze H2H (0/1)</p></li>
+<li><p>RM_ODD_W: Kurs bukmacherski na zwycięstwo Real Madryt</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.fill_dataframe_with_stats">
+<span class="sig-name descname"><span class="pre">fill_dataframe_with_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prepared_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h2h_stats_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/analyzer.html#HeadToHeadAnalyzer.fill_dataframe_with_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.fill_dataframe_with_stats" title="Link to this definition"></a></dt>
+<dd><p>Wypełnia DataFrame obliczonymi statystykami Head-to-Head.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prepared_df</strong> (<em>pd.DataFrame</em>) – DataFrame przygotowany z kolumnami H2H</p></li>
+<li><p><strong>h2h_stats_dict</strong> (<em>dict</em>) – Słownik ze statystykami dla każdego meczu</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z wypełnionymi wartościami H2H</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Mapuje statystyki na podstawie MATCH_ID</p></li>
+<li><p>Wypełnia tylko te wiersze, dla których istnieją obliczone statystyki</p></li>
+<li><p>Pozostawia NaN dla meczów bez danych H2H</p></li>
+<li><p>Loguje liczbę pomyślnie wypełnionych wierszy</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.prepare_dataframe">
+<span class="sig-name descname"><span class="pre">prepare_dataframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/analyzer.html#HeadToHeadAnalyzer.prepare_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.prepare_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Przygotowuje DataFrame z dodatkowymi kolumnami Head-to-Head.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame rozszerzony o kolumny H2H zainicjalizowane wartościami NaN</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-odd">Wyrzuca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – Gdy bazowy DataFrame nie został wcześniej ustawiony</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Dodaje 5 kolumn H2H zdefiniowanych w H2H_COLUMNS</p></li>
+<li><p>Inicjalizuje wszystkie nowe kolumny wartościami NaN</p></li>
+<li><p>Zachowuje wszystkie istniejące dane z poprzednich analiz</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.set_base_dataframe">
+<span class="sig-name descname"><span class="pre">set_base_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/analyzer.html#HeadToHeadAnalyzer.set_base_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.analyzer.HeadToHeadAnalyzer.set_base_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Ustawia bazowy DataFrame z poprzednich etapów analizy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame z wynikami analiz zawodników, drużyny i przeciwników</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Konwertuje kolumnę M_DATE do typu datetime jeśli potrzeba</p></li>
+<li><p>Ustala punkt czasowy rozpoczęcia analizy (df_first_date)</p></li>
+<li><p>Kopiuje DataFrame aby uniknąć modyfikacji oryginału</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_h2h.config">
+<span id="finall-dataframe-rm-h2h-config-module"></span><h2>finall_dataframe.rm_h2h.config module<a class="headerlink" href="#module-finall_dataframe.rm_h2h.config" title="Link to this heading"></a></h2>
+<p>Konfiguracja modułu Head-to-Head.</p>
+</section>
+<section id="module-finall_dataframe.rm_h2h.data_loader">
+<span id="finall-dataframe-rm-h2h-data-loader-module"></span><h2>finall_dataframe.rm_h2h.data_loader module<a class="headerlink" href="#module-finall_dataframe.rm_h2h.data_loader" title="Link to this heading"></a></h2>
+<p>Moduł ładowania danych dla analizy Head-to-Head Real Madryt.</p>
+<p>Ten moduł odpowiada za wczytywanie i przygotowanie danych meczowych
+wymaganych do obliczania statystyk historycznych starć między
+Real Madryt a przeciwnikami w La Liga.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.data_loader.H2HDataLoader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.data_loader.</span></span><span class="sig-name descname"><span class="pre">H2HDataLoader</span></span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/data_loader.html#H2HDataLoader"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.data_loader.H2HDataLoader" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Ładowarka danych meczowych dla analizy Head-to-Head.</p>
+<p>Odpowiada za wczytywanie i walidację podstawowych źródeł danych
+wymaganych do obliczania statystyk historycznych starć Real Madryt
+z przeciwnikami La Liga.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.data_loader.H2HDataLoader.rm_matches">
+<span class="sig-name descname"><span class="pre">rm_matches</span></span><a class="headerlink" href="#finall_dataframe.rm_h2h.data_loader.H2HDataLoader.rm_matches" title="Link to this definition"></a></dt>
+<dd><p>Mecze Real Madryt z pełnymi statystykami</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.data_loader.H2HDataLoader.opp_matches">
+<span class="sig-name descname"><span class="pre">opp_matches</span></span><a class="headerlink" href="#finall_dataframe.rm_h2h.data_loader.H2HDataLoader.opp_matches" title="Link to this definition"></a></dt>
+<dd><p>Wszystkie mecze La Liga dla kontekstu przeciwników</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="simple">
+<dt>Data Sources:</dt><dd><ul class="simple">
+<li><p>RM_all_matches_stats.csv: Kompletne dane meczowe Real Madryt</p></li>
+<li><p>all_matches.csv: Wszystkie mecze La Liga dla analizy przeciwników</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.data_loader.H2HDataLoader.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/data_loader.html#H2HDataLoader.load_data"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.data_loader.H2HDataLoader.load_data" title="Link to this definition"></a></dt>
+<dd><p>Ładuje wszystkie wymagane dane meczowe dla analizy Head-to-Head.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>(rm_matches_df, opp_matches_df) zawierające:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>rm_matches_df (pd.DataFrame): Mecze Real Madryt z kolumnami:</dt><dd><ul>
+<li><p>match_id: Unikalny identyfikator meczu</p></li>
+<li><p>match_date: Data meczu w formacie datetime</p></li>
+<li><p>home_team_id: ID drużyny gospodarzy</p></li>
+<li><p>away_team_id: ID drużyny gości</p></li>
+<li><p>rm_goals: Bramki zdobyte przez Real Madryt</p></li>
+<li><p>opponent_goals: Bramki zdobyte przez przeciwnika</p></li>
+<li><p>result: Wynik meczu (W/D/L)</p></li>
+<li><p>odds_rm_win: Kursy bukmacherskie na zwycięstwo RM</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>opp_matches_df (pd.DataFrame): Wszystkie mecze La Liga z kolumnami:</dt><dd><ul>
+<li><p>match_id: Identyfikator meczu</p></li>
+<li><p>match_date: Data meczu</p></li>
+<li><p>home_team_id: ID gospodarzy</p></li>
+<li><p>away_team_id: ID gości</p></li>
+<li><p>season: Sezon rozgrywkowy</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple</p>
+</dd>
+<dt class="field-odd">Wyrzuca<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – Gdy nie można znaleźć wymaganych plików CSV</p></li>
+<li><p><strong>ValueError</strong> – Gdy dane są uszkodzone lub niepełne</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Process:</dt><dd><ol class="arabic simple">
+<li><p>Określa ścieżki do folderów z danymi (Data/Real i Data/Mecze)</p></li>
+<li><p>Ładuje RM_all_matches_stats.csv z pełnymi danymi Real Madryt</p></li>
+<li><p>Ładuje all_matches.csv z meczami wszystkich drużyn La Liga</p></li>
+<li><p>Konwertuje kolumny dat do formatu datetime dla spójności</p></li>
+<li><p>Waliduje kompletność kluczowych kolumn</p></li>
+<li><p>Przechowuje dane w atrybutach klasy dla dalszego użycia</p></li>
+</ol>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Dane Real Madryt są krytyczne dla analizy H2H</p></li>
+<li><p>Dane przeciwników służą do kontekstu i walidacji</p></li>
+<li><p>Automatycznie konwertuje daty do pd.datetime</p></li>
+<li><p>Loguje informacje o załadowanych danych</p></li>
+<li><p>Przechowuje dane w pamięci dla wydajności</p></li>
+</ul>
+<p class="rubric">Przykład</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">loader</span> <span class="o">=</span> <span class="n">H2HDataLoader</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rm_data</span><span class="p">,</span> <span class="n">opp_data</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Załadowano </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rm_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów RM&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_h2h.h2h_calculator">
+<span id="finall-dataframe-rm-h2h-h2h-calculator-module"></span><h2>finall_dataframe.rm_h2h.h2h_calculator module<a class="headerlink" href="#module-finall_dataframe.rm_h2h.h2h_calculator" title="Link to this heading"></a></h2>
+<p>Kalkulatory statystyk Head-to-Head między Real Madryt a przeciwnikami.</p>
+<p>Ten moduł zawiera funkcje do obliczania statystyk bezpośrednich starć
+między Real Madryt a przeciwnikami, obejmujące wyniki, bilans bramkowy
+oraz średnie punkty na mecz z różnych okresów czasowych.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.h2h_calculator.calculate_h2h_overall_ppm">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.h2h_calculator.</span></span><span class="sig-name descname"><span class="pre">calculate_h2h_overall_ppm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opp_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/h2h_calculator.html#calculate_h2h_overall_ppm"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.h2h_calculator.calculate_h2h_overall_ppm" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnie punkty Real Madryt na mecz ze wszystkich meczów H2H w historii.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame z danymi meczów zawierający kompletną historię</p></li>
+<li><p><strong>opp_id</strong> (<em>int</em>) – ID drużyny przeciwnika do analizy</p></li>
+<li><p><strong>match_date</strong> (<em>str/datetime</em>) – Data graniczna - analizuje mecze sprzed tej daty</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Średnie punkty na mecz Real Madryt przeciwko temu przeciwnikowi</dt><dd><p>w całej dostępnej historii. Zwraca None jeśli brak meczów H2H.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or None</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Process:</dt><dd><ol class="arabic simple">
+<li><p>Pobiera wszystkie mecze H2H z historii (bez ograniczenia last_n)</p></li>
+<li><p>Zlicza wszystkie wygrane Real Madryt u siebie i na wyjeździe</p></li>
+<li><p>Zlicza wszystkie remisy w historii starć</p></li>
+<li><p>Oblicza średnie punkty używając systemu punktowego La Liga</p></li>
+</ol>
+</dd>
+<dt>Calculation:</dt><dd><p>PPM = (total_wins * 3 + total_draws * 1) / total_matches_played</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Różni się od calculate_h2h_stats() tym, że analizuje całą historię</p></li>
+<li><p>Nie ma ograniczenia do ostatnich N meczów</p></li>
+<li><p>Używa tego samego systemu punktowego co Liga (3-1-0)</p></li>
+<li><p>Kluczowa metryka dla długoterminowej analizy H2H</p></li>
+<li><p>Pomaga ocenić historyczną dominację nad przeciwnikiem</p></li>
+</ul>
+<dl class="simple">
+<dt>Use Cases:</dt><dd><ul class="simple">
+<li><p>Porównanie z recent form (ostatnie 5 meczów)</p></li>
+<li><p>Ocena długoterminowych trendów H2H</p></li>
+<li><p>Analiza historycznej przewagi Real Madryt</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Przykład</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">overall_ppm</span> <span class="o">=</span> <span class="n">calculate_h2h_overall_ppm</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">opp_id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">match_date</span><span class="o">=</span><span class="s1">&#39;2023-10-15&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">overall_ppm</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RM średnio zdobywa </span><span class="si">{</span><span class="n">overall_ppm</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> punktów przeciwko tej drużynie&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">if</span> <span class="n">overall_ppm</span> <span class="o">&gt;</span> <span class="mf">2.0</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Historyczna dominacja Real Madryt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.h2h_calculator.calculate_h2h_stats">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.h2h_calculator.</span></span><span class="sig-name descname"><span class="pre">calculate_h2h_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opp_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/h2h_calculator.html#calculate_h2h_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.h2h_calculator.calculate_h2h_stats" title="Link to this definition"></a></dt>
+<dd><p>Oblicza kompleksowe statystyki Head-to-Head z ostatnich meczów między RM a przeciwnikiem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame z danymi meczów z wymaganymi kolumnami</p></li>
+<li><p><strong>opp_id</strong> (<em>int</em>) – ID drużyny przeciwnika</p></li>
+<li><p><strong>match_date</strong> (<em>str/datetime</em>) – Data graniczna meczu</p></li>
+<li><p><strong>last_n</strong> (<em>int</em>) – Liczba ostatnich meczów H2H do analizy (domyślnie 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Słownik ze statystykami H2H zawierający:</dt><dd><ul class="simple">
+<li><p>win_ratio (float): Procent wygranych Real Madryt (0.0-1.0)</p></li>
+<li><p>points_per_match (float): Średnie punkty RM na mecz (0-3 punkty)</p></li>
+<li><p>goals_balance (int): Różnica bramkowa RM vs przeciwnik</p></li>
+</ul>
+</dd>
+</dl>
+<p>Zwraca None jeśli brak meczów H2H do analizy.</p>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict or None</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Process:</dt><dd><ol class="arabic simple">
+<li><p>Pobiera ostatnie mecze H2H używając get_h2h_matches()</p></li>
+<li><p>Zlicza wygrane Real Madryt u siebie i na wyjeździe</p></li>
+<li><p>Zlicza remisy między drużynami</p></li>
+<li><p>Oblicza procent wygranych i średnie punkty na mecz</p></li>
+<li><p>Kalkuluje bilans bramkowy (bramki RM - bramki przeciwnika)</p></li>
+</ol>
+</dd>
+<dt>Calculation Details:</dt><dd><ul class="simple">
+<li><p>Win Ratio: (wygrane_u_siebie + wygrane_na_wyjeździe) / total_mecze</p></li>
+<li><p>Points Per Match: (wygrane * 3 + remisy * 1) / total_mecze</p></li>
+<li><p>Goals Balance: suma_bramek_RM - suma_bramek_przeciwnika</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Używa WIN_POINTS=3 i DRAW_POINTS=1 z konfiguracji</p></li>
+<li><p>Obsługuje Real Madryt jako gospodarza i gościa</p></li>
+<li><p>Wszystkie wartości zwracane jako float/int dla spójności</p></li>
+</ul>
+<p class="rubric">Przykład</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">calculate_h2h_stats</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">opp_id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">match_date</span><span class="o">=</span><span class="s1">&#39;2023-10-15&#39;</span><span class="p">,</span> <span class="n">last_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">stats</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RM wygrywa </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;win_ratio&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2"> meczów H2H&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Średnio </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;points_per_match&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> punktów na mecz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.h2h_calculator.get_h2h_matches">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.h2h_calculator.</span></span><span class="sig-name descname"><span class="pre">get_h2h_matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opp_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/h2h_calculator.html#get_h2h_matches"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.h2h_calculator.get_h2h_matches" title="Link to this definition"></a></dt>
+<dd><p>Pobiera mecze bezpośrednie między Real Madryt a przeciwnikiem przed określoną datą.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame z danymi meczów zawierający kolumny:
+- match_date: Data meczu
+- home_team_id: ID drużyny gospodarzy
+- away_team_id: ID drużyny gości
+- home_goals: Bramki gospodarzy
+- away_goals: Bramki gości</p></li>
+<li><p><strong>opp_id</strong> (<em>int</em>) – ID drużyny przeciwnika do analizy H2H</p></li>
+<li><p><strong>match_date</strong> (<em>str/datetime</em>) – Data graniczna - pobiera mecze sprzed tej daty</p></li>
+<li><p><strong>last_n</strong> (<em>int</em><em>, </em><em>optional</em>) – Liczba ostatnich meczów do pobrania.
+Jeśli None, pobiera wszystkie mecze H2H</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>DataFrame z meczami H2H posortowanymi od najnowszych.</dt><dd><p>Zwraca None jeśli brak meczów lub błąd walidacji.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame or None</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Process:</dt><dd><ol class="arabic simple">
+<li><p>Waliduje format DataFrame pod kątem wymaganych kolumn</p></li>
+<li><p>Filtruje mecze gdzie Real Madryt grał przeciwko opp_id przed match_date</p></li>
+<li><p>Sortuje mecze od najnowszych do najstarszych</p></li>
+<li><p>Ogranicza do last_n meczów jeśli parametr podany</p></li>
+</ol>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Real Madryt może być gospodarzem lub gościem</p></li>
+<li><p>Uwzględnia tylko mecze przed podaną datą (wykluczając aktualny mecz)</p></li>
+<li><p>Loguje ostrzeżenie jeśli brak meczów H2H</p></li>
+<li><p>Używa REAL_MADRID_ID z konfiguracji (standardowo ID=1)</p></li>
+</ul>
+<p class="rubric">Przykład</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">load_match_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h2h</span> <span class="o">=</span> <span class="n">get_h2h_matches</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">opp_id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">match_date</span><span class="o">=</span><span class="s1">&#39;2023-10-15&#39;</span><span class="p">,</span> <span class="n">last_n</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">h2h</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów H2H&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.h2h_calculator.is_playing_before">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.h2h_calculator.</span></span><span class="sig-name descname"><span class="pre">is_playing_before</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/h2h_calculator.html#is_playing_before"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.h2h_calculator.is_playing_before" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza, czy Real Madryt grał wcześniej z przeciwnikiem przed określoną datą.</p>
+<p>Funkcja weryfikuje czy istnieją jakiekolwiek mecze bezpośrednie między Real Madryt
+a przeciwnikiem w bazie danych przed podaną datą meczu. Jest używana do bezpiecznego
+wypełnienia wartości NaN w końcowym datasecie.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame z danymi meczów zawierający kolumny:
+- match_date: Data meczu
+- home_team_id: ID drużyny gospodarzy
+- away_team_id: ID drużyny gości</p></li>
+<li><p><strong>match_date</strong> (<em>str/datetime</em>) – Data graniczna - sprawdza mecze sprzed tej daty</p></li>
+<li><p><strong>team_id</strong> (<em>int</em>) – ID drużyny przeciwnika do sprawdzenia H2H z Real Madryt</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>True jeśli istnieje przynajmniej jeden mecz H2H przed podaną datą,</dt><dd><p>False jeśli brak wcześniejszych meczów w bazie danych.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Logic:</dt><dd><ul class="simple">
+<li><p>Wartość True (1) oznacza: istnieją mecze H2H w przeszłości w bazie</p></li>
+<li><p>Wartość False (0) oznacza: brak wcześniejszych meczów H2H w bazie</p></li>
+</ul>
+</dd>
+<dt>Usage in Dataset:</dt><dd><p>Kolumna H2H_EXISTS w finalnym datasecie:
+- 0: Real Madryt wcześniej nie rozegrał z daną drużyną żadnego meczu
+- 1: Istnieją mecze w przeszłości w bazie danych przed określoną datą</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Używa funkcji get_h2h_matches() do wyszukania historycznych meczów</p></li>
+<li><p>Kluczowa dla bezpiecznego wypełniania NaN w statystykach H2H</p></li>
+<li><p>Pozwala rozróżnić brak danych od braku historii meczów</p></li>
+<li><p>Real Madryt może być gospodarzem lub gościem w sprawdzanych meczach</p></li>
+</ul>
+<p class="rubric">Przykład</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">load_match_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exists</span> <span class="o">=</span> <span class="n">is_playing_before</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;2023-10-15&#39;</span><span class="p">,</span> <span class="n">team_id</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">exists</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Real Madryt ma historię meczów z tą drużyną&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Pierwszy mecz H2H z tą drużyną&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_h2h.odds_calculator">
+<span id="finall-dataframe-rm-h2h-odds-calculator-module"></span><h2>finall_dataframe.rm_h2h.odds_calculator module<a class="headerlink" href="#module-finall_dataframe.rm_h2h.odds_calculator" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.odds_calculator.get_rm_odds">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.odds_calculator.</span></span><span class="sig-name descname"><span class="pre">get_rm_odds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opp_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/odds_calculator.html#get_rm_odds"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.odds_calculator.get_rm_odds" title="Link to this definition"></a></dt>
+<dd><p>Pobiera odmarżowiony kurs na zwycięstwo Real Madryt z konkretnego meczu H2H.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame z danymi meczów i kursami zawierający kolumny:
+- match_id: Unikalny identyfikator meczu
+- match_date: Data meczu
+- home_team_id: ID drużyny gospodarzy
+- away_team_id: ID drużyny gości
+- home_odds_fair: Odmarżowiony kurs na wygraną gospodarzy
+- away_odds_fair: Odmarżowiony kurs na wygraną gości</p></li>
+<li><p><strong>match_id</strong> (<em>int</em>) – ID konkretnego meczu do analizy</p></li>
+<li><p><strong>opp_id</strong> (<em>int</em>) – ID drużyny przeciwnika w meczu H2H</p></li>
+<li><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu dla weryfikacji</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Odmarżowiony kurs na zwycięstwo Real Madryt w tym meczu.</dt><dd><p>Zwraca None jeśli brak danych lub błąd walidacji.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float or None</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Process:</dt><dd><ol class="arabic simple">
+<li><p>Waliduje format DataFrame pod kątem wymaganych kolumn z kursami</p></li>
+<li><p>Znajduje konkretny mecz po match_id, dacie i uczestnikach</p></li>
+<li><p>Identyfikuje czy Real Madryt grał u siebie czy na wyjeździe</p></li>
+<li><p>Zwraca odpowiedni odmarżowiony kurs (home_odds_fair lub away_odds_fair)</p></li>
+</ol>
+</dd>
+<dt>Fair Odds (Kursy Odmarżowione):</dt><dd><ul class="simple">
+<li><p>Kursy oczyszczone z marży bukmachera dla dokładniejszej analizy</p></li>
+<li><p>Lepiej odzwierciedlają rzeczywiste prawdopodobieństwo wygranej</p></li>
+<li><p>Eliminują wpływ różnic w marżach między bukmacherami</p></li>
+<li><p>Kluczowe dla obiektywnej analizy siły zespołów</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Real Madryt może być gospodarzem (home_odds_fair) lub gościem (away_odds_fair)</p></li>
+<li><p>Używa REAL_MADRID_ID z konfiguracji (standardowo ID=1)</p></li>
+<li><p>Loguje błąd jeśli nie znajdzie meczu o podanych parametrach</p></li>
+<li><p>Waliduje completeness danych przed przetwarzaniem</p></li>
+</ul>
+<p class="rubric">Przykład</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">load_match_data_with_odds</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">odds</span> <span class="o">=</span> <span class="n">get_rm_odds</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">match_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span> <span class="n">opp_id</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">match_date</span><span class="o">=</span><span class="s1">&#39;2023-10-15&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">odds</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">probability</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">odds</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Odmarżowiony kurs RM: </span><span class="si">{</span><span class="n">odds</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> (prawdopodobieństwo: </span><span class="si">{</span><span class="n">probability</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_h2h.validators">
+<span id="finall-dataframe-rm-h2h-validators-module"></span><h2>finall_dataframe.rm_h2h.validators module<a class="headerlink" href="#module-finall_dataframe.rm_h2h.validators" title="Link to this heading"></a></h2>
+<p>Moduł walidacji danych dla analiz Head-to-Head Real Madryt.</p>
+<p>Ten moduł zawiera funkcje walidacyjne zapewniające integralność
+i kompletność danych wymaganych do przeprowadzenia analiz H2H,
+obejmujące walidację struktur DataFrame, kursów bukmacherskich
+oraz wyników końcowych analiz.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.validators.validate_h2h_analysis_results">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.validators.</span></span><span class="sig-name descname"><span class="pre">validate_h2h_analysis_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/validators.html#validate_h2h_analysis_results"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.validators.validate_h2h_analysis_results" title="Link to this definition"></a></dt>
+<dd><p>Waliduje kompletność i jakość wyników analiz Head-to-Head.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>result_df</strong> (<em>pd.DataFrame</em>) – DataFrame z wynikami analiz H2H zawierający:
+- Kolumny H2H_*: Statystyki Head-to-Head
+- RM_ODD_W: Kursy na wygraną Real Madryt
+- Wszystkie poprzednie kolumny analiz</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Szczegółowy raport walidacji zawierający:</dt><dd><ul class="simple">
+<li><p>total_matches (int): Łączna liczba przeanalizowanych meczów</p></li>
+<li><p>h2h_columns_added (int): Liczba dodanych kolumn H2H</p></li>
+<li><p>h2h_missing_values (int): Łączna liczba brakujących wartości H2H</p></li>
+<li><p>h2h_completeness (float): Procent kompletności danych H2H (0-100%)</p></li>
+<li><p>rm_odds_stats (pd.Series): Statystyki opisowe kursów RM (jeśli dostępne)</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Process:</dt><dd><ol class="arabic simple">
+<li><p>Identyfikuje wszystkie kolumny H2H (prefix «<a href="#id1"><span class="problematic" id="id2">H2H_</span></a>») i kursy RM</p></li>
+<li><p>Oblicza metryki kompletności dla dodanych kolumn</p></li>
+<li><p>Generuje statystyki opisowe dla kursów Real Madryt</p></li>
+<li><p>Tworzy szczegółowy raport jakości danych</p></li>
+<li><p>Loguje podsumowanie wyników walidacji</p></li>
+</ol>
+</dd>
+<dt>Quality Metrics:</dt><dd><ul class="simple">
+<li><p>Completeness: % wypełnionych komórek w kolumnach H2H</p></li>
+<li><p>Coverage: Liczba meczów z kompletnymi danymi H2H</p></li>
+<li><p>Odds Distribution: Rozkład kursów na wygraną RM</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Używa prefixów kolumn do identyfikacji danych H2H</p></li>
+<li><p>Oblicza kompletność na podstawie wszystkich komórek H2H</p></li>
+<li><p>Generuje statystyki opisowe tylko jeśli kolumna RM_ODD_W istnieje</p></li>
+<li><p>Loguje kluczowe metryki jakości dla monitorowania</p></li>
+<li><p>Przydatne do oceny skuteczności procesu analizy H2H</p></li>
+</ul>
+<p class="rubric">Przykład</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">analyzed_df</span> <span class="o">=</span> <span class="n">h2h_analyzer</span><span class="o">.</span><span class="n">analyze</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">validate_h2h_analysis_results</span><span class="p">(</span><span class="n">analyzed_df</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kompletność H2H: </span><span class="si">{</span><span class="n">report</span><span class="p">[</span><span class="s1">&#39;h2h_completeness&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">report</span><span class="p">[</span><span class="s1">&#39;h2h_completeness&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">95</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Wysoka jakość danych H2H&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Uwaga: Niska kompletność danych H2H&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.validators.validate_h2h_dataframe">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.validators.</span></span><span class="sig-name descname"><span class="pre">validate_h2h_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/validators.html#validate_h2h_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.validators.validate_h2h_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Waliduje DataFrame pod kątem wymaganych kolumn dla analiz Head-to-Head.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame z danymi meczów do walidacji. Musi zawierać
+kolumny zdefiniowane w REQUIRED_MATCH_COLUMNS:
+- match_id, match_date, home_team_id, away_team_id
+- home_goals, away_goals dla obliczania wyników</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>True jeśli DataFrame spełnia wszystkie wymagania dla analiz H2H.</dt><dd><p>False jeśli brakuje kluczowych kolumn lub występują błędy strukturalne.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Process:</dt><dd><ol class="arabic simple">
+<li><p>Sprawdza obecność wszystkich wymaganych kolumn z REQUIRED_MATCH_COLUMNS</p></li>
+<li><p>Waliduje typ danych kolumny match_date (wymagany datetime)</p></li>
+<li><p>Automatycznie konwertuje match_date do datetime jeśli potrzeba</p></li>
+<li><p>Loguje błędy dla brakujących kolumn i ostrzeżenia dla konwersji</p></li>
+</ol>
+</dd>
+<dt>Data Requirements:</dt><dd><ul class="simple">
+<li><p>match_id: Unikalne identyfikatory meczów</p></li>
+<li><p>match_date: Daty meczów w formacie datetime</p></li>
+<li><p>home_team_id/away_team_id: ID drużyn dla identyfikacji H2H</p></li>
+<li><p>home_goals/away_goals: Wyniki bramkowe dla obliczania statystyk</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Automatyczna konwersja dat z ostrzeżeniem w logu</p></li>
+<li><p>Nie modyfikuje oryginalnego DataFrame</p></li>
+<li><p>Krytyczne dla wszystkich funkcji H2H calculator</p></li>
+<li><p>Loguje szczegółowe informacje o problemach walidacji</p></li>
+</ul>
+<p class="rubric">Przykład</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">load_match_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">validate_h2h_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DataFrame gotowy do analiz H2H&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Błędy walidacji - sprawdź logi&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_h2h.validators.validate_odds_dataframe">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_h2h.validators.</span></span><span class="sig-name descname"><span class="pre">validate_odds_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_h2h/validators.html#validate_odds_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_h2h.validators.validate_odds_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Waliduje DataFrame pod kątem kursów bukmacherskich dla analiz H2H.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame z danymi kursów do walidacji. Musi zawierać
+kolumny zdefiniowane w REQUIRED_ODDS_COLUMNS:
+- home_odds_fair, away_odds_fair (odmarżowione kursy)
+- match_id, match_date dla linkowania z meczami</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>True jeśli DataFrame zawiera wszystkie wymagane kolumny z kursami.</dt><dd><p>False jeśli brakuje kluczowych kolumn z odmarżowionymi kursami.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Process:</dt><dd><ol class="arabic simple">
+<li><p>Iteruje przez wszystkie kolumny z REQUIRED_ODDS_COLUMNS</p></li>
+<li><p>Sprawdza obecność każdej wymaganej kolumny w DataFrame</p></li>
+<li><p>Loguje błąd dla pierwszej brakującej kolumny i przerywa walidację</p></li>
+<li><p>Zwraca False natychmiast po znalezieniu problemu</p></li>
+</ol>
+</dd>
+<dt>Required Odds Columns:</dt><dd><ul class="simple">
+<li><p>home_odds_fair: Odmarżowione kursy na wygraną gospodarzy</p></li>
+<li><p>away_odds_fair: Odmarżowione kursy na wygraną gości</p></li>
+<li><p>Kolumny identyfikacyjne: match_id, match_date dla łączenia danych</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Nie sprawdza wartości kursów, tylko ich obecność</p></li>
+<li><p>Krytyczne dla funkcji odds_calculator</p></li>
+<li><p>Używa odmarżowionych kursów (fair odds) dla obiektywności</p></li>
+<li><p>Szybkie przerwanie przy pierwszym błędzie dla wydajności</p></li>
+</ul>
+<p class="rubric">Przykład</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df_with_odds</span> <span class="o">=</span> <span class="n">load_odds_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">validate_odds_dataframe</span><span class="p">(</span><span class="n">df_with_odds</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DataFrame z kursami gotowy do analiz&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Brakuje wymaganych kolumn z kursami&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_h2h">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-finall_dataframe.rm_h2h" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="finall_dataframe.opp_team.html" class="btn btn-neutral float-left" title="finall_dataframe.opp_team package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Poprzedni</a>
+        <a href="finall_dataframe.rm_players.html" class="btn btn-neutral float-right" title="finall_dataframe.rm_players package" accesskey="n" rel="next">Następny <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>data_processing.table_actuall_PPM &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=2827c288"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">data_processing.table_actuall_PPM</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu data_processing.table_actuall_PPM</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Moduł obliczania dynamicznych statystyk PPM dla plików sezonowych LaLiga.</span>
+
+<span class="sd">Ten skrypt dodaje do każdego pliku sezonowego kolumny PPM_H oraz PPM_A,</span>
+<span class="sd">czyli punkty na mecz gospodarza i gościa liczone DYNAMICZNIE przed każdym meczem.</span>
+<span class="sd">PPM jest obliczane na podstawie dotychczasowych wyników drużyn w bieżącym sezonie.</span>
+
+<span class="sd">Moduł umożliwia:</span>
+<span class="sd">- Przetwarzanie wielu plików sezonowych jednocześnie</span>
+<span class="sd">- Obliczanie aktualnych punktów na mecz dla każdej drużyny</span>
+<span class="sd">- Aktualizację plików CSV z danymi sezonowymi</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">set_level</span><span class="p">,</span> <span class="n">debug</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.data_processor</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataProcessor</span>
+<span class="c1"># Import stałych z modułu const_variable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.const_variable</span><span class="w"> </span><span class="kn">import</span> <span class="n">SEASON_FILES</span> <span class="c1"># SEASON_DATES, SEASON_YEARS, SEASON_ID_TO_NAME</span>
+
+<span class="n">set_level</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SeasonPPMCalculator">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.table_actuall_PPM.SeasonPPMCalculator">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SeasonPPMCalculator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa odpowiedzialna za obliczanie punktów na mecz (PPM) dla gospodarza i gościa w plikach sezonowych.</span>
+<span class="sd">    </span>
+<span class="sd">    Klasa umożliwia obliczenie i dodanie do pliku sezonowego dwóch kolumn:</span>
+<span class="sd">    - PPM_H: punkty na mecz zespołu gospodarzy przed danym meczem</span>
+<span class="sd">    - PPM_A: punkty na mecz zespołu gości przed danym meczem</span>
+<span class="sd">    </span>
+<span class="sd">    PPM jest obliczane jako stosunek dotychczas zdobytych punktów do liczby rozegranych meczów.</span>
+<span class="sd">    Dla każdego meczu w pliku, PPM jest obliczane na podstawie wyników wcześniejszych meczów,</span>
+<span class="sd">    co daje dynamiczny obraz formy drużyn tuż przed każdym meczem.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        file_path (str): Ścieżka do pliku CSV z danymi sezonu</span>
+<span class="sd">        data_frame (pd.DataFrame): DataFrame z danymi sezonu</span>
+<span class="sd">        team_points (dict): Słownik z punktami zdobytymi przez każdą drużynę</span>
+<span class="sd">        team_matches_played (dict): Słownik z liczbą meczów rozegranych przez każdą drużynę</span>
+<span class="sd">        ppm_home_team (list): Lista z PPM gospodarza dla każdego meczu</span>
+<span class="sd">        ppm_away_team (list): Lista z PPM gościa dla każdego meczu</span>
+<span class="sd">        file_utils (FileUtils): Instancja klasy pomocniczej do operacji na plikach</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje obiekt SeasonPPMCalculator.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku CSV z danymi sezonu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">file_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">team_points</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">team_matches_played</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ppm_home_team</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ppm_away_team</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file_path</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="SeasonPPMCalculator.prepare_data">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.table_actuall_PPM.SeasonPPMCalculator.prepare_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przygotowuje dane przed obliczaniem PPM - standaryzuje nazwy drużyn i dodaje brakujące ID.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda standaryzuje nazwy drużyn według określonego słownika mapowań,</span>
+<span class="sd">        a następnie dodaje identyfikatory drużyn (home_team_id i away_team_id) jeśli ich brakuje.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli dane zostały pomyślnie przygotowane, False w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Wczytaj dane</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się wczytać pliku: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="c1"># Sprawdź czy kolumny home_team i away_team istnieją</span>
+        <span class="k">if</span> <span class="s1">&#39;home_team&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s1">&#39;away_team&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak kolumn home_team lub away_team w pliku </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="c1"># Standaryzuj nazwy drużyn</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">standardize_team_names</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas standaryzacji nazw drużyn w pliku </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="c1"># Sprawdź czy potrzeba dodać kolumny ID</span>
+        <span class="n">needs_id_columns</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;home_team_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;away_team_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">needs_id_columns</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dodawanie kolumn ID drużyn do pliku </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_processor</span><span class="o">.</span><span class="n">add_team_ids_to_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas dodawania ID drużyn do pliku </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="c1"># Zapisz plik z nowymi kolumnami</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się zapisać pliku z dodanymi ID drużyn: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zaktualizowano plik </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> - dodano kolumny ID drużyn&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="SeasonPPMCalculator.load_data">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.table_actuall_PPM.SeasonPPMCalculator.load_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje dane z pliku CSV i weryfikuje obecność wymaganych kolumn.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda najpierw przygotowuje dane (standaryzacja nazw, dodanie ID), a następnie</span>
+<span class="sd">        wczytuje plik CSV i sprawdza, czy zawiera wszystkie niezbędne kolumny</span>
+<span class="sd">        do obliczenia PPM. Wymagane kolumny to: &#39;round&#39;, &#39;home_team_id&#39;, &#39;away_team_id&#39;,</span>
+<span class="sd">        &#39;home_goals&#39;, &#39;away_goals&#39;.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli plik został poprawnie wczytany i zawiera wszystkie wymagane kolumny,</span>
+<span class="sd">                  False w przeciwnym razie</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Przygotuj dane - standaryzuj nazwy i dodaj ID jeśli potrzeba</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="c1"># Wczytaj zaktualizowany plik</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się wczytać pliku po przygotowaniu: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="c1"># Sprawdź wymagane kolumny</span>
+        <span class="n">required_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;round&#39;</span><span class="p">,</span> <span class="s1">&#39;home_team_id&#39;</span><span class="p">,</span> <span class="s1">&#39;away_team_id&#39;</span><span class="p">,</span> <span class="s1">&#39;home_goals&#39;</span><span class="p">,</span> <span class="s1">&#39;away_goals&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">required_columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak wymaganej kolumny &#39;</span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s2">&#39; w pliku </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="SeasonPPMCalculator.calculate_ppm">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.table_actuall_PPM.SeasonPPMCalculator.calculate_ppm">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_ppm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza punkty na mecz (PPM) dla gospodarza i gościa w każdym meczu.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda sortuje mecze według kolejki (i ewentualnie daty, jeśli jest dostępna),</span>
+<span class="sd">        a następnie iteruje po meczach w kolejności chronologicznej. Dla każdego meczu:</span>
+<span class="sd">        1. Oblicza PPM dla gospodarza i gościa na podstawie dotychczasowych wyników</span>
+<span class="sd">        2. Aktualizuje liczbę rozegranych meczów przez obie drużyny</span>
+<span class="sd">        3. Aktualizuje liczbę punktów zdobytych przez obie drużyny (3 za zwycięstwo, 1 za remis)</span>
+<span class="sd">        </span>
+<span class="sd">        Po zakończeniu iteracji, metoda dodaje obliczone wartości PPM jako nowe kolumny</span>
+<span class="sd">        &#39;PPM_H&#39; i &#39;PPM_A&#39; do DataFrame data_frame.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Dla drużyny, która nie rozegrała jeszcze żadnego meczu, PPM wynosi 0.0</span>
+<span class="sd">            - PPM jest zaokrąglane do 3 miejsc po przecinku</span>
+<span class="sd">            - Metoda pomija aktualizację punktów dla meczów bez znanego wyniku (NaN)</span>
+<span class="sd">            - Drużyny są identyfikowane za pomocą ich identyfikatorów (home_team_id, away_team_id)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sort_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;round&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;match_date&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">sort_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;match_date&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">sort_columns</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">match_row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">home_team_id</span> <span class="o">=</span> <span class="n">match_row</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span>
+            <span class="n">away_team_id</span> <span class="o">=</span> <span class="n">match_row</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span>
+
+            <span class="n">home_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">team_points</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">home_team_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">home_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">team_matches_played</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">home_team_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">away_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">team_points</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">away_team_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">away_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">team_matches_played</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">away_team_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">ppm_home_team</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">home_points</span> <span class="o">/</span> <span class="n">home_matches</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">if</span> <span class="n">home_matches</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ppm_away_team</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">away_points</span> <span class="o">/</span> <span class="n">away_matches</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">if</span> <span class="n">away_matches</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">team_matches_played</span><span class="p">[</span><span class="n">home_team_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">home_matches</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">team_matches_played</span><span class="p">[</span><span class="n">away_team_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">away_matches</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">match_row</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">])</span> <span class="ow">or</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">match_row</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]):</span>
+                <span class="k">continue</span>
+            <span class="n">home_goals</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_row</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">])</span>
+            <span class="n">away_goals</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_row</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">home_goals</span> <span class="o">&gt;</span> <span class="n">away_goals</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">team_points</span><span class="p">[</span><span class="n">home_team_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">home_points</span> <span class="o">+</span> <span class="mi">3</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">team_points</span><span class="p">[</span><span class="n">away_team_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">away_points</span>
+            <span class="k">elif</span> <span class="n">home_goals</span> <span class="o">&lt;</span> <span class="n">away_goals</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">team_points</span><span class="p">[</span><span class="n">home_team_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">home_points</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">team_points</span><span class="p">[</span><span class="n">away_team_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">away_points</span> <span class="o">+</span> <span class="mi">3</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">team_points</span><span class="p">[</span><span class="n">home_team_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">home_points</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">team_points</span><span class="p">[</span><span class="n">away_team_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">away_points</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="p">[</span><span class="s1">&#39;PPM_H&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ppm_home_team</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="p">[</span><span class="s1">&#39;PPM_A&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ppm_away_team</span></div>
+
+
+<div class="viewcode-block" id="SeasonPPMCalculator.save">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.table_actuall_PPM.SeasonPPMCalculator.save">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zapisuje zaktualizowany DataFrame z kolumnami PPM do oryginalnego pliku CSV.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda wykorzystuje funkcję save_csv_safe z klasy FileUtils do bezpiecznego</span>
+<span class="sd">        zapisania danych do pliku CSV. Po pomyślnym zapisie, informacja jest logowana.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli zapis się powiódł, False w przypadku błędu</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda nadpisuje oryginalny plik z dodatkowymi kolumnami PPM_H i PPM_A</span>
+<span class="sd">            - Indeksy DataFrame nie są zapisywane do pliku (index=False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_frame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zaktualizowano plik: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> (dodano PPM_H, PPM_A)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">success</span></div>
+</div>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.table_actuall_PPM.main">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Główna funkcja programu, aktualizuje pliki sezonowe o kolumny PPM_H i PPM_A.</span>
+<span class="sd">    </span>
+<span class="sd">    Funkcja wykonuje następujące kroki:</span>
+<span class="sd">    1. Inicjalizuje FileUtils i określa ścieżki do katalogu sezonów</span>
+<span class="sd">    2. Sprawdza czy katalog z plikami sezonów istnieje, tworzy go jeśli nie</span>
+<span class="sd">    3. Iteruje po zdefiniowanej liście plików sezonowych (SEASON_FILES)</span>
+<span class="sd">    4. Dla każdego istniejącego pliku sezonu:</span>
+<span class="sd">       a. Inicjalizuje SeasonPPMCalculator</span>
+<span class="sd">       b. Wczytuje dane</span>
+<span class="sd">       c. Oblicza PPM dla wszystkich meczów</span>
+<span class="sd">       d. Zapisuje zaktualizowane dane do pliku</span>
+<span class="sd">       </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Informacje o postępie są logowane za pomocą modułu logger</span>
+<span class="sd">        - Pliki, które nie istnieją, są pomijane z odpowiednim ostrzeżeniem</span>
+<span class="sd">        - Obsługa błędów jest realizowana przez metody klasy SeasonPPMCalculator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;=== ROZPOCZĘCIE AKTUALIZACJI PPM W PLIKACH SEZONÓW ===&quot;</span><span class="p">)</span>
+    
+    <span class="n">file_utils</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+    
+    <span class="n">project_root</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">()</span>
+    <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Katalog główny projektu: </span><span class="si">{</span><span class="n">project_root</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="n">seasons_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;all_season&quot;</span><span class="p">)</span>
+    <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Katalog z plikami sezonów: </span><span class="si">{</span><span class="n">seasons_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">seasons_dir</span><span class="p">):</span>
+        <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Katalog </span><span class="si">{</span><span class="n">seasons_dir</span><span class="si">}</span><span class="s2"> nie istnieje!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">ensure_directory_exists</span><span class="p">(</span><span class="n">seasons_dir</span><span class="p">):</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono katalog </span><span class="si">{</span><span class="n">seasons_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można utworzyć katalogu </span><span class="si">{</span><span class="n">seasons_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+    <span class="k">for</span> <span class="n">season_filename</span> <span class="ow">in</span> <span class="n">SEASON_FILES</span><span class="p">:</span>
+        <span class="n">season_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">seasons_dir</span><span class="p">,</span> <span class="n">season_filename</span><span class="p">)</span>
+        <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sprawdzanie pliku: </span><span class="si">{</span><span class="n">season_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">season_file_path</span><span class="p">):</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik </span><span class="si">{</span><span class="n">season_file_path</span><span class="si">}</span><span class="s2"> nie istnieje. Pomijam.&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+            
+        <span class="n">calculator</span> <span class="o">=</span> <span class="n">SeasonPPMCalculator</span><span class="p">(</span><span class="n">season_file_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">calculator</span><span class="o">.</span><span class="n">load_data</span><span class="p">():</span>
+            <span class="n">calculator</span><span class="o">.</span><span class="n">calculate_ppm</span><span class="p">()</span>
+            <span class="n">calculator</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;=== ZAKOŃCZONO AKTUALIZACJĘ PPM W PLIKACH SEZONÓW ===&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

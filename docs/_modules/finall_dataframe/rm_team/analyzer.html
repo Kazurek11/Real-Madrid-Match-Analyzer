@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_team.analyzer &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_team.analyzer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.rm_team.analyzer</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Główny moduł analizy drużyny Real Madryt.</span>
+
+<span class="sd">Ten moduł łączy analizę zawodników z analizą drużynową, obliczając statystyki</span>
+<span class="sd">trenera, wydajność przeciwko różnym typom przeciwników oraz metryki sezonowe.</span>
+<span class="sd">Generuje kompletny DataFrame z wszystkimi metrykami potrzebnymi do analizy.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">src_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">))</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">src_dir</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">src_dir</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">src_dir</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">project_root</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">project_root</span><span class="p">)</span>
+
+<span class="c1"># from finall_dataframe.rm_players.analyzer import RealMadridPlayersAnalyzer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_players.season_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">SeasonManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">critical</span><span class="p">,</span> <span class="n">debug</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">COLUMNS_TO_ADD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_missing_columns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.coach_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">CoachManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.stats_calculator</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatsCalculator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.season_calculator</span><span class="w"> </span><span class="kn">import</span> <span class="n">SeasonCalculator</span>
+
+
+<div class="viewcode-block" id="RealMadridTeamAnalyzer">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RealMadridTeamAnalyzer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Główna klasa analizy drużyny Real Madryt.</span>
+<span class="sd">    </span>
+<span class="sd">    Łączy dane zawodników z analizą drużynową, obliczając kompleksowe</span>
+<span class="sd">    statystyki obejmujące trenera, wydajność sezonową i metryki przeciwko</span>
+<span class="sd">    różnym typom przeciwników. Generuje gotowy DataFrame do machine learning.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        team_id (int): ID drużyny (1 dla Real Madryt)</span>
+<span class="sd">        base_df (pd.DataFrame): Podstawowy DataFrame z analizy zawodników</span>
+<span class="sd">        df_prepared (pd.DataFrame): DataFrame rozszerzony o kolumny drużynowe</span>
+<span class="sd">        coach_manager (CoachManager): Manager danych trenerów</span>
+<span class="sd">        stats_calculator (StatsCalculator): Kalkulator statystyk meczowych</span>
+<span class="sd">        season_calculator (SeasonCalculator): Kalkulator statystyk sezonowych</span>
+<span class="sd">        df_first_date (datetime): Data pierwszego meczu w analizie</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">team_id</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje analizator drużyny.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            team_id (int): ID drużyny (domyślnie 1 dla Real Madryt)</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Automatycznie inicjalizuje źródła danych i managery</span>
+<span class="sd">            - Ustawia podstawowe atrybuty dla analizy</span>
+<span class="sd">            - base_df zostanie ustawiony przez set_base_dataframe()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">team_id</span> <span class="o">=</span> <span class="n">team_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_df</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df_prepared</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df_first_date</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_data_sources</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_managers</span><span class="p">()</span>
+    
+<div class="viewcode-block" id="RealMadridTeamAnalyzer.set_base_dataframe">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.set_base_dataframe">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_base_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ustawia bazowy DataFrame z analizy zawodników.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame z analizy zawodników</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Konwertuje kolumnę M_DATE do datetime jeśli potrzeba</span>
+<span class="sd">            - Ustawia df_first_date jako punkt odniesienia czasowego</span>
+<span class="sd">            - Przygotowuje DataFrame do dalszej analizy drużynowej</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_df</span><span class="p">[</span><span class="s2">&quot;M_DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">base_df</span><span class="p">[</span><span class="s2">&quot;M_DATE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_df</span><span class="p">[</span><span class="s2">&quot;M_DATE&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">df_first_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_df</span><span class="p">[</span><span class="s2">&quot;M_DATE&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ustawiono bazowy DataFrame: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy, data od: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">df_first_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridTeamAnalyzer.setup_data_sources">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.setup_data_sources">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_data_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje źródła danych dla analizy drużynowej.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: Gdy brak wymaganych plików CSV</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Wczytuje dane trenerów z RM_coach.csv</span>
+<span class="sd">            - Wczytuje mecze RM z RM_all_matches_stats.csv</span>
+<span class="sd">            - Wczytuje mecze przeciwników z all_matches.csv</span>
+<span class="sd">            - Konwertuje daty do formatu datetime64[ns]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rm_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s1">&#39;Data&#39;</span><span class="p">,</span> <span class="s1">&#39;Real&#39;</span><span class="p">)</span>
+        <span class="n">opp_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s1">&#39;Data&#39;</span><span class="p">,</span> <span class="s1">&#39;Mecze&#39;</span><span class="p">,</span> <span class="s1">&#39;all_season&#39;</span><span class="p">,</span> <span class="s1">&#39;merged_matches&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rm_path</span><span class="p">,</span> <span class="s1">&#39;RM_coach.csv&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rm_path</span><span class="p">,</span> <span class="s1">&#39;RM_all_matches_stats.csv&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opp_matches</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">opp_path</span><span class="p">,</span> <span class="s1">&#39;all_matches.csv&#39;</span><span class="p">))</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Źródła danych dla analizy drużynowej załadowane pomyślnie&quot;</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridTeamAnalyzer.setup_managers">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.setup_managers">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_managers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje klasy zarządzające różnymi aspektami analizy.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - CoachManager: zarządzanie danymi trenerów (ID, okresy kadencji)</span>
+<span class="sd">            - StatsCalculator: obliczenia statystyk ostatnich meczów i ocen trenerów</span>
+<span class="sd">            - SeasonCalculator: metryki sezonowe i przeciwko poziomom drużyn (TOP/MID/LOW)</span>
+<span class="sd">            - SeasonManager: zarządzanie datami sezonów La Liga</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">season_manager</span> <span class="o">=</span> <span class="n">SeasonManager</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coach_manager</span> <span class="o">=</span> <span class="n">CoachManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coach_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats_calculator</span> <span class="o">=</span> <span class="n">StatsCalculator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">opp_matches</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">season_calculator</span> <span class="o">=</span> <span class="n">SeasonCalculator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">,</span> <span class="n">team_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">team_id</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Managery analizy drużynowej zainicjalizowane pomyślnie&quot;</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridTeamAnalyzer.prepare_dataframe">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.prepare_dataframe">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przygotowuje DataFrame z dodatkowymi kolumnami drużynowymi.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z dodanymi kolumnami zdefiniowanymi w COLUMNS_TO_ADD</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: Gdy base_df nie został ustawiony</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Wymaga wcześniejszego wywołania set_base_dataframe()</span>
+<span class="sd">            - Kopiuje bazowy DataFrame zawodników</span>
+<span class="sd">            - Dodaje wszystkie kolumny wymagane dla analizy drużynowej</span>
+<span class="sd">            - Inicjalizuje nowe kolumny z wartościami NaN</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Bazowy DataFrame nie został ustawiony. Wywołaj set_base_dataframe() najpierw.&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">df_prepared</span> <span class="o">=</span> <span class="n">add_missing_columns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_df</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">COLUMNS_TO_ADD</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DataFrame przygotowany: dodano </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">COLUMNS_TO_ADD</span><span class="p">)</span><span class="si">}</span><span class="s2"> kolumn drużynowych&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_prepared</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridTeamAnalyzer.calculate_match_statistics">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.calculate_match_statistics">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_match_statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza statystyki dla wszystkich meczów Real Madryt.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik {match_id: {kolumna: wartość}} ze statystykami</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Przetwarza tylko mecze po dacie df_first_date</span>
+<span class="sd">            - Dla każdego meczu oblicza:</span>
+<span class="sd">              * ID trenera i jego oceny (ostatni sezon, ostatnie 5 meczów)</span>
+<span class="sd">              * Statystyki ostatnich 5 meczów (gole, punkty, różnica bramek)</span>
+<span class="sd">              * Średnie sezonowe punktów na mecz</span>
+<span class="sd">              * Wydajność przeciwko drużynom TOP/MID/LOW</span>
+<span class="sd">            - Obsługuje błędy z fallback do wartości NaN</span>
+<span class="sd">            - Zaokrągla wszystkie wartości do 3 miejsc po przecinku</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">match_stats_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="c1"># Filtruj mecze i zlicz</span>
+        <span class="n">filtered_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rm_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_first_date</span><span class="p">)</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="n">total_matches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_matches</span><span class="p">)</span>
+        <span class="n">processed_matches</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">successful_matches</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">failed_matches</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;=== ROZPOCZYNAM OBLICZANIE STATYSTYK DRUŻYNOWYCH ===&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba meczów do przetworzenia: </span><span class="si">{</span><span class="n">total_matches</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Okres analizy: od </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">df_first_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">filtered_matches</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">match_id</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">]</span>
+            <span class="n">match_date</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span>
+            <span class="n">processed_matches</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="c1"># Log co 10 meczów</span>
+            <span class="k">if</span> <span class="n">processed_matches</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="n">processed_matches</span> <span class="o">/</span> <span class="n">total_matches</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Postęp meczów: </span><span class="si">{</span><span class="n">processed_matches</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total_matches</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">progress</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%) - Udane: </span><span class="si">{</span><span class="n">successful_matches</span><span class="si">}</span><span class="s2">, Błędy: </span><span class="si">{</span><span class="n">failed_matches</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="n">coach_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_manager</span><span class="o">.</span><span class="n">get_coach_id_by_date</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">coach_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie znaleziono trenera dla meczu z datą </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">failed_matches</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">coach_manager</span><span class="o">.</span><span class="n">validate_coach_exists</span><span class="p">(</span><span class="n">coach_id</span><span class="p">):</span>
+                <span class="n">failed_matches</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+            
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Obliczam statystyki dla meczu ID: </span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">, data: </span><span class="si">{</span><span class="n">match_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+                <span class="n">last_5_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats_calculator</span><span class="o">.</span><span class="n">calculate_last_5_stats</span><span class="p">(</span><span class="n">match_date</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+                
+                <span class="n">match_stats</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;RM_C_ID&#39;</span><span class="p">:</span> <span class="n">coach_id</span><span class="p">,</span>
+                    <span class="s1">&#39;RM_C_RT_PS&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats_calculator</span><span class="o">.</span><span class="n">calculate_coach_rating_last_season</span><span class="p">(</span><span class="n">coach_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;RM_C_FORM5&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats_calculator</span><span class="o">.</span><span class="n">calculate_coach_rating_last_5</span><span class="p">(</span><span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;RM_PPM_SEA&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">season_calculator</span><span class="o">.</span><span class="n">calculate_team_points_per_match_season</span><span class="p">(</span><span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    
+                    <span class="s1">&#39;RM_GPM_VS_TOP&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">season_calculator</span><span class="o">.</span><span class="n">calculate_team_goals_against_top</span><span class="p">(</span><span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;RM_PPM_VS_TOP&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">season_calculator</span><span class="o">.</span><span class="n">calculate_team_points_against_top</span><span class="p">(</span><span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;RM_GPM_VS_MID&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">season_calculator</span><span class="o">.</span><span class="n">calculate_team_goals_against_mid</span><span class="p">(</span><span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;RM_PPM_VS_MID&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">season_calculator</span><span class="o">.</span><span class="n">calculate_team_points_against_mid</span><span class="p">(</span><span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;RM_GPM_VS_LOW&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">season_calculator</span><span class="o">.</span><span class="n">calculate_team_goals_against_low</span><span class="p">(</span><span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;RM_PPM_VS_LOW&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">season_calculator</span><span class="o">.</span><span class="n">calculate_team_points_against_low</span><span class="p">(</span><span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="p">}</span>
+                
+                <span class="k">if</span> <span class="n">last_5_stats</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">last_5_stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                        <span class="n">match_stats</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;RM_G_SCO_L5&#39;</span><span class="p">,</span> <span class="s1">&#39;RM_G_CON_L5&#39;</span><span class="p">,</span> <span class="s1">&#39;RM_GDIF_L5&#39;</span><span class="p">,</span> <span class="s1">&#39;RM_PPM_L5&#39;</span><span class="p">,</span> <span class="s1">&#39;RM_OPP_PPM_L5&#39;</span><span class="p">]:</span>
+                        <span class="n">match_stats</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                
+                <span class="n">successful_matches</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Pomyślnie obliczono statystyki dla meczu ID: </span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">failed_matches</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✗ Błąd dla meczu (ID: </span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stacktrace: </span><span class="si">{</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+                <span class="n">match_stats</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">COLUMNS_TO_ADD</span><span class="p">}</span>
+                <span class="n">match_stats</span><span class="p">[</span><span class="s1">&#39;RM_C_ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coach_id</span>
+            
+            <span class="n">match_stats_dict</span><span class="p">[</span><span class="n">match_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">match_stats</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;=== ZAKOŃCZONO OBLICZANIE STATYSTYK DRUŻYNOWYCH ===&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Łącznie przetworzono: </span><span class="si">{</span><span class="n">processed_matches</span><span class="si">}</span><span class="s2"> meczów&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie: </span><span class="si">{</span><span class="n">successful_matches</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="p">(</span><span class="n">successful_matches</span><span class="o">/</span><span class="n">processed_matches</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błędy: </span><span class="si">{</span><span class="n">failed_matches</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="p">(</span><span class="n">failed_matches</span><span class="o">/</span><span class="n">processed_matches</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono statystyki dla </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">match_stats_dict</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">match_stats_dict</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridTeamAnalyzer.fill_dataframe_with_stats">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.fill_dataframe_with_stats">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_dataframe_with_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match_stats_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wypełnia DataFrame obliczonymi statystykami drużynowymi.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            match_stats_dict (dict): Słownik ze statystykami dla każdego meczu</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame z wypełnionymi statystykami drużynowymi</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Mapuje statystyki na podstawie MATCH_ID</span>
+<span class="sd">            - Zachowuje wszystkie istniejące dane z analizy zawodników</span>
+<span class="sd">            - Wypełnia tylko te wiersze, dla których istnieją statystyki</span>
+<span class="sd">            - Pozostawia NaN dla meczów bez obliczonych statystyk</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filled_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">total_rows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_prepared</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;=== ROZPOCZYNAM WYPEŁNIANIE DATAFRAME ===&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba wierszy do wypełnienia: </span><span class="si">{</span><span class="n">total_rows</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dostępne statystyki dla </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">match_stats_dict</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów&quot;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_prepared</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">match_id</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;MATCH_ID&#39;</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">match_id</span> <span class="ow">in</span> <span class="n">match_stats_dict</span><span class="p">:</span>
+                <span class="n">stats</span> <span class="o">=</span> <span class="n">match_stats_dict</span><span class="p">[</span><span class="n">match_id</span><span class="p">]</span>
+                
+                <span class="k">for</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">df_prepared</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                
+                <span class="n">filled_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                
+                <span class="c1"># Log co 20 wypełnień</span>
+                <span class="k">if</span> <span class="n">filled_count</span> <span class="o">%</span> <span class="mi">20</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="n">filled_count</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_stats_dict</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+                    <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wypełniono: </span><span class="si">{</span><span class="n">filled_count</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">match_stats_dict</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">progress</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+        
+        <span class="n">success_rate</span> <span class="o">=</span> <span class="p">(</span><span class="n">filled_count</span> <span class="o">/</span> <span class="n">total_rows</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;=== ZAKOŃCZONO WYPEŁNIANIE DATAFRAME ===&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wypełniono statystyki dla </span><span class="si">{</span><span class="n">filled_count</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total_rows</span><span class="si">}</span><span class="s2"> wierszy (</span><span class="si">{</span><span class="n">success_rate</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">filled_count</span> <span class="o">&lt;</span> <span class="n">total_rows</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">total_rows</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">filled_count</span><span class="si">}</span><span class="s2"> wierszy pozostało bez statystyk drużynowych&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">df_prepared</span></div>
+
+    
+<div class="viewcode-block" id="RealMadridTeamAnalyzer.analyze">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_team.html#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.analyze">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Główna metoda analizy drużyny Real Madryt.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Kompletny DataFrame z analizą zawodników i drużyny</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: Gdy base_df nie został ustawiony</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Wykonuje pełny pipeline analizy:</span>
+<span class="sd">              1. Przygotowanie DataFrame z dodatkowymi kolumnami</span>
+<span class="sd">              2. Obliczenie statystyk dla wszystkich meczów</span>
+<span class="sd">              3. Wypełnienie DataFrame obliczonymi wartościami</span>
+<span class="sd">            - Wymaga wcześniejszego wywołania set_base_dataframe()</span>
+<span class="sd">            - Łączy analizę zawodników z metrykami drużynowymi</span>
+<span class="sd">            - Zwraca gotowy DataFrame do dalszego przetwarzania</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Bazowy DataFrame nie został ustawiony. Wywołaj set_base_dataframe() najpierw.&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam analizę zespołu Real Madrid&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_dataframe</span><span class="p">()</span>
+        <span class="n">match_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_match_statistics</span><span class="p">()</span>
+        <span class="n">result_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_dataframe_with_stats</span><span class="p">(</span><span class="n">match_stats</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zakończono analizę zespołu Real Madrid: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> kolumn&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result_df</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

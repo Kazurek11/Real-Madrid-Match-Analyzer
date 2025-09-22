@@ -1,0 +1,546 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RM.RM_rivals &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=2827c288"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">RM.RM_rivals</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu RM.RM_rivals</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Skrypt do tworzenia struktury katalogów dla rywali Real Madryt.</span>
+
+<span class="sd">Funkcjonalność:</span>
+<span class="sd">- Wczytuje dane identyfikacyjne rywali z pliku CSV</span>
+<span class="sd">- Tworzy unikalne katalogi dla każdej drużyny w formacie ID_NAZWA</span>
+<span class="sd">- Katalogi są tworzone w głównej strukturze projektu</span>
+<span class="sd">- Wykorzystuje zaawansowane logowanie do śledzenia operacji</span>
+<span class="sd">- Zaimplementowano podejście obiektowe z klasami Rival i RivalManager</span>
+<span class="sd">- Tworzy pliki z bezpośrednimi spotkaniami (head-to-head)</span>
+<span class="sd">- Tworzy pliki z aktualną formą rywali (ostatnie 6 meczów)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">critical</span><span class="p">,</span> <span class="n">set_level</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+<div class="viewcode-block" id="real_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.real_data">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">real_data</span><span class="p">():</span>
+    <span class="n">current_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">parent_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_file_path</span><span class="p">)</span>
+    <span class="n">real_madrid_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_file</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span><span class="s2">&quot;Real&quot;</span><span class="p">,</span><span class="s2">&quot;RM_matches.csv&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">real_madrid_path</span><span class="p">)</span></div>
+
+
+<span class="n">set_level</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="Rival">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.Rival">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Rival</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa reprezentująca rywala Real Madryt.</span>
+<span class="sd">    Przechowuje dane identyfikacyjne i ścieżkę do katalogu z danymi rywala.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_rivals_data</span> <span class="o">=</span> <span class="kc">None</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rival_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje obiekt rywala.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            rival_id (int): Identyfikator rywala</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">Rival</span><span class="o">.</span><span class="n">_rivals_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_rivals_data</span><span class="p">()</span>
+            
+        <span class="n">rival_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_rival_by_id</span><span class="p">(</span><span class="n">rival_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rival_info</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie znaleziono rywala o ID: </span><span class="si">{</span><span class="n">rival_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">rival_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">rival_info</span><span class="p">[</span><span class="s2">&quot;team_name&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path_home</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path_away</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path</span> <span class="o">=</span> <span class="kc">None</span>
+    
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_rivals_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ładuje dane wszystkich rywali z pliku CSV do pamięci podręcznej.&quot;&quot;&quot;</span>
+        <span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;id_nazwa&quot;</span><span class="p">,</span> <span class="s2">&quot;rywale.csv&quot;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_rivals_data</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+        <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Załadowano dane </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_rivals_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> rywali do pamięci podręcznej&quot;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="Rival.refresh_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.Rival.refresh_data">[dokumentacja]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">refresh_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Odświeża dane rywali z pliku.&quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_rivals_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_load_rivals_data</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Odświeżono dane rywali&quot;</span><span class="p">)</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_rival_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rival_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Znajduje dane konkretnego rywala po ID.&quot;&quot;&quot;</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">Rival</span><span class="o">.</span><span class="n">_rivals_data</span><span class="p">[</span><span class="n">Rival</span><span class="o">.</span><span class="n">_rivals_data</span><span class="p">[</span><span class="s2">&quot;team_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">rival_id</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">matches</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+<div class="viewcode-block" id="Rival.get_folder_name">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.Rival.get_folder_name">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_folder_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Zwraca nazwę folderu dla rywala w formacie ID_NAZWA.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+        
+<div class="viewcode-block" id="Rival.create_folder">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.Rival.create_folder">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy folder dla rywala w podanej ścieżce bazowej.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            base_path (str): Ścieżka bazowa dla folderów rywali</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli folder został utworzony lub już istnieje, False w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">folder_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_folder_name</span><span class="p">()</span>
+        <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">folder_name</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">full_path</span><span class="p">):</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Katalog dla rywala </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> już istnieje: </span><span class="si">{</span><span class="n">full_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span> <span class="o">=</span> <span class="n">full_path</span>
+                <span class="k">return</span> <span class="kc">True</span>
+                
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span> <span class="o">=</span> <span class="n">full_path</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono katalog dla rywala: </span><span class="si">{</span><span class="n">folder_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas tworzenia katalogu dla </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+            
+<div class="viewcode-block" id="Rival.create_h2h_file">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.Rival.create_h2h_file">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_h2h_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy plik z historią meczów bezpośrednich (head-to-head) w folderze rywala.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli plik został utworzony, False w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można utworzyć pliku H2H dla </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> - brak ścieżki do folderu&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path_home</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_home_h2h.csv&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path_away</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_away_h2h.csv&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_h2h.csv&quot;</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">real_data</span><span class="p">()</span>
+            
+            <span class="n">real_home</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+            <span class="n">real_away</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+            <span class="n">real_overall</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">real_home</span><span class="p">,</span> <span class="n">real_away</span><span class="p">])</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+            
+            <span class="n">real_home</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path_home</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">real_away</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path_away</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">real_overall</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik H2H dla </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> przygotowany do utworzenia: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">h2h_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas tworzenia pliku H2H dla </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="Rival.create_form_file">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.Rival.create_form_file">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_form_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path_sezonu</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy plik z aktualną formą rywala (6 ostatnich meczów).</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path_sezonu (str, optional): Ścieżka do pliku CSV z danymi sezonu.</span>
+<span class="sd">                                          Jeśli None, używa domyślnych danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli plik został utworzony, False w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można utworzyć pliku formy dla </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> - brak ścieżki do folderu&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomijanie tworzenia pliku formy dla Real Madryt (ID=1)&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">form_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_actual_form.csv&quot;</span><span class="p">)</span>
+            
+            <span class="n">table_league</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s1">&#39;table_league&#39;</span><span class="p">)</span>
+            <span class="n">League_Table</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">table_league</span><span class="p">,</span> <span class="s1">&#39;League_Table&#39;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">file_path_sezonu</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">current_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+                <span class="n">parent_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_path</span><span class="p">)</span>
+                <span class="n">file_path_sezonu</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dir</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;all_season&quot;</span><span class="p">,</span> <span class="s2">&quot;all_season.csv&quot;</span><span class="p">)</span>
+            
+            <span class="n">league_table</span> <span class="o">=</span> <span class="n">League_Table</span><span class="p">(</span><span class="n">file_path_to_season</span><span class="o">=</span><span class="n">file_path_sezonu</span><span class="p">,</span> <span class="n">season_year</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+            
+            <span class="n">form_data</span> <span class="o">=</span> <span class="n">league_table</span><span class="o">.</span><span class="n">check_form_team</span><span class="p">(</span><span class="n">team_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">last_matches</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">form_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak danych o formie dla drużyny </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">form_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">form_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">form_data</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">form_df</span> <span class="o">=</span> <span class="n">form_data</span>
+                
+            <span class="n">form_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">form_file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono plik formy dla rywala: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="n">detailed_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">folder_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_last_matches.csv&quot;</span><span class="p">)</span>
+            
+            <span class="n">team_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+            
+            <span class="n">all_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path_sezonu</span><span class="p">)</span>
+            <span class="n">max_round</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s1">&#39;round&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;round&#39;</span> <span class="ow">in</span> <span class="n">all_data</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="mi">38</span>
+            
+            <span class="n">detailed_stats</span> <span class="o">=</span> <span class="n">league_table</span><span class="o">.</span><span class="n">check_team_stats</span><span class="p">(</span>
+                <span class="n">team_id</span><span class="o">=</span><span class="n">team_id</span><span class="p">,</span> 
+                <span class="n">kolejka_do</span><span class="o">=</span><span class="n">max_round</span><span class="p">,</span>
+                <span class="n">file_path_sezonu</span><span class="o">=</span><span class="n">file_path_sezonu</span>
+            <span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">detailed_stats</span> <span class="ow">and</span> <span class="s1">&#39;match_details&#39;</span> <span class="ow">in</span> <span class="n">detailed_stats</span><span class="p">:</span>
+                <span class="n">detailed_stats</span><span class="p">[</span><span class="s1">&#39;match_details&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">detailed_file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono plik ze szczegółami ostatnich meczów dla: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="kc">True</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas tworzenia pliku formy dla </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+</div>
+
+
+        
+
+<div class="viewcode-block" id="RivalManager">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.RivalManager">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RivalManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa zarządzająca rywalami Real Madryt.</span>
+<span class="sd">    Odpowiada za wczytywanie danych, tworzenie obiektów Rival i zarządzanie katalogami.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inicjalizuje menedżera rywali.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rivals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="kc">None</span>
+        
+<div class="viewcode-block" id="RivalManager.load_rivals_data">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.RivalManager.load_rivals_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_rivals_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje dane o rywalach z pliku CSV i tworzy obiekty Rival.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku CSV z danymi rywali</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli dane zostały wczytane poprawnie, False w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie znaleziono pliku z danymi rywali: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytywanie danych rywali z: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;id_rywala&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;id_rywala&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomijanie Real Madryt (ID=1) jako rywala&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">rival</span> <span class="o">=</span> <span class="n">Rival</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;id_rywala&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;nazwa_rywala&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rivals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rival</span><span class="p">)</span>
+                
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano dane </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rivals</span><span class="p">)</span><span class="si">}</span><span class="s2"> rywali&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania danych rywali: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+            
+<div class="viewcode-block" id="RivalManager.set_base_path">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.RivalManager.set_base_path">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_base_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ustawia ścieżkę bazową dla folderów rywali.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="n">path</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Katalog bazowy istnieje lub został utworzony: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">critical</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można utworzyć katalogu bazowego </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+            
+<div class="viewcode-block" id="RivalManager.create_all_folders">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.RivalManager.create_all_folders">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_all_folders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy foldery dla wszystkich rywali.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Liczba pomyślnie utworzonych folderów</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_path</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie ustawiono katalogu bazowego dla folderów rywali&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rivals</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak danych rywali do przetworzenia&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        
+        <span class="n">folders_created</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">rival</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rivals</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rival</span><span class="o">.</span><span class="n">create_folder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_path</span><span class="p">):</span>
+                <span class="n">folders_created</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">return</span> <span class="n">folders_created</span></div>
+
+    
+<div class="viewcode-block" id="RivalManager.create_all_h2h_files">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.RivalManager.create_all_h2h_files">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_all_h2h_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy pliki z historią meczów bezpośrednich (H2H) dla wszystkich rywali.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Liczba pomyślnie utworzonych plików H2H</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rivals</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak danych rywali do przetworzenia&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+            
+        <span class="n">files_created</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">rival</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rivals</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rival</span><span class="o">.</span><span class="n">folder_path</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak folderu dla rywala </span><span class="si">{</span><span class="n">rival</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, pomijanie tworzenia plików H2H&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+                
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Próba utworzenia plików H2H dla rywala: </span><span class="si">{</span><span class="n">rival</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">rival</span><span class="o">.</span><span class="n">create_h2h_file</span><span class="p">():</span>
+                    <span class="n">files_created</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono pliki H2H dla rywala: </span><span class="si">{</span><span class="n">rival</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas tworzenia plików H2H dla rywala </span><span class="si">{</span><span class="n">rival</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">files_created</span></div>
+
+    
+<div class="viewcode-block" id="RivalManager.create_all_form_files">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.RivalManager.create_all_form_files">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_all_form_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path_sezonu</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy pliki z aktualną formą dla wszystkich rywali (poza Realem Madryt).</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path_sezonu (str, optional): Ścieżka do pliku CSV z danymi sezonu.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Liczba pomyślnie utworzonych plików formy</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">rivals</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak danych rywali do przetworzenia&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+            
+        <span class="n">files_created</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">rival</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rivals</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rival</span><span class="o">.</span><span class="n">folder_path</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak folderu dla rywala </span><span class="si">{</span><span class="n">rival</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, pomijanie tworzenia pliku formy&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+                
+            <span class="k">if</span> <span class="n">rival</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">continue</span>
+                
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Próba utworzenia pliku formy dla rywala: </span><span class="si">{</span><span class="n">rival</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">rival</span><span class="o">.</span><span class="n">create_form_file</span><span class="p">(</span><span class="n">file_path_sezonu</span><span class="p">):</span>
+                    <span class="n">files_created</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono pliki formy dla rywala: </span><span class="si">{</span><span class="n">rival</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas tworzenia pliku formy dla rywala </span><span class="si">{</span><span class="n">rival</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">files_created</span></div>
+</div>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../api/RM.html#RM.RM_rivals.main">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Główna funkcja skryptu tworząca foldery dla wszystkich rywali,</span>
+<span class="sd">    pliki z bezpośrednimi spotkaniami (H2H) oraz pliki z aktualną formą.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;=== ROZPOCZĘCIE TWORZENIA KATALOGÓW I PLIKÓW RYWALI ===&quot;</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">current_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+        <span class="n">parent_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_path</span><span class="p">)</span>
+        <span class="n">rival_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dir</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;id_nazwa&quot;</span><span class="p">,</span> <span class="s2">&quot;rywale.csv&quot;</span><span class="p">)</span>
+        <span class="n">path_to_rival_folders</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dir</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Rywale&quot;</span><span class="p">)</span>
+        
+        <span class="n">real_madrid_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dir</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="s2">&quot;real_madrid_all_matches.csv&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">real_madrid_data_path</span><span class="p">):</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik z danymi meczów Real Madryt nie istnieje: </span><span class="si">{</span><span class="n">real_madrid_data_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Najpierw uruchom skrypt real_madrid_match.py, aby utworzyć ten plik&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">RivalManager</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wczytywanie danych rywali...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">manager</span><span class="o">.</span><span class="n">load_rivals_data</span><span class="p">(</span><span class="n">rival_path</span><span class="p">):</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się wczytać danych rywali. Skrypt zostanie zakończony.&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">manager</span><span class="o">.</span><span class="n">set_base_path</span><span class="p">(</span><span class="n">path_to_rival_folders</span><span class="p">):</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie udało się utworzyć katalogu bazowego. Skrypt zostanie zakończony.&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Tworzenie folderów dla rywali...&quot;</span><span class="p">)</span>
+        <span class="n">folders_created</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_all_folders</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono </span><span class="si">{</span><span class="n">folders_created</span><span class="si">}</span><span class="s2"> katalogów dla rywali&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Tworzenie plików z meczami bezpośrednimi (H2H)...&quot;</span><span class="p">)</span>
+        <span class="n">files_created</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_all_h2h_files</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono pliki H2H dla </span><span class="si">{</span><span class="n">files_created</span><span class="si">}</span><span class="s2"> rywali&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Tworzenie plików z aktualną formą rywali...&quot;</span><span class="p">)</span>
+        <span class="n">season_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent_dir</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;all_season&quot;</span><span class="p">,</span> <span class="s2">&quot;all_season.csv&quot;</span><span class="p">)</span>
+        <span class="n">form_files_created</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_all_form_files</span><span class="p">(</span><span class="n">season_data_path</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono pliki formy dla </span><span class="si">{</span><span class="n">form_files_created</span><span class="si">}</span><span class="s2"> rywali&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przetworzono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">rivals</span><span class="p">)</span><span class="si">}</span><span class="s2"> rywali&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Utworzono </span><span class="si">{</span><span class="n">folders_created</span><span class="si">}</span><span class="s2"> katalogów, pliki H2H dla </span><span class="si">{</span><span class="n">files_created</span><span class="si">}</span><span class="s2"> rywali i pliki formy dla </span><span class="si">{</span><span class="n">form_files_created</span><span class="si">}</span><span class="s2"> rywali&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">folders_created</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">rivals</span><span class="p">)</span> <span class="ow">or</span> <span class="n">files_created</span> <span class="o">!=</span> <span class="n">folders_created</span> <span class="ow">or</span> <span class="n">form_files_created</span> <span class="o">!=</span> <span class="n">folders_created</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Uwaga: Nie wszystkie katalogi, pliki H2H lub pliki formy zostały utworzone&quot;</span><span class="p">)</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba rywali: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">rivals</span><span class="p">)</span><span class="si">}</span><span class="s2">, utworzonych katalogów: </span><span class="si">{</span><span class="n">folders_created</span><span class="si">}</span><span class="s2">, utworzonych plików H2H: </span><span class="si">{</span><span class="n">files_created</span><span class="si">}</span><span class="s2">, utworzonych plików formy: </span><span class="si">{</span><span class="n">form_files_created</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;=== ZAKOŃCZENIE TWORZENIA KATALOGÓW I PLIKÓW RYWALI ===&quot;</span><span class="p">)</span>
+    
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">critical</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nieoczekiwany błąd podczas wykonywania skryptu: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

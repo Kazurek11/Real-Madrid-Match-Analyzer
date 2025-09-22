@@ -1,0 +1,877 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>data_processing.data_processor &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=2827c288"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">data_processing.data_processor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu data_processing.data_processor</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.const_variable</span><span class="w"> </span><span class="kn">import</span> <span class="n">TEAM_NAMES_MAPPING</span>
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">warning</span><span class="p">,</span> <span class="n">debug</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+
+<div class="viewcode-block" id="DataProcessor">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataProcessor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Klasa odpowiedzialna za przetwarzanie plików CSV z danymi meczowymi.</span>
+<span class="sd">    </span>
+<span class="sd">    Zapewnia funkcjonalności:</span>
+<span class="sd">    - Standaryzację nazw drużyn według ustalonego słownika mapowań</span>
+<span class="sd">    - Usuwanie marży bukmacherskiej z kursów poprzez obliczanie uczciwych kursów</span>
+<span class="sd">    - Weryfikację zgodności identyfikatorów drużyn z ich nazwami</span>
+<span class="sd">    - Dodawanie identyfikatorów drużyn do DataFrame na podstawie ich nazw</span>
+<span class="sd">    - Zaokrąglanie kolumn numerycznych do określonej liczby miejsc po przecinku</span>
+<span class="sd">    </span>
+<span class="sd">    Klasa wykorzystuje słowniki mapowania nazw drużyn oraz ich identyfikatorów,</span>
+<span class="sd">    co pozwala na spójną reprezentację danych we wszystkich plikach projektu.</span>
+<span class="sd">    Logowanie operacji jest realizowane przy użyciu modułu logger.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root_dir</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje obiekt DataProcessor z konfiguracją ścieżek i mapowań.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            root_dir (str): Ścieżka do głównego katalogu z danymi do przetwarzania.</span>
+<span class="sd">                           Wszystkie podkatalogi będą rekurencyjnie przeszukiwane.</span>
+<span class="sd">                           </span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            root_dir (str): Główny katalog z danymi</span>
+<span class="sd">            file_utils (FileUtils): Instancja klasy pomocniczej do operacji na plikach</span>
+<span class="sd">            project_root (str): Ścieżka do głównego katalogu projektu</span>
+<span class="sd">            team_names_variants (dict): Słownik mapowania standardowych nazw drużyn na ich warianty</span>
+<span class="sd">            team_names_mapping (dict): Słownik jednoznacznych mapowań nazw drużyn na ich standardowe formy</span>
+<span class="sd">            team_columns (list): Lista nazw kolumn, które potencjalnie zawierają nazwy drużyn</span>
+<span class="sd">            odds_columns (list): Lista nazw kolumn z kursami bukmacherskimi</span>
+<span class="sd">            id_to_name (dict): Słownik mapowania ID drużyn na nazwy</span>
+<span class="sd">            name_to_id (dict): Słownik mapowania nazw drużyn na ich ID</span>
+<span class="sd">            files_processed (int): Licznik przetworzonych plików</span>
+<span class="sd">            files_with_errors (int): Licznik plików z wykrytymi błędami</span>
+<span class="sd">            total_errors (int): Całkowita liczba znalezionych błędów</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span> <span class="o">=</span> <span class="n">root_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project_root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">team_names_variants</span> <span class="o">=</span> <span class="n">TEAM_NAMES_MAPPING</span>
+        <span class="c1">#{</span>
+        <span class="c1">#     &#39;Real Madrid CF&#39;: [&#39;Real Madrid&#39;, &#39;Real Madryt&#39;, &#39;Real Madrid CF&#39;, &#39;Madrid&#39;],</span>
+        <span class="c1">#     &#39;FC Barcelona&#39;: [&#39;Barcelona&#39;, &#39;FC Barcelona&#39;, &#39;Barca&#39;, &#39;Barça&#39;],</span>
+        <span class="c1">#     &#39;Atletico Madrid&#39;: [&quot;Atlético Madryt&quot;,&#39;Atletico Madrid&#39;, &#39;Atlético Madrid&#39;, &#39;Atletico&#39;, &#39;Atlético&#39;,&#39;Atl. Madrid&#39;],</span>
+        <span class="c1">#     &#39;Athletic Club&#39;: [&#39;Athletic Bilbao&#39;, &#39;Athletic Club&#39;, &#39;Athletic&#39;,&#39;Ath Bilbao&#39;],</span>
+        <span class="c1">#     &#39;Sevilla FC&#39;: [&#39;Sevilla&#39;, &#39;Sevilla FC&#39;],</span>
+        <span class="c1">#     &#39;Valencia CF&#39;: [&#39;Valencia&#39;, &#39;Valencia CF&#39;],</span>
+        <span class="c1">#     &#39;Villarreal CF&#39;: [&#39;Villarreal&#39;, &#39;Villarreal CF&#39;],</span>
+        <span class="c1">#     &#39;Real Sociedad&#39;: [&#39;Real Sociedad&#39;, &#39;RSSS&#39;],</span>
+        <span class="c1">#     &#39;Real Betis&#39;: [&#39;Real Betis&#39;, &#39;Betis&#39;],</span>
+        <span class="c1">#     &#39;RC Celta&#39;: [&#39;Celta Vigo&#39;, &#39;RC Celta&#39;, &#39;Celta&#39;],</span>
+        <span class="c1">#     &#39;CA Osasuna&#39;: [&#39;Osasuna&#39;, &#39;CA Osasuna&#39;],</span>
+        <span class="c1">#     &#39;RCD Mallorca&#39;: [&#39;Mallorca&#39;, &#39;RCD Mallorca&#39;],</span>
+        <span class="c1">#     &#39;RCD Espanyol&#39;: [&#39;Espanyol&#39;, &#39;RCD Espanyol&#39;],</span>
+        <span class="c1">#     &#39;Getafe CF&#39;: [&#39;Getafe&#39;, &#39;Getafe CF&#39;],</span>
+        <span class="c1">#     &#39;Elche CF&#39;: [&#39;Elche&#39;, &#39;Elche CF&#39;],</span>
+        <span class="c1">#     &#39;Granada CF&#39;: [&#39;Granada&#39;, &#39;Granada CF&#39;],</span>
+        <span class="c1">#     &#39;Rayo Vallecano&#39;: [&#39;Rayo Vallecano&#39;, &#39;Rayo&#39;],</span>
+        <span class="c1">#     &#39;Cádiz CF&#39;: [&#39;Cadiz CF&#39;, &#39;Cádiz CF&#39;, &#39;Cadiz&#39;, &#39;Cádiz&#39;],</span>
+        <span class="c1">#     &#39;Deportivo Alaves&#39;: [&#39;Alaves&#39;, &#39;Deportivo Alavés&#39;, &#39;Alavés&#39;],</span>
+        <span class="c1">#     &#39;Levante UD&#39;: [&#39;Levante&#39;, &#39;Levante UD&#39;],</span>
+        <span class="c1">#     &#39;UD Las Palmas&#39;: [&#39;Las Palmas&#39;, &#39;UD Las Palmas&#39;],</span>
+        <span class="c1">#     &#39;CD Leganes&#39;: [&#39;Leganes&#39;, &#39;CD Leganes&#39;,&#39;Leganés&#39;,&#39;CD Leganés&#39;],</span>
+        <span class="c1">#     &#39;SD Huesca&#39;: [&#39;Huesca&#39;],</span>
+        <span class="c1">#     &#39;SD Eibar&#39;:[&#39;Eibar&#39;],</span>
+        <span class="c1">#     &#39;Girona FC&#39;:[&#39;Girona&#39;,&quot;Girona FC&quot;,&quot;Girona CF&quot;],</span>
+        <span class="c1">#     &#39;Real Valladolid&#39;: [&#39;Valladolid&#39;, &#39;Real Valladolid&#39;],</span>
+        <span class="c1">#     &#39;UD Almeria&#39;: [&#39;UD Almería&#39;, &#39;Almeria&#39;,&#39;UD Almería&#39;]</span>
+        <span class="c1"># }</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">team_names_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">standard_name</span><span class="p">,</span> <span class="n">variants</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">team_names_variants</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">variant</span> <span class="ow">in</span> <span class="n">variants</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">team_names_mapping</span><span class="p">[</span><span class="n">variant</span><span class="p">]</span> <span class="o">=</span> <span class="n">standard_name</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">team_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;gospodarz&quot;</span><span class="p">,</span><span class="s2">&quot;gosc&quot;</span><span class="p">,</span><span class="s1">&#39;home_team&#39;</span><span class="p">,</span> <span class="s1">&#39;away_team&#39;</span><span class="p">,</span> <span class="s1">&#39;team&#39;</span><span class="p">,</span> 
+                             <span class="s1">&#39;opponent_name&#39;</span><span class="p">,</span> <span class="s1">&#39;team_name&#39;</span><span class="p">,</span><span class="s1">&#39;nazwa_rywala&#39;</span><span class="p">,</span><span class="s1">&#39;rival&#39;</span><span class="p">,</span><span class="s1">&#39;rivals&#39;</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">odds_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;home_odds&quot;</span><span class="p">,</span> <span class="s2">&quot;draw_odds&quot;</span><span class="p">,</span> <span class="s2">&quot;away_odds&quot;</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_to_name</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name_to_id</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">files_processed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">files_with_errors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_errors</span> <span class="o">=</span> <span class="mi">0</span>
+    
+<div class="viewcode-block" id="DataProcessor.standardize_team_names">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor.standardize_team_names">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">standardize_team_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Standaryzuje nazwy drużyn w DataFrame lub pliku CSV.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda wyszukuje kolumny zawierające nazwy drużyn i zastępuje różne warianty nazw</span>
+<span class="sd">        ich standardowymi odpowiednikami zgodnie ze słownikiem mapowań. Zapewnia to spójność</span>
+<span class="sd">        nazewnictwa we wszystkich plikach projektu.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            data (pd.DataFrame, optional): DataFrame z danymi do standaryzacji.</span>
+<span class="sd">                Jeśli podany, zmiany są dokonywane na kopii, a oryginał pozostaje niezmieniony.</span>
+<span class="sd">            file_path (str, optional): Ścieżka do pliku CSV, który ma zostać przetworzony.</span>
+<span class="sd">                Jeśli podana, plik zostanie wczytany, przetworzony i nadpisany zmodyfikowaną zawartością.</span>
+<span class="sd">                </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: (updated, df) gdzie:</span>
+<span class="sd">                - updated (bool): True jeśli nazwy drużyn zostały zmienione, False w przeciwnym przypadku</span>
+<span class="sd">                - df (pd.DataFrame): Zaktualizowany DataFrame lub None w przypadku błędu</span>
+<span class="sd">                </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: W przypadku błędów podczas przetwarzania, szczegóły są zapisywane w logach.</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Jeśli podano zarówno data jak i file_path, priorytet ma parametr data</span>
+<span class="sd">            - Zmiany zostają zapisane do pliku tylko jeśli wykryto faktyczne różnice w nazwach</span>
+<span class="sd">            - Operacja nie zmienia innych kolumn ani struktury danych</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>
+            
+            <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;przekazany DataFrame&quot;</span>
+            <span class="k">elif</span> <span class="n">file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;plik </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span>
+                
+                <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można wczytać pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie podano ani DataFrame ani ścieżki do pliku&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span>
+                    
+            <span class="n">original_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="n">columns_to_update</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">team_columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">columns_to_update</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns_to_update</span><span class="p">:</span>
+                    <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">team_names_mapping</span><span class="p">)</span>
+                    
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">df</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">original_df</span><span class="p">):</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zaktualizowano nazwy drużyn w </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="n">file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">sort_by</span> <span class="o">=</span> <span class="n">columns_to_update</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">columns_to_update</span> <span class="k">else</span> <span class="kc">None</span>
+                        <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span>
+                            <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> 
+                            <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> 
+                            <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">sort_by</span><span class="o">=</span><span class="n">sort_by</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się zapisać zmian do pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">df</span>
+                            
+                    <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">df</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak zmian w nazwach drużyn w </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">df</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak kolumn z nazwami drużyn w </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">df</span>
+                
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas standaryzacji nazw drużyn: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span></div>
+
+    
+<div class="viewcode-block" id="DataProcessor.remove_bookmaker_margin">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor.remove_bookmaker_margin">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_bookmaker_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Usuwa marżę z kursów bukmacherskich w pliku CSV i dodaje nowe kolumny z &quot;uczciwymi&quot; kursami.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda oblicza tzw. &quot;uczciwe kursy&quot; (fair odds) poprzez usunięcie marży bukmacherskiej</span>
+<span class="sd">        z oryginalnych kursów. Kursy bez marży są zaokrąglane do 2 miejsc po przecinku i zapisywane</span>
+<span class="sd">        jako nowe kolumny z przyrostkiem &quot;_fair&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku CSV zawierającego kolumny z kursami bukmacherskimi</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli plik został pomyślnie zmodyfikowany, False w przypadku błędu</span>
+<span class="sd">                 lub gdy plik nie zawiera wymaganych kolumn kursów</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Wymagane kolumny: &quot;home_odds&quot;, &quot;draw_odds&quot;, &quot;away_odds&quot;</span>
+<span class="sd">            - Dodawane kolumny: &quot;home_odds_fair&quot;, &quot;draw_odds_fair&quot;, &quot;away_odds_fair&quot;</span>
+<span class="sd">            - Algorytm usuwania marży zakłada, że marża jest równomiernie rozłożona na wszystkie kursy</span>
+<span class="sd">            - Zmodyfikowany plik jest zapisywany pod tą samą ścieżką, nadpisując oryginalny plik</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można wczytać pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">odds_columns</span><span class="p">):</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak kolumn kursów: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">odds_columns</span><span class="si">}</span><span class="s2"> w pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="c1"># Oblicz prawdopodobieństwa implikowane przez kursy</span>
+            <span class="n">data_odds</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">odds_columns</span><span class="p">]</span>
+            <span class="n">implied_probs</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">data_odds</span>
+            <span class="n">margin</span> <span class="o">=</span> <span class="n">implied_probs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">fair_probs</span> <span class="o">=</span> <span class="n">implied_probs</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">margin</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">fair_odds</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">fair_probs</span>
+            
+            <span class="c1"># Dodaj nowe kolumny do DataFrame z zaokrągleniem do 2 miejsc po przecinku</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;home_odds_fair&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fair_odds</span><span class="p">[</span><span class="s2">&quot;home_odds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;draw_odds_fair&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fair_odds</span><span class="p">[</span><span class="s2">&quot;draw_odds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;away_odds_fair&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fair_odds</span><span class="p">[</span><span class="s2">&quot;away_odds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            
+            <span class="c1"># Zapisz plik z nowymi kolumnami</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">save_csv_safe</span><span class="p">(</span>
+                <span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> 
+                <span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> 
+                <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                <span class="n">sort_by</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dodano kolumny z kursami bez marży do pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> (zaokrąglone do 2 miejsc po przecinku)&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się zapisać pliku po usunięciu marży: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas usuwania marży w pliku </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="DataProcessor.process_all_files">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor.process_all_files">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_all_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przetwarza wszystkie pliki CSV w katalogu głównym i jego podkatalogach.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda rekurencyjnie przeszukuje wszystkie katalogi w poszukiwaniu plików CSV</span>
+<span class="sd">        i wykonuje dla każdego z nich operacje standaryzacji nazw drużyn oraz usuwania</span>
+<span class="sd">        marży bukmacherskiej z kursów.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: (processed_files, names_updated, odds_updated)</span>
+<span class="sd">                - processed_files (int): Liczba przetworzonych plików CSV</span>
+<span class="sd">                - names_updated (int): Liczba plików, w których zaktualizowano nazwy drużyn</span>
+<span class="sd">                - odds_updated (int): Liczba plików, w których dodano kursy bez marży</span>
+<span class="sd">                </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Operacje są wykonywane sekwencyjnie dla każdego pliku</span>
+<span class="sd">            - Szczegółowe informacje o przetwarzaniu są zapisywane w logach</span>
+<span class="sd">            - Metoda nie przerywa przetwarzania w przypadku błędów z pojedynczym plikiem</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">processed_files</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">names_updated</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">odds_updated</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rozpoczynam przetwarzanie plików CSV w katalogu: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">):</span>
+                    <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                    <span class="n">processed_files</span> <span class="o">+=</span> <span class="mi">1</span>
+                    
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przetwarzam plik (</span><span class="si">{</span><span class="n">processed_files</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">updated</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">standardize_team_names</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">updated</span><span class="p">:</span>
+                        <span class="n">names_updated</span> <span class="o">+=</span> <span class="mi">1</span>
+                    
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_bookmaker_margin</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+                        <span class="n">odds_updated</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zakończono przetwarzanie.&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przetworzono plików: </span><span class="si">{</span><span class="n">processed_files</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zaktualizowano nazwy drużyn w </span><span class="si">{</span><span class="n">names_updated</span><span class="si">}</span><span class="s2"> plikach&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dodano kursy bez marży w </span><span class="si">{</span><span class="n">odds_updated</span><span class="si">}</span><span class="s2"> plikach&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">processed_files</span><span class="p">,</span> <span class="n">names_updated</span><span class="p">,</span> <span class="n">odds_updated</span></div>
+
+    
+    
+<div class="viewcode-block" id="DataProcessor.load_team_id_template">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor.load_team_id_template">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_team_id_template</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje mapowania identyfikatorów drużyn z pliku szablonowego.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda wczytuje plik &#39;rywale.csv&#39; zawierający mapowania ID drużyn do ich nazw</span>
+<span class="sd">        i przygotowuje dwukierunkowe słowniki mapowań, które będą używane do weryfikacji</span>
+<span class="sd">        spójności identyfikatorów z nazwami w plikach danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli mapowania zostały pomyślnie wczytane, </span>
+<span class="sd">                  False w przypadku błędu lub braku wymaganych kolumn</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Lokalizacja pliku szablonu: &quot;[project_root]/Data/Mecze/id_nazwa/rywale.csv&quot;</span>
+<span class="sd">            - Wymagane kolumny: &#39;team_id&#39; i &#39;team_name&#39; (lub ich alternatywy)</span>
+<span class="sd">            - W przypadku braku pliku lub problemów z wczytaniem, informacje są zapisywane w logach</span>
+<span class="sd">            - Obsługiwane są alternatywne nazwy kolumn: &#39;id_rywala&#39; zamiast &#39;team_id&#39; </span>
+<span class="sd">              oraz &#39;nazwa_rywala&#39; zamiast &#39;team_name&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">template_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;id_nazwa&quot;</span><span class="p">,</span> <span class="s2">&quot;rywale.csv&quot;</span><span class="p">)</span>
+    
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Próba wczytania szablonu z: </span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">template_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">template_path</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">template_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można wczytać pliku szablonu: </span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="k">if</span> <span class="n">template_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik szablonu jest pusty: </span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="n">required_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;team_id&#39;</span><span class="p">,</span> <span class="s1">&#39;team_name&#39;</span><span class="p">]</span>
+            
+            <span class="n">column_alternatives</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;team_id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;team_id&#39;</span><span class="p">,</span> <span class="s1">&#39;id_rywala&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;team_name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;team_name&#39;</span><span class="p">,</span> <span class="s1">&#39;nazwa_rywala&#39;</span><span class="p">]</span>
+            <span class="p">}</span>
+            
+            <span class="n">column_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+            
+            <span class="k">for</span> <span class="n">req_col</span> <span class="ow">in</span> <span class="n">required_columns</span><span class="p">:</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">alt_col</span> <span class="ow">in</span> <span class="n">column_alternatives</span><span class="p">[</span><span class="n">req_col</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">alt_col</span> <span class="ow">in</span> <span class="n">template_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="n">column_mapping</span><span class="p">[</span><span class="n">req_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">alt_col</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak wymaganej kolumny &#39;</span><span class="si">{</span><span class="n">req_col</span><span class="si">}</span><span class="s2">&#39; w szablonie. Dostępne kolumny: </span><span class="si">{</span><span class="n">template_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+            
+            <span class="n">id_col</span> <span class="o">=</span> <span class="n">column_mapping</span><span class="p">[</span><span class="s1">&#39;team_id&#39;</span><span class="p">]</span>
+            <span class="n">name_col</span> <span class="o">=</span> <span class="n">column_mapping</span><span class="p">[</span><span class="s1">&#39;team_name&#39;</span><span class="p">]</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">id_to_name</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">template_df</span><span class="p">[</span><span class="n">id_col</span><span class="p">],</span> <span class="n">template_df</span><span class="p">[</span><span class="n">name_col</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name_to_id</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">template_df</span><span class="p">[</span><span class="n">name_col</span><span class="p">],</span> <span class="n">template_df</span><span class="p">[</span><span class="n">id_col</span><span class="p">]))</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano szablon z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id_to_name</span><span class="p">)</span><span class="si">}</span><span class="s2"> powiązaniami ID-nazwa drużyny.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+            
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie znaleziono pliku szablonu&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania szablonu: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="DataProcessor.validate_team_ids_in_file">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor.validate_team_ids_in_file">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_team_ids_in_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Weryfikuje spójność identyfikatorów drużyn z ich nazwami w pliku CSV.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda sprawdza, czy identyfikatory drużyn gospodarzy i gości odpowiadają</span>
+<span class="sd">        ich nazwom zgodnie z wczytanym szablonem mapowań. Wykrywa niezgodności</span>
+<span class="sd">        takie jak nieprawidłowe ID dla danej nazwy lub nieprawidłowa nazwa dla danego ID.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Ścieżka do pliku CSV, który ma zostać zweryfikowany</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Lista wykrytych błędów w formacie [(wiersz, opis_błędu), ...], </span>
+<span class="sd">                  gdzie wiersz to indeks DataFrame (wiersz - 1 w pliku CSV).</span>
+<span class="sd">                  Pusta lista oznacza brak błędów.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda wymaga wcześniejszego wywołania load_team_id_template()</span>
+<span class="sd">            - Weryfikowane są pary kolumn: home_team/home_team_id oraz away_team/away_team_id</span>
+<span class="sd">            - Plik CSV musi zawierać co najmniej jedną z tych par kolumn</span>
+<span class="sd">            - Wartości NaN są ignorowane podczas weryfikacji</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można wczytać pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Błąd wczytywania pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">errors</span>
+            
+            <span class="n">home_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;home_team&quot;</span><span class="p">,</span> <span class="s2">&quot;home_team_id&quot;</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="n">away_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;away_team&quot;</span><span class="p">,</span> <span class="s2">&quot;away_team_id&quot;</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">home_cols</span> <span class="ow">or</span> <span class="n">away_cols</span><span class="p">):</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> nie zawiera kolumn drużyn i ID do walidacji.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">errors</span>
+                
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">home_cols</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_check_team_id_consistency</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;home_team&quot;</span><span class="p">],</span> <span class="s2">&quot;home&quot;</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">errors</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">away_cols</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_check_team_id_consistency</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;away_team&quot;</span><span class="p">],</span> <span class="s2">&quot;away&quot;</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">errors</span><span class="p">)</span>
+                    
+            <span class="k">return</span> <span class="n">errors</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas walidacji pliku </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Błąd przetwarzania: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">errors</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_team_id_consistency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">team_id</span><span class="p">,</span> <span class="n">team_name</span><span class="p">,</span> <span class="n">team_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">row_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">errors</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sprawdza spójność identyfikatora drużyny z jej nazwą.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda pomocnicza, która weryfikuje zgodność pary (ID, nazwa) drużyny z mapowaniami </span>
+<span class="sd">        z szablonu. Wykrywa niezgodności w obu kierunkach mapowania. Błędy są dodawane</span>
+<span class="sd">        do przekazanej listy.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            team_id: Identyfikator drużyny do weryfikacji</span>
+<span class="sd">            team_name: Nazwa drużyny do weryfikacji</span>
+<span class="sd">            team_type (str): Typ drużyny (&quot;home&quot; lub &quot;away&quot;)</span>
+<span class="sd">            row_idx (int): Indeks wiersza w DataFrame, w którym sprawdzana jest para</span>
+<span class="sd">            errors (list): Lista, do której dodawane są wykryte błędy</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            None: Metoda nie zwraca wartości, a jedynie modyfikuje przekazaną listę errors</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda ignoruje wartości NaN</span>
+<span class="sd">            - Wykrywane są cztery rodzaje błędów:</span>
+<span class="sd">                1. Nieprawidłowy typ danych ID lub nazwy</span>
+<span class="sd">                2. Nieznane ID drużyny (nie istnieje w szablonie)</span>
+<span class="sd">                3. Nieznana nazwa drużyny (nie istnieje w szablonie)</span>
+<span class="sd">                4. Niezgodność między ID a nazwą (nie pasują do siebie)</span>
+<span class="sd">            - Błędy są dodawane do listy w formacie (indeks_wiersza, opis_błędu)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">team_id</span><span class="p">)</span> <span class="ow">or</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">team_name</span><span class="p">):</span>
+                <span class="k">return</span>
+                
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">team_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">team_id</span><span class="p">)</span>
+                <span class="n">team_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">team_name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">row_idx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Nieprawidłowy typ danych: </span><span class="si">{</span><span class="n">team_type</span><span class="si">}</span><span class="s2">_team_id=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">team_type</span><span class="si">}</span><span class="s2">_team=&#39;</span><span class="si">{</span><span class="n">team_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">))</span>
+                <span class="k">return</span>
+                
+            <span class="k">if</span> <span class="n">team_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_to_name</span><span class="p">:</span>
+                <span class="n">expected_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_to_name</span><span class="p">[</span><span class="n">team_id</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">team_name</span> <span class="o">!=</span> <span class="n">expected_name</span><span class="p">:</span>
+                    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">row_idx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">team_type</span><span class="si">}</span><span class="s2">_team_id=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2"> ma nazwę &#39;</span><span class="si">{</span><span class="n">team_name</span><span class="si">}</span><span class="s2">&#39;, powinno być &#39;</span><span class="si">{</span><span class="n">expected_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">row_idx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Nieznane </span><span class="si">{</span><span class="n">team_type</span><span class="si">}</span><span class="s2">_team_id=</span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+                
+            <span class="k">if</span> <span class="n">team_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_to_id</span><span class="p">:</span>
+                <span class="n">expected_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name_to_id</span><span class="p">[</span><span class="n">team_name</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">team_id</span> <span class="o">!=</span> <span class="n">expected_id</span><span class="p">:</span>
+                    <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">row_idx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">team_type</span><span class="si">}</span><span class="s2">_team=&#39;</span><span class="si">{</span><span class="n">team_name</span><span class="si">}</span><span class="s2">&#39; ma ID </span><span class="si">{</span><span class="n">team_id</span><span class="si">}</span><span class="s2">, powinno być </span><span class="si">{</span><span class="n">expected_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">row_idx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Nieznana nazwa </span><span class="si">{</span><span class="n">team_type</span><span class="si">}</span><span class="s2">_team=&#39;</span><span class="si">{</span><span class="n">team_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">))</span>
+                
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">row_idx</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Błąd podczas sprawdzania spójności: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+    
+<div class="viewcode-block" id="DataProcessor.validate_all_team_ids">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor.validate_all_team_ids">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_all_team_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Weryfikuje spójność identyfikatorów drużyn z ich nazwami we wszystkich plikach CSV.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda rekurencyjnie przeszukuje wszystkie katalogi w poszukiwaniu plików CSV</span>
+<span class="sd">        i weryfikuje spójność identyfikatorów drużyn z ich nazwami. Gromadzi statystyki</span>
+<span class="sd">        dotyczące liczby przetworzonych plików, plików z błędami i całkowitej liczby błędów.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli nie znaleziono błędów we wszystkich plikach,</span>
+<span class="sd">                  False jeśli wykryto błędy lub wystąpił problem podczas weryfikacji</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda automatycznie wczytuje szablon mapowań ID &lt;-&gt; nazwa</span>
+<span class="sd">            - Szczegółowe informacje o weryfikacji i wykrytych błędach są zapisywane w logach</span>
+<span class="sd">            - Błędy są raportowane z numerem wiersza w pliku (numeracja od 1, z uwzględnieniem nagłówka)</span>
+<span class="sd">            - Metoda aktualizuje atrybuty klasy: files_processed, files_with_errors i total_errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_team_id_template</span><span class="p">():</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie można przeprowadzić weryfikacji bez poprawnego szablonu ID drużyn.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="n">all_ok</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">files_processed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">files_with_errors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_errors</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;=== ROZPOCZĘCIE WERYFIKACJI SPÓJNOŚCI ID DRUŻYN ===&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rozpoczynam sprawdzanie powiązań ID drużyn w katalogu: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_dir</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">file_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">):</span>
+                        <span class="k">continue</span>
+                        
+                    <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">files_processed</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sprawdzanie pliku (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">files_processed</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    
+                    <span class="n">file_errors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_team_ids_in_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="n">file_errors</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">files_with_errors</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">total_errors</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_errors</span><span class="p">)</span>
+                        <span class="n">all_ok</span> <span class="o">=</span> <span class="kc">False</span>
+                        
+                        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">file_errors</span><span class="p">)</span><span class="si">}</span><span class="s2"> błędów w pliku: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">err_msg</span> <span class="ow">in</span> <span class="n">file_errors</span><span class="p">:</span>
+                            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Wiersz </span><span class="si">{</span><span class="n">row_idx</span><span class="o">+</span><span class="mi">2</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">err_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># +2 bo indeksujemy od 0, a wiersz 1 to nagłówki</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik poprawny: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;=== PODSUMOWANIE WERYFIKACJI ===&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przeszukano plików CSV: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">files_processed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">all_ok</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wszystkie pliki są poprawne. Nie znaleziono niezgodności.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">total_errors</span><span class="si">}</span><span class="s2"> błędów w </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">files_with_errors</span><span class="si">}</span><span class="s2"> plikach.&quot;</span><span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;=== ZAKOŃCZONO WERYFIKACJĘ SPÓJNOŚCI ID DRUŻYN ===&quot;</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">all_ok</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas weryfikacji katalogów: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+        
+<div class="viewcode-block" id="DataProcessor.for_name_return_id">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor.for_name_return_id">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">for_name_return_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_of_team</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zwraca identyfikator drużyny na podstawie jej nazwy.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda wczytuje plik mapowania drużyn i wyszukuje identyfikator odpowiadający</span>
+<span class="sd">        podanej nazwie drużyny. W przeciwieństwie do metody load_team_id_template(),</span>
+<span class="sd">        ta metoda jest przeznaczona do jednorazowych odwołań do identyfikatorów drużyn.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            name_of_team (str): Nazwa drużyny, dla której ma zostać odnaleziony identyfikator</span>
+<span class="sd">                </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            int lub None: Identyfikator drużyny (team_id) jeśli znaleziono w pliku mapowania,</span>
+<span class="sd">                         None jeśli nie znaleziono dopasowania lub wystąpił błąd</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda wczytuje plik mapowania przy każdym wywołaniu, co może być nieefektywne</span>
+<span class="sd">              przy wielokrotnych odwołaniach - w takim przypadku lepiej użyć load_team_id_template()</span>
+<span class="sd">            - Lokalizacja pliku: &quot;[project_root]/Data/Mecze/id_nazwa/rywale.csv&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_utils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;id_nazwa&quot;</span><span class="p">,</span> <span class="s2">&quot;rywale.csv&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie można wczytać pliku mapowania drużyn&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;team_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">name_of_team</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;team_id&quot;</span><span class="p">]</span>
+        
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="DataProcessor.add_team_ids_to_dataframe">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor.add_team_ids_to_dataframe">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_team_ids_to_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dodaje identyfikatory drużyn do DataFrame na podstawie ich nazw.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda analizuje DataFrame w poszukiwaniu kolumn z nazwami drużyn (home_team, away_team)</span>
+<span class="sd">        i dodaje odpowiadające im identyfikatory (home_team_id, away_team_id) poprzez</span>
+<span class="sd">        odwołanie do pliku mapowania drużyn.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame zawierający co najmniej kolumny home_team i away_team</span>
+<span class="sd">                              z nazwami drużyn</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Zaktualizowany DataFrame z dodanymi lub uzupełnionymi kolumnami</span>
+<span class="sd">                         home_team_id i away_team_id</span>
+<span class="sd">                         </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Jeśli kolumny ID już istnieją, są aktualizowane tylko brakujące wartości</span>
+<span class="sd">            - Metoda nie modyfikuje wartości ID, które już istnieją w DataFrame</span>
+<span class="sd">            - W przypadku braku dopasowania nazwy drużyny do ID, odpowiednie pole pozostaje NaN</span>
+<span class="sd">            - Metoda nie modyfikuje oryginalnego DataFrame, zwraca jego zaktualizowaną kopię</span>
+<span class="sd">            - Dla dużej liczby wierszy, metoda może być wolna ze względu na wczytywanie</span>
+<span class="sd">              pliku mapowania przy każdym odwołaniu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Przekazany DataFrame jest pusty&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">df</span>
+                
+            <span class="k">if</span> <span class="s2">&quot;home_team&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s2">&quot;away_team&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Brak wymaganych kolumn home_team i/lub away_team w DataFrame&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">df</span>
+                
+            <span class="c1"># Kopia DataFrame, aby nie modyfikować oryginału</span>
+            <span class="n">result_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="c1"># Inicjalizuj kolumny ID drużyn, jeśli nie istnieją</span>
+            <span class="k">if</span> <span class="s2">&quot;home_team_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">result_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">result_df</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span>
+                
+            <span class="k">if</span> <span class="s2">&quot;away_team_id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">result_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">result_df</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span>
+                
+            <span class="c1"># Dla każdego wiersza znajdź ID na podstawie nazwy drużyny</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="c1"># Dodaj ID drużyny gospodarzy, jeśli brakuje</span>
+                <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;home_team_id&quot;</span><span class="p">]):</span>
+                    <span class="n">home_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">for_name_return_id</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;home_team&quot;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">home_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">result_df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s2">&quot;home_team_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">home_id</span>
+                    
+                <span class="c1"># Dodaj ID drużyny gości, jeśli brakuje</span>
+                <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;away_team_id&quot;</span><span class="p">]):</span>
+                    <span class="n">away_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">for_name_return_id</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;away_team&quot;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">away_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">result_df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s2">&quot;away_team_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">away_id</span>
+            
+            <span class="k">return</span> <span class="n">result_df</span>
+                
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas dodawania ID drużyn do DataFrame: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">df</span></div>
+
+    
+<div class="viewcode-block" id="DataProcessor.round_numeric_columns">
+<a class="viewcode-back" href="../../api/data_processing.html#data_processing.data_processor.DataProcessor.round_numeric_columns">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">round_numeric_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zaokrągla wszystkie kolumny numeryczne w DataFrame do określonej liczby miejsc po przecinku.</span>
+<span class="sd">        </span>
+<span class="sd">        Metoda identyfikuje wszystkie kolumny numeryczne w DataFrame i zaokrągla ich wartości</span>
+<span class="sd">        do żądanej precyzji. Jest przydatna do ujednolicenia prezentacji danych liczbowych</span>
+<span class="sd">        oraz zmniejszenia rozmiaru plików.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            df (pd.DataFrame): DataFrame zawierający dane do zaokrąglenia</span>
+<span class="sd">            decimals (int, optional): Liczba miejsc po przecinku do zaokrąglenia (domyślnie: 3)</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Nowy DataFrame z zaokrąglonymi wartościami w kolumnach numerycznych</span>
+<span class="sd">                         lub oryginalny DataFrame, jeśli był pusty lub nie zawierał kolumn numerycznych</span>
+<span class="sd">                         </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Zaokrąglane są tylko kolumny typu float64 i int64</span>
+<span class="sd">            - Metoda nie modyfikuje oryginalnego DataFrame, zwraca jego zaktualizowaną kopię</span>
+<span class="sd">            - Dla kolumn typu int64, zaokrąglenie nie zmienia wartości, ale zapewnia spójność</span>
+<span class="sd">              w przypadku konwersji typów danych</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        
+        <span class="n">rounded_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">numeric_columns</span> <span class="o">=</span> <span class="n">rounded_df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float64&#39;</span><span class="p">,</span> <span class="s1">&#39;int64&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+        
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">numeric_columns</span><span class="p">:</span>
+            <span class="n">rounded_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">rounded_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">decimals</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">rounded_df</span>       </div>
+</div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">file_utils</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="p">()</span>
+    <span class="n">project_root</span> <span class="o">=</span> <span class="n">file_utils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">()</span>
+    <span class="n">data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">)</span>
+    <span class="n">processor</span> <span class="o">=</span> <span class="n">DataProcessor</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== PRZETWARZANIE DANYCH CSV ===&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Katalog źródłowy: </span><span class="si">{</span><span class="n">data_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Wybierz operację do wykonania:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1. Standaryzuj nazwy drużyn&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2. Usuń marżę z kursów bukmacherskich&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;3. Wykonaj obie operacje (1 + 2)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;4. Weryfikuj spójność ID drużyn&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;5. Wykonaj wszystkie operacje (1 + 2 + 4)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;0. Wyjdź bez zmian&quot;</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Twój wybór (0-5): &quot;</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">processed_files</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">names_updated</span> <span class="o">=</span> <span class="mi">0</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam standaryzację nazw drużyn...&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">data_dir</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">file</span> <span class="o">==</span> <span class="s2">&quot;rywale_polskie_nazwy.csv&quot;</span><span class="p">:</span>
+                            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomijam standaryzację pliku: </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> (zachowuję oryginalne nazwy polskie)&quot;</span><span class="p">)</span>
+                            <span class="k">continue</span>
+                        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                        <span class="n">processed_files</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przetwarzam plik (</span><span class="si">{</span><span class="n">processed_files</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">processor</span><span class="o">.</span><span class="n">standardize_team_names</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">):</span>
+                            <span class="n">names_updated</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zakończono standaryzację nazw drużyn.&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przetworzono plików: </span><span class="si">{</span><span class="n">processed_files</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zaktualizowano nazwy w </span><span class="si">{</span><span class="n">names_updated</span><span class="si">}</span><span class="s2"> plikach&quot;</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">processed_files</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">odds_updated</span> <span class="o">=</span> <span class="mi">0</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam usuwanie marży z kursów...&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">data_dir</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">):</span>
+                        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                        <span class="n">processed_files</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przetwarzam plik (</span><span class="si">{</span><span class="n">processed_files</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">processor</span><span class="o">.</span><span class="n">remove_bookmaker_margin</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+                            <span class="n">odds_updated</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zakończono usuwanie marży z kursów.&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przetworzono plików: </span><span class="si">{</span><span class="n">processed_files</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zmodyfikowano kursy w </span><span class="si">{</span><span class="n">odds_updated</span><span class="si">}</span><span class="s2"> plikach&quot;</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">process_all_files</span><span class="p">()</span>
+        
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">validate_all_team_ids</span><span class="p">()</span>
+            
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wykonywanie wszystkich operacji na plikach...&quot;</span><span class="p">)</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">process_all_files</span><span class="p">()</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">validate_all_team_ids</span><span class="p">()</span>
+        
+        <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wyjście bez zmian.&quot;</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nieprawidłowy wybór. Dozwolone opcje: 0-5.&quot;</span><span class="p">)</span>
+    
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nieprawidłowy format wyboru. Wprowadź liczbę od 0 do 5.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wystąpił nieoczekiwany błąd: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.opp_team.extended_stats &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.opp_team.extended_stats</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.opp_team.extended_stats</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">finall_dataframe.rm_team.season_calculator</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_all_opp_matches</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span>
+
+<div class="viewcode-block" id="calculate_OP_G_SCO_ALL">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_G_SCO_ALL">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_G_SCO_ALL</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza łączne gole strzelone przez przeciwnika w sezonie.</span>
+<span class="sd">    </span>
+<span class="sd">    Funkcja analizuje wszystkie mecze przeciwnika od początku poprzedniego sezonu</span>
+<span class="sd">    do daty konkretnego meczu i sumuje wszystkie gole strzelone przez tę drużynę.</span>
+<span class="sd">    Uwzględnia mecze domowe i wyjazdowe przeciwnika.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        opponent_id (int): ID drużyny przeciwnika w bazie danych</span>
+<span class="sd">        match_date (str/datetime): Data meczu, do której obliczamy statystyki</span>
+<span class="sd">        season_manager (SeasonManager): Obiekt zarządzający sezonami i datami</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        int/float: Łączna liczba goli strzelonych przez przeciwnika w sezonie.</span>
+<span class="sd">                  Zwraca 0 dla pierwszego sezonu lub braku meczów,</span>
+<span class="sd">                  np.nan w przypadku błędu lub braku danych</span>
+<span class="sd">    </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Uwzględnia tylko mecze od początku poprzedniego sezonu do daty meczu</span>
+<span class="sd">        - Dla pierwszego sezonu (brak poprzedniego) zwraca 0</span>
+<span class="sd">        - Automatycznie konwertuje daty na format datetime64[ns]</span>
+<span class="sd">        - Sumuje gole z meczów domowych (home_goals) i wyjazdowych (away_goals)</span>
+<span class="sd">        - Używa logowania błędów przez moduł helpers.logger</span>
+<span class="sd">        </span>
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; goals = calculate_OP_G_SCO_ALL(15, &quot;2023-03-15&quot;, season_manager)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Gole strzelone: {goals}&quot;)</span>
+<span class="sd">        45</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">current_season</span> <span class="o">=</span> <span class="n">season_manager</span><span class="o">.</span><span class="n">get_season</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+        <span class="n">previous_season</span> <span class="o">=</span> <span class="n">season_manager</span><span class="o">.</span><span class="n">get_previous_season</span><span class="p">(</span><span class="n">current_season</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">previous_season</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+            
+        <span class="n">opp_matches</span> <span class="o">=</span> <span class="n">get_all_opp_matches</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opp_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            
+        <span class="k">if</span> <span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="s1">&#39;datetime64[ns]&#39;</span><span class="p">:</span>
+            <span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        
+        <span class="n">filtered_matches</span> <span class="o">=</span> <span class="n">opp_matches</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">previous_season</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">])</span> <span class="o">&amp;</span> 
+            <span class="p">(</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">match_date</span><span class="p">)</span>
+        <span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        
+        <span class="n">home_games</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="p">[</span><span class="n">filtered_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opponent_id</span><span class="p">]</span>
+        <span class="n">away_games</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="p">[</span><span class="n">filtered_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opponent_id</span><span class="p">]</span>
+        
+        <span class="n">goals_scored</span> <span class="o">=</span> <span class="n">home_games</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">away_games</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">goals_scored</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd przy obliczaniu goli strzelonych dla przeciwnika </span><span class="si">{</span><span class="n">opponent_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_G_CON_ALL">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_G_CON_ALL">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_G_CON_ALL</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza łączne gole stracone przez przeciwnika w sezonie.</span>
+<span class="sd">    </span>
+<span class="sd">    Funkcja analizuje wszystkie mecze przeciwnika od początku poprzedniego sezonu</span>
+<span class="sd">    do daty konkretnego meczu i sumuje wszystkie gole stracone przez tę drużynę.</span>
+<span class="sd">    Uwzględnia mecze domowe i wyjazdowe przeciwnika.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        opponent_id (int): ID drużyny przeciwnika w bazie danych</span>
+<span class="sd">        match_date (str/datetime): Data meczu, do której obliczamy statystyki</span>
+<span class="sd">        season_manager (SeasonManager): Obiekt zarządzający sezonami i datami</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        int/float: Łączna liczba goli straconych przez przeciwnika w sezonie.</span>
+<span class="sd">                  Zwraca 0 dla pierwszego sezonu lub braku meczów,</span>
+<span class="sd">                  np.nan w przypadku błędu lub braku danych</span>
+<span class="sd">    </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Uwzględnia tylko mecze od początku poprzedniego sezonu do daty meczu</span>
+<span class="sd">        - Dla pierwszego sezonu (brak poprzedniego) zwraca 0</span>
+<span class="sd">        - Automatycznie konwertuje daty na format datetime64[ns]</span>
+<span class="sd">        - Sumuje gole stracone w meczach domowych (away_goals) i wyjazdowych (home_goals)</span>
+<span class="sd">        - Logika: w meczu domowym przeciwnik traci away_goals, w wyjazdowym home_goals</span>
+<span class="sd">        </span>
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; goals_conceded = calculate_OP_G_CON_ALL(15, &quot;2023-03-15&quot;, season_manager)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Gole stracone: {goals_conceded}&quot;)</span>
+<span class="sd">        32</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">current_season</span> <span class="o">=</span> <span class="n">season_manager</span><span class="o">.</span><span class="n">get_season</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+        <span class="n">previous_season</span> <span class="o">=</span> <span class="n">season_manager</span><span class="o">.</span><span class="n">get_previous_season</span><span class="p">(</span><span class="n">current_season</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">previous_season</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+            
+        <span class="n">opp_matches</span> <span class="o">=</span> <span class="n">get_all_opp_matches</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opp_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            
+        <span class="k">if</span> <span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="s1">&#39;datetime64[ns]&#39;</span><span class="p">:</span>
+            <span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        
+        <span class="n">filtered_matches</span> <span class="o">=</span> <span class="n">opp_matches</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">previous_season</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">])</span> <span class="o">&amp;</span> 
+            <span class="p">(</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">match_date</span><span class="p">)</span>
+        <span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        
+        <span class="n">home_games</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="p">[</span><span class="n">filtered_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opponent_id</span><span class="p">]</span>
+        <span class="n">away_games</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="p">[</span><span class="n">filtered_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opponent_id</span><span class="p">]</span>
+        
+        <span class="n">goals_conceded</span> <span class="o">=</span> <span class="n">home_games</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="n">away_games</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">goals_conceded</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd przy obliczaniu goli straconych dla przeciwnika </span><span class="si">{</span><span class="n">opponent_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_G_SCO_G_CON_RAT">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_G_SCO_G_CON_RAT">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_G_SCO_G_CON_RAT</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza stosunek goli strzelonych do straconych przez przeciwnika w sezonie.</span>
+<span class="sd">    </span>
+<span class="sd">    Funkcja wykorzystuje wcześniej obliczone gole strzelone i stracone przez przeciwnika</span>
+<span class="sd">    do wyliczenia wskaźnika skuteczności ofensywnej względem defensywnej.</span>
+<span class="sd">    Wyższy wskaźnik oznacza lepszą skuteczność ofensywną względem defensywy.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        opponent_id (int): ID drużyny przeciwnika w bazie danych</span>
+<span class="sd">        match_date (str/datetime): Data meczu, do której obliczamy statystyki</span>
+<span class="sd">        season_manager (SeasonManager): Obiekt zarządzający sezonami i datami</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Stosunek goli strzelonych do straconych.</span>
+<span class="sd">              Zwraca liczbę goli strzelonych jeśli nie stracono żadnego gola,</span>
+<span class="sd">              0 jeśli nie strzelono ani nie stracono goli,</span>
+<span class="sd">              np.nan w przypadku błędu</span>
+<span class="sd">    </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Wykorzystuje funkcje calculate_OP_G_SCO_ALL i calculate_OP_G_CON_ALL</span>
+<span class="sd">        - W przypadku 0 straconych goli zwraca liczbę strzelonych (unika dzielenia przez 0)</span>
+<span class="sd">        - Wskaźnik &gt; 1.0 oznacza więcej goli strzelonych niż straconych</span>
+<span class="sd">        - Wskaźnik &lt; 1.0 oznacza więcej goli straconych niż strzelonych</span>
+<span class="sd">        </span>
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; ratio = calculate_OP_G_SCO_G_CON_RAT(15, &quot;2023-03-15&quot;, season_manager)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Stosunek goli: {ratio:.2f}&quot;)</span>
+<span class="sd">        1.41</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">goals_scored</span> <span class="o">=</span> <span class="n">calculate_OP_G_SCO_ALL</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">)</span>
+        <span class="n">goals_conceded</span> <span class="o">=</span> <span class="n">calculate_OP_G_CON_ALL</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">goals_conceded</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">goals_scored</span> <span class="k">if</span> <span class="n">goals_scored</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        
+        <span class="k">return</span> <span class="n">goals_scored</span> <span class="o">/</span> <span class="n">goals_conceded</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd przy obliczaniu stosunku goli dla przeciwnika </span><span class="si">{</span><span class="n">opponent_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_ODD_W_L5">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_ODD_W_L5">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_ODD_W_L5</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średni kurs na wygraną przeciwnika z ostatnich 5 meczów.</span>
+<span class="sd">    </span>
+<span class="sd">    Funkcja analizuje ostatnie 5 meczów przeciwnika przed daną datą i oblicza</span>
+<span class="sd">    średni kurs bukmacherski na wygraną tej drużyny. Uwzględnia kursy z meczów</span>
+<span class="sd">    domowych i wyjazdowych.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        opponent_id (int): ID drużyny przeciwnika w bazie danych</span>
+<span class="sd">        match_date (str/datetime): Data meczu, przed którą szukamy ostatnich 5 meczów</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średni kurs na wygraną przeciwnika z ostatnich 5 meczów.</span>
+<span class="sd">              Zwraca np.nan jeśli brak danych, meczów lub kursów</span>
+<span class="sd">    </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Wymaga kolumn &#39;home_odds&#39; i &#39;away_odds&#39; w danych meczowych</span>
+<span class="sd">        - Uwzględnia tylko mecze przed podaną datą</span>
+<span class="sd">        - Sortuje mecze chronologicznie i bierze ostatnie 5</span>
+<span class="sd">        - Dla meczów domowych używa &#39;home_odds&#39;, dla wyjazdowych &#39;away_odds&#39;</span>
+<span class="sd">        - Automatycznie pomija wartości NaN przy obliczaniu średniej</span>
+<span class="sd">        </span>
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; odds = calculate_OP_ODD_W_L5(15, &quot;2023-03-15&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Średni kurs na wygraną: {odds:.2f}&quot;)</span>
+<span class="sd">        2.15</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">opp_matches</span> <span class="o">=</span> <span class="n">get_all_opp_matches</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opp_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            
+        <span class="c1"># Sprawdź czy kolumny z kursami istnieją</span>
+        <span class="k">if</span> <span class="s1">&#39;home_odds&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opp_matches</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s1">&#39;away_odds&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opp_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+        <span class="n">filtered_matches</span> <span class="o">=</span> <span class="n">opp_matches</span><span class="p">[</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">match_date</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;match_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+        <span class="n">home_games</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="p">[</span><span class="n">filtered_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opponent_id</span><span class="p">]</span>
+        <span class="n">away_games</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="p">[</span><span class="n">filtered_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opponent_id</span><span class="p">]</span>
+        
+        <span class="n">win_odds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">home_games</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">win_odds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">home_games</span><span class="p">[</span><span class="s1">&#39;home_odds&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">away_games</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">win_odds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">away_games</span><span class="p">[</span><span class="s1">&#39;away_odds&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">win_odds</span><span class="p">)</span> <span class="k">if</span> <span class="n">win_odds</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd przy obliczaniu kursów na wygraną dla przeciwnika </span><span class="si">{</span><span class="n">opponent_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+<div class="viewcode-block" id="calculate_OP_ODD_L_L5">
+<a class="viewcode-back" href="../../../api/finall_dataframe.opp_team.html#finall_dataframe.opp_team.extended_stats.calculate_OP_ODD_L_L5">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_OP_ODD_L_L5</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Oblicza średni kurs na porażkę przeciwnika z ostatnich 5 meczów.</span>
+<span class="sd">    </span>
+<span class="sd">    Funkcja analizuje ostatnie 5 meczów przeciwnika przed daną datą i oblicza</span>
+<span class="sd">    średni kurs bukmacherski na porażkę tej drużyny. Uwzględnia kursy z meczów</span>
+<span class="sd">    domowych i wyjazdowych, gdzie porażka oznacza wygraną przeciwnej drużyny.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        opponent_id (int): ID drużyny przeciwnika w bazie danych</span>
+<span class="sd">        match_date (str/datetime): Data meczu, przed którą szukamy ostatnich 5 meczów</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Średni kurs na porażkę przeciwnika z ostatnich 5 meczów.</span>
+<span class="sd">              Zwraca np.nan jeśli brak danych, meczów lub kursów</span>
+<span class="sd">    </span>
+<span class="sd">    Notes:</span>
+<span class="sd">        - Wymaga kolumn &#39;home_odds&#39; i &#39;away_odds&#39; w danych meczowych</span>
+<span class="sd">        - Uwzględnia tylko mecze przed podaną datą</span>
+<span class="sd">        - Sortuje mecze chronologicznie i bierze ostatnie 5</span>
+<span class="sd">        - Dla meczów domowych przeciwnika używa &#39;away_odds&#39; (porażka = wygrana gościa)</span>
+<span class="sd">        - Dla meczów wyjazdowych przeciwnika używa &#39;home_odds&#39; (porażka = wygrana gospodarza)</span>
+<span class="sd">        - Automatycznie pomija wartości NaN przy obliczaniu średniej</span>
+<span class="sd">        </span>
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; loss_odds = calculate_OP_ODD_L_L5(15, &quot;2023-03-15&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Średni kurs na porażkę: {loss_odds:.2f}&quot;)</span>
+<span class="sd">        1.85</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">opp_matches</span> <span class="o">=</span> <span class="n">get_all_opp_matches</span><span class="p">(</span><span class="n">opponent_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opp_matches</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            
+        <span class="c1"># Sprawdź czy kolumny z kursami istnieją</span>
+        <span class="k">if</span> <span class="s1">&#39;home_odds&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opp_matches</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s1">&#39;away_odds&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opp_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+        <span class="n">filtered_matches</span> <span class="o">=</span> <span class="n">opp_matches</span><span class="p">[</span><span class="n">opp_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">match_date</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;match_date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_matches</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+        <span class="n">home_games</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="p">[</span><span class="n">filtered_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opponent_id</span><span class="p">]</span>
+        <span class="n">away_games</span> <span class="o">=</span> <span class="n">filtered_matches</span><span class="p">[</span><span class="n">filtered_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">opponent_id</span><span class="p">]</span>
+        
+        <span class="n">loss_odds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">home_games</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">loss_odds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">home_games</span><span class="p">[</span><span class="s1">&#39;away_odds&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">away_games</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">loss_odds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">away_games</span><span class="p">[</span><span class="s1">&#39;home_odds&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">loss_odds</span><span class="p">)</span> <span class="k">if</span> <span class="n">loss_odds</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd przy obliczaniu kursów na porażkę dla przeciwnika </span><span class="si">{</span><span class="n">opponent_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

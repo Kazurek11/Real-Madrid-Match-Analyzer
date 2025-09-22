@@ -1,0 +1,426 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_players.data_loader &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_players.data_loader</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.rm_players.data_loader</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Moduł ładowania danych dla analizy zawodników Real Madryt.</span>
+
+<span class="sd">Ten moduł odpowiada za wczytywanie, walidację i wstępne przetwarzanie</span>
+<span class="sd">wszystkich plików danych wymaganych do analizy statystyk zawodników</span>
+<span class="sd">Real Madryt, włączając mecze, statystyki indywidualne i dane historyczne.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">warning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.file_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileUtils</span>
+
+<div class="viewcode-block" id="DataLoader">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataLoader</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ładowarka danych dla kompleksowej analizy zawodników Real Madryt.</span>
+<span class="sd">    </span>
+<span class="sd">    Odpowiada za wczytywanie, walidację i synchronizację wszystkich źródeł</span>
+<span class="sd">    danych wymaganych do obliczania statystyk zawodników, form, ocen</span>
+<span class="sd">    i wydajności w różnych okresach czasowych.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        base_path (str): Ścieżka bazowa do katalogu z danymi</span>
+<span class="sd">        real_path (str): Ścieżka do katalogu z danymi Real Madryt</span>
+<span class="sd">        data_cache (dict): Pamięć podręczna wczytanych plików</span>
+<span class="sd">        </span>
+<span class="sd">        matches (pd.DataFrame): Statystyki meczowe Real Madryt</span>
+<span class="sd">        individual (pd.DataFrame): Indywidualne statystyki zawodników</span>
+<span class="sd">        players (pd.DataFrame): Podstawowe dane zawodników</span>
+<span class="sd">        players_stats (pd.DataFrame): Zagregowane statystyki zawodników</span>
+<span class="sd">        old_matches (pd.DataFrame): Historyczne dane meczowe</span>
+<span class="sd">        all_matches (pd.DataFrame): Wszystkie mecze La Liga</span>
+<span class="sd">        </span>
+<span class="sd">        min_date_individual (pd.Timestamp): Najwcześniejsza data w danych indywidualnych</span>
+<span class="sd">        min_date_matches (pd.Timestamp): Najwcześniejsza data w danych meczowych</span>
+<span class="sd">        common_min_date (pd.Timestamp): Najwcześniejsza wspólna data obu zbiorów</span>
+<span class="sd">        common_dates (set): Zbiór dat występujących w obu źródłach</span>
+<span class="sd">        filtered_matches (pd.DataFrame): Mecze z datami wspólnymi</span>
+<span class="sd">        filtered_individual (pd.DataFrame): Statystyki indywidualne z datami wspólnymi</span>
+<span class="sd">        </span>
+<span class="sd">    Data Sources:</span>
+<span class="sd">        - RM_all_matches_stats.csv: Kompletne statystyki meczowe RM</span>
+<span class="sd">        - RM_individual_stats.csv: Indywidualne występy zawodników</span>
+<span class="sd">        - RM_players.csv: Podstawowe informacje o zawodnikach</span>
+<span class="sd">        - RM_players_stats.csv: Zagregowane statystyki zawodników</span>
+<span class="sd">        - RM_old_editor_data.csv: Historyczne dane meczowe</span>
+<span class="sd">        - all_matches.csv: Kontekst meczów całej La Liga</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje ładowarkę danych dla analizy zawodników.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            base_path (str, optional): Niestandardowa ścieżka do katalogu danych.</span>
+<span class="sd">                                     Domyślnie używa Data/ w katalogu głównym projektu.</span>
+<span class="sd">                        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Przygotowuje strukturę katalogów do wczytywania danych</span>
+<span class="sd">            - Inicjalizuje pustą pamięć podręczną dla optymalizacji</span>
+<span class="sd">            - Nie wczytuje danych automatycznie - wymaga wywołania load_all_data()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="n">base_path</span> <span class="k">if</span> <span class="n">base_path</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FileUtils</span><span class="o">.</span><span class="n">get_project_root</span><span class="p">(),</span> <span class="s2">&quot;Data&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">real_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_path</span><span class="p">,</span> <span class="s2">&quot;Real&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_cache</span> <span class="o">=</span> <span class="p">{}</span>
+        
+<div class="viewcode-block" id="DataLoader.load_csv">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.load_csv">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje pojedynczy plik CSV z pamięcią podręczną i obsługą błędów.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            file_path (str): Pełna ścieżka do pliku CSV do wczytania</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Wczytane dane w postaci DataFrame. W przypadku błędu</span>
+<span class="sd">                         zwraca pusty DataFrame z odpowiednimi logami błędów.</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Wykorzystuje pamięć podręczną dla optymalizacji wielokrotnych wywołań</span>
+<span class="sd">            - Zawsze zwraca kopię danych aby uniknąć przypadkowych modyfikacji</span>
+<span class="sd">            - Używa FileUtils.load_csv_safe dla bezpiecznego wczytywania</span>
+<span class="sd">            - Loguje błędy bez przerywania wykonania programu</span>
+<span class="sd">            </span>
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; loader = DataLoader()</span>
+<span class="sd">            &gt;&gt;&gt; matches_df = loader.load_csv(&quot;Data/Real/RM_all_matches_stats.csv&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_cache</span><span class="p">[</span><span class="n">file_path</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">FileUtils</span><span class="o">.</span><span class="n">load_csv_safe</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_cache</span><span class="p">[</span><span class="n">file_path</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span>
+            <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie udało się wczytać pliku </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+    
+<div class="viewcode-block" id="DataLoader.load_all_data">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.load_all_data">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_all_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wczytuje wszystkie wymagane pliki danych dla analizy zawodników.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DataLoader: Referencję do bieżącego obiektu z wczytanymi danymi</span>
+<span class="sd">            </span>
+<span class="sd">        Process:</span>
+<span class="sd">            1. Wczytuje 6 głównych plików CSV z danymi Real Madryt i La Liga</span>
+<span class="sd">            2. Wykonuje wstępne przetwarzanie danych (daty, wartości null)</span>
+<span class="sd">            3. Oblicza minimalne daty dla każdego zbioru danych</span>
+<span class="sd">            4. Synchronizuje daty między zbiorami i tworzy przefiltrowane wersje</span>
+<span class="sd">            5. Loguje podsumowanie wczytanych danych</span>
+<span class="sd">            </span>
+<span class="sd">        Data Files Loaded:</span>
+<span class="sd">            - matches: Statystyki wszystkich meczów Real Madryt</span>
+<span class="sd">            - individual: Indywidualne występy każdego zawodnika w każdym meczu</span>
+<span class="sd">            - players: Podstawowe dane zawodników (ID, imię, pozycja)</span>
+<span class="sd">            - players_stats: Zagregowane statystyki zawodników</span>
+<span class="sd">            - old_matches: Historyczne dane meczowe dla kontekstu</span>
+<span class="sd">            - all_matches: Wszystkie mecze La Liga dla analizy przeciwników</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Automatycznie uruchamia preprocessing i synchronizację dat</span>
+<span class="sd">            - Tworzy przefiltrowane wersje z tylko wspólnymi datami</span>
+<span class="sd">            - Obsługuje błędy gracefully - puste DataFrame przy problemach</span>
+<span class="sd">            - Wszystkie dane dostępne jako atrybuty po zakończeniu</span>
+<span class="sd">            </span>
+<span class="sd">        Raises:</span>
+<span class="sd">            Nie podnosi wyjątków - błędy są logowane i zastępowane pustymi DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam wczytywanie wszystkich danych dla analizy zawodników&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_path</span><span class="p">,</span> <span class="s2">&quot;RM_all_matches_stats.csv&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_path</span><span class="p">,</span> <span class="s2">&quot;RM_individual_stats.csv&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">players</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_path</span><span class="p">,</span> <span class="s2">&quot;RM_players.csv&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">players_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_path</span><span class="p">,</span> <span class="s2">&quot;RM_players_stats.csv&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_path</span><span class="p">,</span> <span class="s2">&quot;Old&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_old_editor_data.csv&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_path</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;all_season&quot;</span><span class="p">,</span> <span class="s2">&quot;merged_matches&quot;</span><span class="p">,</span> <span class="s2">&quot;all_matches.csv&quot;</span><span class="p">))</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wczytano pliki danych:&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Mecze RM: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Statystyki indywidualne: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span> 
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Zawodnicy: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Statystyki zawodników: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players_stats</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Historyczne mecze: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Wszystkie mecze La Liga: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess_data</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_date_individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="s2">&quot;match_date&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">NaT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_date_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="s2">&quot;match_date&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="n">pd</span><span class="o">.</span><span class="n">NaT</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_find_common_dates</span><span class="p">()</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Zakończono wczytywanie i przetwarzanie danych&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_common_dates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Synchronizuje daty między zbiorami danych meczowych i indywidualnych.</span>
+<span class="sd">        </span>
+<span class="sd">        Process:</span>
+<span class="sd">            1. Ekstraktuje unikalne daty z obu głównych zbiorów danych</span>
+<span class="sd">            2. Znajduje przecięcie dat występujących w obu źródłach</span>
+<span class="sd">            3. Określa najwcześniejszą wspólną datę jako punkt startowy analizy</span>
+<span class="sd">            4. Tworzy przefiltrowane wersje danych zawierające tylko wspólne daty</span>
+<span class="sd">            5. Loguje szczegółowe informacje o synchronizacji</span>
+<span class="sd">            </span>
+<span class="sd">        Creates:</span>
+<span class="sd">            - common_dates (set): Zbiór dat w formacie YYYY-MM-DD wspólnych dla obu źródeł</span>
+<span class="sd">            - common_min_date (pd.Timestamp): Najwcześniejsza data wspólna</span>
+<span class="sd">            - filtered_matches (pd.DataFrame): Mecze tylko z wspólnymi datami</span>
+<span class="sd">            - filtered_individual (pd.DataFrame): Statystyki indywidualne z wspólnymi datami</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Kluczowe dla zapewnienia spójności analizy czasowej</span>
+<span class="sd">            - Eliminuje mecze bez danych o zawodnikach i vice versa</span>
+<span class="sd">            - Obsługuje przypadki braku wspólnych dat z odpowiednimi ostrzeżeniami</span>
+<span class="sd">            - Format daty: YYYY-MM-DD dla porównań string-based</span>
+<span class="sd">            </span>
+<span class="sd">        Logging:</span>
+<span class="sd">            - Informuje o liczbie znalezionych wspólnych dat</span>
+<span class="sd">            - Pokazuje najwcześniejszą wspólną datę</span>
+<span class="sd">            - Raportuje rozmiary przefiltrowanych zbiorów</span>
+<span class="sd">            - Ostrzega o problemach z synchronizacją</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Jeden z wymaganych zbiorów danych jest pusty - brak synchronizacji dat&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">common_min_date</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">common_dates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+                <span class="k">return</span>
+                
+            <span class="n">matches_dates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">))</span>
+            <span class="n">individual_dates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">))</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">common_dates</span> <span class="o">=</span> <span class="n">matches_dates</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">individual_dates</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">common_dates</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Nie znaleziono wspólnych dat między zbiorami danych&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">common_min_date</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+                <span class="k">return</span>
+                
+            <span class="bp">self</span><span class="o">.</span><span class="n">common_min_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">common_dates</span><span class="p">))</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">common_dates</span><span class="p">)</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s2">&quot;match_date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">common_dates</span><span class="p">)</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Synchronizacja dat zakończona pomyślnie:&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Wspólne daty: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">common_dates</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Najwcześniejsza wspólna data: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">common_min_date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Mecze po filtracji: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Statystyki indywidualne po filtracji: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas synchronizacji dat: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">common_min_date</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">common_dates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_preprocess_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wykonuje wstępne przetwarzanie i czyszczenie wczytanych danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Process:</span>
+<span class="sd">            1. Konwertuje kolumny &#39;match_date&#39; do formatu pandas datetime</span>
+<span class="sd">            2. Zastępuje wszystkie wartości NaN wartością 0 dla spójności obliczeń</span>
+<span class="sd">            3. Zapewnia jednolity format danych we wszystkich zbiorach</span>
+<span class="sd">            </span>
+<span class="sd">        Applied To:</span>
+<span class="sd">            - matches: Statystyki meczowe Real Madryt</span>
+<span class="sd">            - individual: Indywidualne statystyki zawodników  </span>
+<span class="sd">            - old_matches: Historyczne dane meczowe</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Metoda prywatna wywoływana automatycznie przez load_all_data()</span>
+<span class="sd">            - Kluczowa dla zapewnienia spójności formatów dat</span>
+<span class="sd">            - Eliminuje problemy z obliczeniami na wartościach null</span>
+<span class="sd">            - Modyfikuje dane in-place dla wydajności</span>
+<span class="sd">            - Pomija zbiory bez kolumny &#39;match_date&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam wstępne przetwarzanie danych&quot;</span><span class="p">)</span>
+        
+        <span class="n">datasets_to_process</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s2">&quot;matches&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;individual&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">),</span> 
+            <span class="p">(</span><span class="s2">&quot;old_matches&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span><span class="p">)</span>
+        <span class="p">]</span>
+        
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">datasets_to_process</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zbiór </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> jest pusty - pomijam przetwarzanie&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+                
+            <span class="k">if</span> <span class="s1">&#39;match_date&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">])</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skonwertowano daty w zbiorze </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="n">null_count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zastąpiono </span><span class="si">{</span><span class="n">null_count</span><span class="si">}</span><span class="s2"> wartości null w zbiorze </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Zakończono wstępne przetwarzanie danych&quot;</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="DataLoader.get_data_summary">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_loader.DataLoader.get_data_summary">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zwraca szczegółowe podsumowanie wczytanych i przetworzonych danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik zawierający metryki wszystkich wczytanych zbiorów danych:</span>
+<span class="sd">                - dataset_sizes: Rozmiary poszczególnych zbiorów</span>
+<span class="sd">                - date_ranges: Zakresy dat dla zbiorów zawierających daty</span>
+<span class="sd">                - common_data_info: Informacje o synchronizacji dat</span>
+<span class="sd">                - data_quality: Metryki jakości danych</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;dataset_sizes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;matches&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;matches&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;individual&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;individual&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;players&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;players&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;players_stats&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players_stats</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;players_stats&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;old_matches&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;old_matches&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;all_matches&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_matches</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;all_matches&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;date_ranges&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;matches&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_date_matches</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;matches&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;individual&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_date_individual</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;individual&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;common_data_info&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;common_dates_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">common_dates</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;common_dates&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;common_min_date&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">common_min_date</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;common_min_date&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;filtered_matches_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_matches</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;filtered_matches&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;filtered_individual_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;filtered_individual&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,992 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_team package &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=2827c288"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../genindex.html" />
+    <link rel="search" title="Szukaj" href="../search.html" />
+    <link rel="next" title="helpers package" href="helpers.html" />
+    <link rel="prev" title="finall_dataframe.rm_players package" href="finall_dataframe.rm_players.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_processing.html">data_processing package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="finall_dataframe.html">finall_dataframe package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="finall_dataframe.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.opp_team.html">finall_dataframe.opp_team package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_h2h.html">finall_dataframe.rm_h2h package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="finall_dataframe.rm_players.html">finall_dataframe.rm_players package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">finall_dataframe.rm_team package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.html#module-finall_dataframe.main">finall_dataframe.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="finall_dataframe.html#module-finall_dataframe">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html">helpers package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RM.html">RM package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+          <li class="breadcrumb-item"><a href="finall_dataframe.html">finall_dataframe package</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_team package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/finall_dataframe.rm_team.rst.txt" rel="nofollow"> Zobacz źródło strony</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="finall-dataframe-rm-team-package">
+<h1>finall_dataframe.rm_team package<a class="headerlink" href="#finall-dataframe-rm-team-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-finall_dataframe.rm_team.analyzer">
+<span id="finall-dataframe-rm-team-analyzer-module"></span><h2>finall_dataframe.rm_team.analyzer module<a class="headerlink" href="#module-finall_dataframe.rm_team.analyzer" title="Link to this heading"></a></h2>
+<p>Główny moduł analizy drużyny Real Madryt.</p>
+<p>Ten moduł łączy analizę zawodników z analizą drużynową, obliczając statystyki
+trenera, wydajność przeciwko różnym typom przeciwników oraz metryki sezonowe.
+Generuje kompletny DataFrame z wszystkimi metrykami potrzebnymi do analizy.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.analyzer.</span></span><span class="sig-name descname"><span class="pre">RealMadridTeamAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">team_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/analyzer.html#RealMadridTeamAnalyzer"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Główna klasa analizy drużyny Real Madryt.</p>
+<p>Łączy dane zawodników z analizą drużynową, obliczając kompleksowe
+statystyki obejmujące trenera, wydajność sezonową i metryki przeciwko
+różnym typom przeciwników. Generuje gotowy DataFrame do machine learning.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.team_id">
+<span class="sig-name descname"><span class="pre">team_id</span></span><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.team_id" title="Link to this definition"></a></dt>
+<dd><p>ID drużyny (1 dla Real Madryt)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.base_df">
+<span class="sig-name descname"><span class="pre">base_df</span></span><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.base_df" title="Link to this definition"></a></dt>
+<dd><p>Podstawowy DataFrame z analizy zawodników</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.df_prepared">
+<span class="sig-name descname"><span class="pre">df_prepared</span></span><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.df_prepared" title="Link to this definition"></a></dt>
+<dd><p>DataFrame rozszerzony o kolumny drużynowe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.coach_manager">
+<span class="sig-name descname"><span class="pre">coach_manager</span></span><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.coach_manager" title="Link to this definition"></a></dt>
+<dd><p>Manager danych trenerów</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#finall_dataframe.rm_team.coach_manager.CoachManager" title="finall_dataframe.rm_team.coach_manager.CoachManager">CoachManager</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.stats_calculator">
+<span class="sig-name descname"><span class="pre">stats_calculator</span></span><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.stats_calculator" title="Link to this definition"></a></dt>
+<dd><p>Kalkulator statystyk meczowych</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#finall_dataframe.rm_team.stats_calculator.StatsCalculator" title="finall_dataframe.rm_team.stats_calculator.StatsCalculator">StatsCalculator</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.season_calculator">
+<span class="sig-name descname"><span class="pre">season_calculator</span></span><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.season_calculator" title="Link to this definition"></a></dt>
+<dd><p>Kalkulator statystyk sezonowych</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator" title="finall_dataframe.rm_team.season_calculator.SeasonCalculator">SeasonCalculator</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.df_first_date">
+<span class="sig-name descname"><span class="pre">df_first_date</span></span><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.df_first_date" title="Link to this definition"></a></dt>
+<dd><p>Data pierwszego meczu w analizie</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>datetime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.analyze">
+<span class="sig-name descname"><span class="pre">analyze</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/analyzer.html#RealMadridTeamAnalyzer.analyze"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.analyze" title="Link to this definition"></a></dt>
+<dd><p>Główna metoda analizy drużyny Real Madryt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Kompletny DataFrame z analizą zawodników i drużyny</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-odd">Wyrzuca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – Gdy base_df nie został ustawiony</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wykonuje pełny pipeline analizy:
+1. Przygotowanie DataFrame z dodatkowymi kolumnami
+2. Obliczenie statystyk dla wszystkich meczów
+3. Wypełnienie DataFrame obliczonymi wartościami</p></li>
+<li><p>Wymaga wcześniejszego wywołania set_base_dataframe()</p></li>
+<li><p>Łączy analizę zawodników z metrykami drużynowymi</p></li>
+<li><p>Zwraca gotowy DataFrame do dalszego przetwarzania</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.calculate_match_statistics">
+<span class="sig-name descname"><span class="pre">calculate_match_statistics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/analyzer.html#RealMadridTeamAnalyzer.calculate_match_statistics"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.calculate_match_statistics" title="Link to this definition"></a></dt>
+<dd><p>Oblicza statystyki dla wszystkich meczów Real Madryt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Słownik {match_id: {kolumna: wartość}} ze statystykami</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Przetwarza tylko mecze po dacie df_first_date</p></li>
+<li><p>Dla każdego meczu oblicza:
+* ID trenera i jego oceny (ostatni sezon, ostatnie 5 meczów)
+* Statystyki ostatnich 5 meczów (gole, punkty, różnica bramek)
+* Średnie sezonowe punktów na mecz
+* Wydajność przeciwko drużynom TOP/MID/LOW</p></li>
+<li><p>Obsługuje błędy z fallback do wartości NaN</p></li>
+<li><p>Zaokrągla wszystkie wartości do 3 miejsc po przecinku</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.fill_dataframe_with_stats">
+<span class="sig-name descname"><span class="pre">fill_dataframe_with_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_stats_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/analyzer.html#RealMadridTeamAnalyzer.fill_dataframe_with_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.fill_dataframe_with_stats" title="Link to this definition"></a></dt>
+<dd><p>Wypełnia DataFrame obliczonymi statystykami drużynowymi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_stats_dict</strong> (<em>dict</em>) – Słownik ze statystykami dla każdego meczu</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z wypełnionymi statystykami drużynowymi</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Mapuje statystyki na podstawie MATCH_ID</p></li>
+<li><p>Zachowuje wszystkie istniejące dane z analizy zawodników</p></li>
+<li><p>Wypełnia tylko te wiersze, dla których istnieją statystyki</p></li>
+<li><p>Pozostawia NaN dla meczów bez obliczonych statystyk</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.prepare_dataframe">
+<span class="sig-name descname"><span class="pre">prepare_dataframe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/analyzer.html#RealMadridTeamAnalyzer.prepare_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.prepare_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Przygotowuje DataFrame z dodatkowymi kolumnami drużynowymi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Zwraca<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame z dodanymi kolumnami zdefiniowanymi w COLUMNS_TO_ADD</p>
+</dd>
+<dt class="field-even">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+<dt class="field-odd">Wyrzuca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – Gdy base_df nie został ustawiony</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wymaga wcześniejszego wywołania set_base_dataframe()</p></li>
+<li><p>Kopiuje bazowy DataFrame zawodników</p></li>
+<li><p>Dodaje wszystkie kolumny wymagane dla analizy drużynowej</p></li>
+<li><p>Inicjalizuje nowe kolumny z wartościami NaN</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.set_base_dataframe">
+<span class="sig-name descname"><span class="pre">set_base_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/analyzer.html#RealMadridTeamAnalyzer.set_base_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.set_base_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Ustawia bazowy DataFrame z analizy zawodników.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame z analizy zawodników</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Konwertuje kolumnę M_DATE do datetime jeśli potrzeba</p></li>
+<li><p>Ustawia df_first_date jako punkt odniesienia czasowego</p></li>
+<li><p>Przygotowuje DataFrame do dalszej analizy drużynowej</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.setup_data_sources">
+<span class="sig-name descname"><span class="pre">setup_data_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/analyzer.html#RealMadridTeamAnalyzer.setup_data_sources"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.setup_data_sources" title="Link to this definition"></a></dt>
+<dd><p>Inicjalizuje źródła danych dla analizy drużynowej.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Wyrzuca<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>FileNotFoundError</strong> – Gdy brak wymaganych plików CSV</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Wczytuje dane trenerów z RM_coach.csv</p></li>
+<li><p>Wczytuje mecze RM z RM_all_matches_stats.csv</p></li>
+<li><p>Wczytuje mecze przeciwników z all_matches.csv</p></li>
+<li><p>Konwertuje daty do formatu datetime64[ns]</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.setup_managers">
+<span class="sig-name descname"><span class="pre">setup_managers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/analyzer.html#RealMadridTeamAnalyzer.setup_managers"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.analyzer.RealMadridTeamAnalyzer.setup_managers" title="Link to this definition"></a></dt>
+<dd><p>Inicjalizuje klasy zarządzające różnymi aspektami analizy.</p>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>CoachManager: zarządzanie danymi trenerów (ID, okresy kadencji)</p></li>
+<li><p>StatsCalculator: obliczenia statystyk ostatnich meczów i ocen trenerów</p></li>
+<li><p>SeasonCalculator: metryki sezonowe i przeciwko poziomom drużyn (TOP/MID/LOW)</p></li>
+<li><p>SeasonManager: zarządzanie datami sezonów La Liga</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_team.coach_manager">
+<span id="finall-dataframe-rm-team-coach-manager-module"></span><h2>finall_dataframe.rm_team.coach_manager module<a class="headerlink" href="#module-finall_dataframe.rm_team.coach_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.coach_manager.CoachManager">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.coach_manager.</span></span><span class="sig-name descname"><span class="pre">CoachManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coach_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/coach_manager.html#CoachManager"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.coach_manager.CoachManager" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa zarządzająca danymi trenerów Real Madryt</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.coach_manager.CoachManager.get_coach_id_by_date">
+<span class="sig-name descname"><span class="pre">get_coach_id_by_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/coach_manager.html#CoachManager.get_coach_id_by_date"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.coach_manager.CoachManager.get_coach_id_by_date" title="Link to this definition"></a></dt>
+<dd><p>Zwraca ID trenera Real Madryt aktywnego w określonej dacie.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>ID trenera lub None jeśli nie znaleziono</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int/None</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Sprawdza przedział start_date &lt;= match_date &lt;= end_date</p></li>
+<li><p>Zwraca pierwszego pasującego trenera</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.coach_manager.CoachManager.get_coach_id_by_name">
+<span class="sig-name descname"><span class="pre">get_coach_id_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coach_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/coach_manager.html#CoachManager.get_coach_id_by_name"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.coach_manager.CoachManager.get_coach_id_by_name" title="Link to this definition"></a></dt>
+<dd><p>Zwraca ID trenera na podstawie nazwy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>coach_name</strong> (<em>str</em>) – Nazwa trenera</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>ID trenera lub None jeśli nie znaleziono</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int/None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.coach_manager.CoachManager.get_coach_name_by_id">
+<span class="sig-name descname"><span class="pre">get_coach_name_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coach_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/coach_manager.html#CoachManager.get_coach_name_by_id"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.coach_manager.CoachManager.get_coach_name_by_id" title="Link to this definition"></a></dt>
+<dd><p>Zwraca nazwę trenera na podstawie ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>coach_id</strong> (<em>int</em>) – ID trenera</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nazwa trenera lub None jeśli nie znaleziono</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str/None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.coach_manager.CoachManager.validate_coach_exists">
+<span class="sig-name descname"><span class="pre">validate_coach_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coach_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/coach_manager.html#CoachManager.validate_coach_exists"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.coach_manager.CoachManager.validate_coach_exists" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza czy trener istnieje w bazie danych.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>coach_id</strong> (<em>int</em>) – ID trenera do sprawdzenia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli trener istnieje, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Loguje błąd jeśli trener nie istnieje</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_team.config">
+<span id="finall-dataframe-rm-team-config-module"></span><h2>finall_dataframe.rm_team.config module<a class="headerlink" href="#module-finall_dataframe.rm_team.config" title="Link to this heading"></a></h2>
+<p>Konfiguracja modułu analizy drużyny Real Madryt.</p>
+<p>Ten moduł zawiera wszystkie stałe używane w analizie statystyk drużynowych,
+ocen trenerów i wydajności przeciwko różnym typom przeciwników.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.config.SPECIAL_DATA">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.config.</span></span><span class="sig-name descname"><span class="pre">SPECIAL_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#finall_dataframe.rm_team.config.SPECIAL_DATA" title="Link to this definition"></a></dt>
+<dd><p>Przykład kategoryzacji drużyn na podstawie PPM:
+- TOP: Real Madrid, Barcelona, Atletico (PPM &gt;= 1.9)
+- MID: Valencia, Sevilla, Real Sociedad (1.2 &lt;= PPM &lt; 1.9)
+- LOW: Drużyny walczące o utrzymanie (PPM &lt; 1.2)</p>
+<p>Kolumny są generowane dla każdego meczu Realu Madryt i zawierają:
+1. Informacje o trenerze i jego formie
+2. Statystyki ofensywne/defensywne z ostatnich meczów
+3. Wydajność punktową w różnych kontekstach
+4. Specjalistyczne metryki przeciwko różnym poziomom przeciwników</p>
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_team.data_imputer">
+<span id="finall-dataframe-rm-team-data-imputer-module"></span><h2>finall_dataframe.rm_team.data_imputer module<a class="headerlink" href="#module-finall_dataframe.rm_team.data_imputer" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.data_imputer.DataFrameImputer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.data_imputer.</span></span><span class="sig-name descname"><span class="pre">DataFrameImputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/data_imputer.html#DataFrameImputer"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.data_imputer.DataFrameImputer" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Klasa odpowiedzialna za inteligentne uzupełnianie brakujących
+wartości (NaN) w finalnym zbiorze danych.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_h2h_stats">
+<span class="sig-name descname"><span class="pre">impute_h2h_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/data_imputer.html#DataFrameImputer.impute_h2h_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_h2h_stats" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_opponent_stats">
+<span class="sig-name descname"><span class="pre">impute_opponent_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/data_imputer.html#DataFrameImputer.impute_opponent_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_opponent_stats" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_player_stats">
+<span class="sig-name descname"><span class="pre">impute_player_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/data_imputer.html#DataFrameImputer.impute_player_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_player_stats" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_remaining">
+<span class="sig-name descname"><span class="pre">impute_remaining</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/data_imputer.html#DataFrameImputer.impute_remaining"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.data_imputer.DataFrameImputer.impute_remaining" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.data_imputer.DataFrameImputer.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/data_imputer.html#DataFrameImputer.run"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.data_imputer.DataFrameImputer.run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_team.season_calculator">
+<span id="finall-dataframe-rm-team-season-calculator-module"></span><h2>finall_dataframe.rm_team.season_calculator module<a class="headerlink" href="#module-finall_dataframe.rm_team.season_calculator" title="Link to this heading"></a></h2>
+<p>Kalkulator statystyk sezonowych dla drużyn La Liga.</p>
+<p>Moduł oblicza średnie punktów na mecz oraz wydajność przeciwko drużynom
+różnych poziomów na podstawie ich PPM (punktów na mecz).
+Obsługuje zarówno Real Madryt jak i inne drużyny La Liga.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.SeasonCalculator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.season_calculator.</span></span><span class="sig-name descname"><span class="pre">SeasonCalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rm_matches</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">season_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#SeasonCalculator"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Kalkulator statystyk sezonowych dla drużyn La Liga.</p>
+<p>Oblicza średnie punktów na mecz, goli oraz wydajność przeciwko
+drużynom różnych poziomów (TOP/MID/LOW) na podstawie ich PPM.
+Obsługuje specjalne przypadki dla Real Madryt oraz uniwersalne
+obliczenia dla pozostałych drużyn.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_goals_against_low">
+<span class="sig-name descname"><span class="pre">calculate_team_goals_against_low</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#SeasonCalculator.calculate_team_goals_against_low"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_goals_against_low" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnią goli na mecz przeciwko drużynom LOW tier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Średnia goli na mecz przeciwko drużynom LOW (PPM &lt; 1.2)</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>LOW tier: drużyny z niskim PPM poniżej 1.2 (słabe drużyny)</p></li>
+<li><p>Uwzględnia tylko mecze z poprzedniego sezonu przed match_date</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_goals_against_mid">
+<span class="sig-name descname"><span class="pre">calculate_team_goals_against_mid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#SeasonCalculator.calculate_team_goals_against_mid"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_goals_against_mid" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnią goli na mecz przeciwko drużynom MID tier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Średnia goli na mecz przeciwko drużynom MID (1.2 &lt;= PPM &lt; 1.9)</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>MID tier: drużyny ze średnim PPM między 1.2 a 1.9</p></li>
+<li><p>Uwzględnia tylko mecze z poprzedniego sezonu przed match_date</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_goals_against_top">
+<span class="sig-name descname"><span class="pre">calculate_team_goals_against_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#SeasonCalculator.calculate_team_goals_against_top"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_goals_against_top" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnią goli na mecz przeciwko drużynom TOP tier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Średnia goli na mecz przeciwko drużynom TOP (PPM &gt;= 1.9)</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>TOP tier: drużyny z PPM &gt;= 1.9 (silne drużyny)</p></li>
+<li><p>Uwzględnia tylko mecze z poprzedniego sezonu przed match_date</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_against_low">
+<span class="sig-name descname"><span class="pre">calculate_team_points_against_low</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#SeasonCalculator.calculate_team_points_against_low"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_against_low" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnią punktów na mecz przeciwko drużynom LOW tier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Średnia punktów na mecz przeciwko drużynom LOW (PPM &lt; 1.2)</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>LOW tier: drużyny z niskim PPM poniżej 1.2 (słabe drużyny)</p></li>
+<li><p>Uwzględnia tylko mecze z poprzedniego sezonu przed match_date</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_against_mid">
+<span class="sig-name descname"><span class="pre">calculate_team_points_against_mid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#SeasonCalculator.calculate_team_points_against_mid"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_against_mid" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnią punktów na mecz przeciwko drużynom MID tier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Średnia punktów na mecz przeciwko drużynom MID (1.2 &lt;= PPM &lt; 1.9)</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>MID tier: drużyny ze średnim PPM między 1.2 a 1.9</p></li>
+<li><p>Uwzględnia tylko mecze z poprzedniego sezonu przed match_date</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_against_top">
+<span class="sig-name descname"><span class="pre">calculate_team_points_against_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#SeasonCalculator.calculate_team_points_against_top"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_against_top" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnią punktów na mecz przeciwko drużynom TOP tier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Średnia punktów na mecz przeciwko drużynom TOP (PPM &gt;= 1.9)</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>TOP tier: drużyny z PPM &gt;= 1.9 (silne drużyny)</p></li>
+<li><p>Uwzględnia tylko mecze z poprzedniego sezonu przed match_date</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_per_match_season">
+<span class="sig-name descname"><span class="pre">calculate_team_points_per_match_season</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#SeasonCalculator.calculate_team_points_per_match_season"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_points_per_match_season" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnią punktów na mecz drużyny w poprzednim sezonie.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Średnia punktów na mecz lub 0 jeśli brak danych</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float/int</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Dla Real Madryt (ID=1) używa kolumny «real_result» (1=wygrana, 0.5=remis, 0=porażka)</p></li>
+<li><p>Dla innych drużyn oblicza na podstawie porównania home_goals vs away_goals</p></li>
+<li><p>Zwraca 0 dla pierwszego sezonu (brak poprzedniego sezonu)</p></li>
+<li><p>Filtruje mecze od początku poprzedniego sezonu do match_date (wyłącznie)</p></li>
+<li><p>Uwzględnia 3 punkty za wygraną, 1 punkt za remis, 0 za porażkę</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_stats_against_tier">
+<span class="sig-name descname"><span class="pre">calculate_team_stats_against_tier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_ppm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ppm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#SeasonCalculator.calculate_team_stats_against_tier"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.SeasonCalculator.calculate_team_stats_against_tier" title="Link to this definition"></a></dt>
+<dd><p>Oblicza statystyki drużyny przeciwko przeciwnikom o określonym poziomie PPM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p></li>
+<li><p><strong>min_ppm</strong> (<em>float</em>) – Minimalna wartość PPM przeciwnika dla kategorii</p></li>
+<li><p><strong>max_ppm</strong> (<em>float</em><em>, </em><em>optional</em>) – Maksymalna wartość PPM przeciwnika (None = bez limitu)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>(średnia_goli_na_mecz, średnia_punktów_na_mecz) lub (False, False) przy błędzie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Filtruje przeciwników na podstawie ich PPM (Points Per Match)</p></li>
+<li><p>PPM_H = PPM gospodarza, PPM_A = PPM gościa</p></li>
+<li><p>Jeśli max_ppm=None, uwzględnia wszystkich powyżej min_ppm</p></li>
+<li><p>Zwraca (np.nan, np.nan) jeśli brak meczów w kategorii</p></li>
+<li><p>Dla RM używa kolumn «goals» i «real_result»</p></li>
+<li><p>Dla innych drużyn oblicza gole i punkty na podstawie home/away_goals</p></li>
+<li><p>Specjalny przypadek dla pierwszego sezonu (2019-2020)</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.season_calculator.get_all_opp_matches">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.season_calculator.</span></span><span class="sig-name descname"><span class="pre">get_all_opp_matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">team_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/season_calculator.html#get_all_opp_matches"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.season_calculator.get_all_opp_matches" title="Link to this definition"></a></dt>
+<dd><p>Pobiera wszystkie mecze określonej drużyny z bazy danych.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>team_id</strong> (<em>int</em>) – ID drużyny</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z meczami lub None jeśli brak danych</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame/None</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Zwraca mecze gdzie drużyna występuje jako gospodarz lub gość</p></li>
+<li><p>Loguje błąd jeśli brak meczów dla podanego ID</p></li>
+<li><p>Używa pliku all_matches.csv z połączonymi danymi sezonowymi</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_team.stats_calculator">
+<span id="finall-dataframe-rm-team-stats-calculator-module"></span><h2>finall_dataframe.rm_team.stats_calculator module<a class="headerlink" href="#module-finall_dataframe.rm_team.stats_calculator" title="Link to this heading"></a></h2>
+<p>Kalkulator statystyk drużynowych i trenerskich.</p>
+<p>Moduł oblicza średnie ocen trenerów, statystyki ofensywne/defensywne
+oraz wydajność punktową dla Real Madryt i przeciwników na podstawie
+ostatnich meczów i poprzednich sezonów.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.stats_calculator.StatsCalculator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.stats_calculator.</span></span><span class="sig-name descname"><span class="pre">StatsCalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rm_matches</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opp_matches</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">season_manager</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/stats_calculator.html#StatsCalculator"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.stats_calculator.StatsCalculator" title="Link to this definition"></a></dt>
+<dd><p>Klasy bazowe: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Kalkulator statystyk drużynowych i trenerskich.</p>
+<p>Oblicza średnie ocen trenerów, statystyki meczowe oraz wydajność
+przeciwko różnym typom przeciwników na podstawie danych historycznych.
+Obsługuje zarówno Real Madryt jak i drużyny przeciwników.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.stats_calculator.StatsCalculator.rm_matches">
+<span class="sig-name descname"><span class="pre">rm_matches</span></span><a class="headerlink" href="#finall_dataframe.rm_team.stats_calculator.StatsCalculator.rm_matches" title="Link to this definition"></a></dt>
+<dd><p>Dane meczów Real Madryt z preprocessowanymi kolumnami</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.stats_calculator.StatsCalculator.opp_matches">
+<span class="sig-name descname"><span class="pre">opp_matches</span></span><a class="headerlink" href="#finall_dataframe.rm_team.stats_calculator.StatsCalculator.opp_matches" title="Link to this definition"></a></dt>
+<dd><p>Dane wszystkich meczów La Liga</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.stats_calculator.StatsCalculator.season_manager">
+<span class="sig-name descname"><span class="pre">season_manager</span></span><a class="headerlink" href="#finall_dataframe.rm_team.stats_calculator.StatsCalculator.season_manager" title="Link to this definition"></a></dt>
+<dd><p>Manager do zarządzania datami sezonów</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_coach_rating_last_5">
+<span class="sig-name descname"><span class="pre">calculate_coach_rating_last_5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/stats_calculator.html#StatsCalculator.calculate_coach_rating_last_5"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_coach_rating_last_5" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnią ocenę trenera z ostatnich 5 meczów.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Średnia ocena trenera z ostatnich 5 meczów lub False/0 przy błędzie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float/False</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Filtruje mecze przed match_date</p></li>
+<li><p>Sortuje malejąco po dacie i bierze pierwsze 5 meczów</p></li>
+<li><p>Sprawdza poprawność danych przez check_NaN_column_in_RM_matches</p></li>
+<li><p>Zwraca 0 jeśli brak meczów</p></li>
+<li><p>Używa kolumny RM_COACH_RATING do obliczeń</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_coach_rating_last_season">
+<span class="sig-name descname"><span class="pre">calculate_coach_rating_last_season</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coach_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/stats_calculator.html#StatsCalculator.calculate_coach_rating_last_season"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_coach_rating_last_season" title="Link to this definition"></a></dt>
+<dd><p>Oblicza średnią ocenę trenera z poprzedniego sezonu.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coach_id</strong> (<em>int</em>) – ID trenera (nieużywane w obecnej implementacji)</p></li>
+<li><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Średnia ocena trenera lub NaN jeśli brak danych</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float/np.nan</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Dla pierwszego sezonu używa danych z SEASON_DATES[0]</p></li>
+<li><p>Filtruje mecze z niepustymi ocenami trenera (RM_COACH_RATING)</p></li>
+<li><p>Zwraca NaN jeśli brak ocen w poprzednim sezonie</p></li>
+<li><p>Konwertuje daty do datetime64[ns] jeśli potrzeba</p></li>
+<li><p>Loguje informacje o liczbie meczów i średniej ocenie</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_last_5_stats">
+<span class="sig-name descname"><span class="pre">calculate_last_5_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matches_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/stats_calculator.html#StatsCalculator.calculate_last_5_stats"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.stats_calculator.StatsCalculator.calculate_last_5_stats" title="Link to this definition"></a></dt>
+<dd><p>Oblicza statystyki z ostatnich X meczów dla określonej drużyny.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>match_date</strong> (<em>str/datetime</em>) – Data meczu jako punkt odniesienia</p></li>
+<li><p><strong>team_id</strong> (<em>int</em>) – ID drużyny (1 dla Real Madryt, inne dla przeciwników)</p></li>
+<li><p><strong>matches_count</strong> (<em>int</em>) – Liczba ostatnich meczów do analizy (domyślnie 5)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>Słownik ze statystykami lub False przy błędzie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict/False</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Dla team_id=1 używa _calculate_real_madrid_last_5()</p></li>
+<li><p>Dla innych team_id używa _calculate_opponent_last_5()</p></li>
+<li><p>Zwracany słownik zawiera klucze z prefiksem <a href="#id1"><span class="problematic" id="id2">RM_</span></a> lub <a href="#id3"><span class="problematic" id="id4">OP_</span></a></p></li>
+<li><p>Statystyki obejmują: gole strzelone/stracone, różnicę bramek, PPM, PPM przeciwników</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_team.utils">
+<span id="finall-dataframe-rm-team-utils-module"></span><h2>finall_dataframe.rm_team.utils module<a class="headerlink" href="#module-finall_dataframe.rm_team.utils" title="Link to this heading"></a></h2>
+<p>Funkcje narzędziowe do walidacji danych i sprawdzania typów.</p>
+<p>Moduł zawiera funkcje pomocnicze do sprawdzania typów kolumn,
+wykrywania wartości NaN, konwersji typów danych oraz dodawania
+brakujących kolumn do DataFrame’ów używanych w analizie drużynowej.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.utils.add_missing_columns">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.utils.</span></span><span class="sig-name descname"><span class="pre">add_missing_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns_to_add</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/utils.html#add_missing_columns"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.utils.add_missing_columns" title="Link to this definition"></a></dt>
+<dd><p>Dodaje brakujące kolumny do DataFrame z wartościami NaN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do rozszerzenia</p></li>
+<li><p><strong>columns_to_add</strong> (<em>list</em>) – Lista nazw kolumn do dodania</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>DataFrame z dodanymi kolumnami lub oryginalny jeśli brak nowych</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Sprawdza które kolumny z listy nie istnieją w df</p></li>
+<li><p>Inicjalizuje nowe kolumny z wartościami np.nan</p></li>
+<li><p>Zachowuje indeks oryginalnego DataFrame</p></li>
+<li><p>Używa pd.concat() do łączenia kolumn</p></li>
+<li><p>Zwraca oryginalny DataFrame jeśli wszystkie kolumny już istnieją</p></li>
+<li><p>Nowe kolumny są dodawane po prawej stronie</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.utils.check_NAN_in_dataframe">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.utils.</span></span><span class="sig-name descname"><span class="pre">check_NAN_in_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/utils.html#check_NAN_in_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.utils.check_NAN_in_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza obecność wartości NaN w określonej kolumnie DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do sprawdzenia</p></li>
+<li><p><strong>column_name</strong> (<em>str</em>) – Nazwa kolumny do sprawdzenia</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli kolumna zawiera NaN, False jeśli nie zawiera lub kolumna nie istnieje</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Używa pandas.isnull() do wykrywania NaN</p></li>
+<li><p>Loguje informacje o wynikach sprawdzenia</p></li>
+<li><p>Zwraca False i loguje błąd jeśli kolumna nie istnieje</p></li>
+<li><p>Nie modyfikuje danych, tylko sprawdza</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.utils.check_NaN_column_in_RM_matches">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.utils.</span></span><span class="sig-name descname"><span class="pre">check_NaN_column_in_RM_matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/utils.html#check_NaN_column_in_RM_matches"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.utils.check_NaN_column_in_RM_matches" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza i uzupełnia wartości NaN w kluczowych kolumnach meczów RM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataframe</strong> (<em>pd.DataFrame</em>) – DataFrame z danymi meczów Real Madryt</p>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli nie znaleziono NaN, False jeśli znaleziono i uzupełniono</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Sprawdza kluczowe kolumny: daty, drużyny, gole, punkty, oceny</p></li>
+<li><p>Automatycznie uzupełnia NaN wartościami 0</p></li>
+<li><p>Modyfikuje DataFrame in-place przy uzupełnianiu</p></li>
+<li><p>Używa konfiguracji kolumn z config.py</p></li>
+<li><p>Loguje informacje o znalezionych i uzupełnionych NaN</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="finall_dataframe.rm_team.utils.check_type_in_dataframe">
+<span class="sig-prename descclassname"><span class="pre">finall_dataframe.rm_team.utils.</span></span><span class="sig-name descname"><span class="pre">check_type_in_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/finall_dataframe/rm_team/utils.html#check_type_in_dataframe"><span class="viewcode-link"><span class="pre">[źródło]</span></span></a><a class="headerlink" href="#finall_dataframe.rm_team.utils.check_type_in_dataframe" title="Link to this definition"></a></dt>
+<dd><p>Sprawdza typ kolumny w DataFrame i konwertuje jeśli potrzeba.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parametry<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame do sprawdzenia</p></li>
+<li><p><strong>column_name</strong> (<em>str</em>) – Nazwa kolumny do sprawdzenia</p></li>
+<li><p><strong>expected_type</strong> (<em>str</em>) – Oczekiwany typ danych (np. «datetime64[ns]»)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Zwraca<span class="colon">:</span></dt>
+<dd class="field-even"><p>True jeśli typ jest poprawny lub udało się skonwertować, False w przeciwnym razie</p>
+</dd>
+<dt class="field-odd">Typ zwracany<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Uwagi</p>
+<ul class="simple">
+<li><p>Automatycznie próbuje konwertować datetime gdy expected_type=»datetime64[ns]»</p></li>
+<li><p>Modyfikuje DataFrame in-place przy konwersji datetime</p></li>
+<li><p>Loguje informacje o typach i próbach konwersji</p></li>
+<li><p>Zwraca False jeśli kolumna nie istnieje</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="module-finall_dataframe.rm_team">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-finall_dataframe.rm_team" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="finall_dataframe.rm_players.html" class="btn btn-neutral float-left" title="finall_dataframe.rm_players package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Poprzedni</a>
+        <a href="helpers.html" class="btn btn-neutral float-right" title="helpers package" accesskey="n" rel="next">Następny <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

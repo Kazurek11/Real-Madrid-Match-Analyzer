@@ -1,0 +1,630 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_players.statistics_calculator &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_players.statistics_calculator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.rm_players.statistics_calculator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">warning</span>
+
+<div class="viewcode-block" id="StatisticsCalculator">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StatisticsCalculator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Klasa obliczająca różne statystyki zawodników&quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">,</span> <span class="n">player_manager</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje kalkulator statystyk zawodników.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            data_loader: Dostawca danych z meczów i statystyk</span>
+<span class="sd">            season_manager: Manager sezonów do określania dat</span>
+<span class="sd">            player_manager: Manager zawodników do obsługi danych personalnych</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Inicjalizuje dostęp do przefiltrowanych i oryginalnych danych</span>
+<span class="sd">            - Przechowuje cache dla zoptymalizowanego dostępu</span>
+<span class="sd">            - Automatycznie konfiguruje źródła danych</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span> <span class="o">=</span> <span class="n">data_loader</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span> <span class="o">=</span> <span class="n">season_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span> <span class="o">=</span> <span class="n">player_manager</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dates_without_season</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_combined_data</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_data_access</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_data_access</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje dostęp do wszystkich źródeł danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Preferuje przefiltrowane dane nad oryginalnymi</span>
+<span class="sd">            - Zapewnia fallback do oryginalnych danych</span>
+<span class="sd">            - Ustawia atrybuty dla szybkiego dostępu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="o">.</span><span class="n">individual</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="o">.</span><span class="n">matches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="o">.</span><span class="n">old_matches</span>
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="p">,</span> <span class="s1">&#39;filtered_individual&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="o">.</span><span class="n">filtered_individual</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="o">.</span><span class="n">filtered_individual</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span>
+            
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="p">,</span> <span class="s1">&#39;filtered_matches&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="o">.</span><span class="n">filtered_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span><span class="o">.</span><span class="n">filtered_matches</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span>
+    
+<div class="viewcode-block" id="StatisticsCalculator.get_player_rating">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_player_rating">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_player_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">number_of_matches</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pobiera średnią ocenę zawodnika z ostatnich N meczów.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            player_id (int): ID zawodnika</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            number_of_matches (int): Liczba ostatnich meczów do uwzględnienia</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Średnia ocena z ostatnich N meczów lub 0</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Preferuje kolumnę &#39;rating&#39; nad &#39;editor_rating&#39;</span>
+<span class="sd">            - Uwzględnia tylko mecze z is_value &gt; 0 jeśli kolumna istnieje</span>
+<span class="sd">            - Używa ogólnej średniej jako fallback</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">player_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_name</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">player_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+            
+            <span class="n">match_date_dt</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+            <span class="n">last_n_matches</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">match_date_dt</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+                <span class="n">by</span><span class="o">=</span><span class="s1">&#39;match_date&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">number_of_matches</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">last_n_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;is_value&#39;</span> <span class="ow">in</span> <span class="n">last_n_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="n">valid_matches</span> <span class="o">=</span> <span class="n">last_n_matches</span><span class="p">[</span><span class="n">last_n_matches</span><span class="p">[</span><span class="s1">&#39;is_value&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="s1">&#39;rating&#39;</span> <span class="ow">in</span> <span class="n">valid_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="n">valid_matches</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                        <span class="k">elif</span> <span class="s1">&#39;editor_rating&#39;</span> <span class="ow">in</span> <span class="n">valid_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="n">valid_matches</span><span class="p">[</span><span class="s1">&#39;editor_rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s1">&#39;rating&#39;</span> <span class="ow">in</span> <span class="n">last_n_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">last_n_matches</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="s1">&#39;editor_rating&#39;</span> <span class="ow">in</span> <span class="n">last_n_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">last_n_matches</span><span class="p">[</span><span class="s1">&#39;editor_rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="s1">&#39;is_value&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">valid_all_matches</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;is_value&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">valid_all_matches</span> <span class="o">=</span> <span class="n">data</span>
+                
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_all_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;rating&#39;</span> <span class="ow">in</span> <span class="n">valid_all_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">valid_all_matches</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="s1">&#39;editor_rating&#39;</span> <span class="ow">in</span> <span class="n">valid_all_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">valid_all_matches</span><span class="p">[</span><span class="s1">&#39;editor_rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas pobierania oceny dla zawodnika </span><span class="si">{</span><span class="n">player_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+
+    
+<div class="viewcode-block" id="StatisticsCalculator.is_player_in_previous_season">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.is_player_in_previous_season">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_player_in_previous_season</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">min_minutes</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sprawdza czy zawodnik grał w poprzednim sezonie.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            player_id (int): ID zawodnika</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            min_minutes (int): Minimalna liczba minut do uznania za aktywnego</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True jeśli zawodnik grał wystarczająco w poprzednim sezonie</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Używa oryginalnych danych (nie przefiltrowanych)</span>
+<span class="sd">            - Sprawdza sumę minut w poprzednim sezonie</span>
+<span class="sd">            - Zwraca False dla pierwszego sezonu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">player_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_name</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">player_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            
+            <span class="n">season</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span><span class="o">.</span><span class="n">get_season</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">season</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="n">prev_season</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span><span class="o">.</span><span class="n">get_previous_season</span><span class="p">(</span><span class="n">season</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">prev_season</span> <span class="ow">or</span> <span class="n">prev_season</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="n">prev_season_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">)</span> <span class="o">&amp;</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">prev_season</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">])</span> <span class="o">&amp;</span> 
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">prev_season</span><span class="p">[</span><span class="s2">&quot;end_date&quot;</span><span class="p">])</span>
+            <span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">prev_season_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="k">if</span> <span class="s1">&#39;player_min&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prev_season_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+                
+            <span class="n">total_minutes</span> <span class="o">=</span> <span class="n">prev_season_data</span><span class="p">[</span><span class="s2">&quot;player_min&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">total_minutes</span> <span class="o">&gt;=</span> <span class="n">min_minutes</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas sprawdzania obecności zawodnika w poprzednim sezonie: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="StatisticsCalculator.get_last_season_rating">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_last_season_rating">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_last_season_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pobiera średnią ocenę zawodnika z poprzedniego sezonu.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            player_id (int): ID zawodnika</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Średnia ocena z poprzedniego sezonu lub 0</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Dla pierwszego sezonu używa starych danych</span>
+<span class="sd">            - Sprawdza aktywność zawodnika w poprzednim sezonie</span>
+<span class="sd">            - Fallback do średniej sezonowej jeśli brak danych zawodnika</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">player_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_name</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">player_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="n">season</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span><span class="o">.</span><span class="n">get_season</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">season</span><span class="p">:</span>
+                <span class="n">date_str</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">date_str</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dates_without_season</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_dates_without_season</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">date_str</span><span class="p">)</span>
+                    <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie znaleziono sezonu dla daty </span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="n">prev_season</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span><span class="o">.</span><span class="n">get_previous_season</span><span class="p">(</span><span class="n">season</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">prev_season</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="n">prev_season</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_old_data_rating</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+                
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_player_in_previous_season</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+                <span class="n">prev_season_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">)</span> <span class="o">&amp;</span> 
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">prev_season</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">])</span> <span class="o">&amp;</span> 
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">prev_season</span><span class="p">[</span><span class="s2">&quot;end_date&quot;</span><span class="p">])</span>
+                <span class="p">]</span>
+                
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">prev_season_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s1">&#39;is_value&#39;</span> <span class="ow">in</span> <span class="n">prev_season_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="n">valid_data</span> <span class="o">=</span> <span class="n">prev_season_data</span><span class="p">[</span><span class="n">prev_season_data</span><span class="p">[</span><span class="s1">&#39;is_value&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_data</span><span class="o">.</span><span class="n">empty</span> <span class="ow">and</span> <span class="s1">&#39;editor_rating&#39;</span> <span class="ow">in</span> <span class="n">valid_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                            <span class="k">return</span> <span class="n">valid_data</span><span class="p">[</span><span class="s1">&#39;editor_rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="s1">&#39;editor_rating&#39;</span> <span class="ow">in</span> <span class="n">prev_season_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">prev_season_data</span><span class="p">[</span><span class="s1">&#39;editor_rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_avg_season_rating</span><span class="p">(</span><span class="n">prev_season</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas pobierania oceny z poprzedniego sezonu: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_old_data_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pobiera ocenę zawodnika ze starych danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            player_id (int): ID zawodnika</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Średnia ocena ze starych danych lub 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">player_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_name</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">player_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="n">player_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">player_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="k">if</span> <span class="s1">&#39;is_value&#39;</span> <span class="ow">in</span> <span class="n">player_data</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;editor_rating&#39;</span> <span class="ow">in</span> <span class="n">player_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">valid_data</span> <span class="o">=</span> <span class="n">player_data</span><span class="p">[</span><span class="n">player_data</span><span class="p">[</span><span class="s1">&#39;is_value&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">valid_data</span><span class="p">[</span><span class="s1">&#39;editor_rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="s1">&#39;editor_rating&#39;</span> <span class="ow">in</span> <span class="n">player_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">player_data</span><span class="p">[</span><span class="s1">&#39;editor_rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+                
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas pobierania starszych danych: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_avg_season_rating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">season</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza średnią ocenę dla całego sezonu.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            season (dict): Słownik z informacjami o sezonie</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Średnia ocena sezonu lub 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">season</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">season</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="n">season_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">season</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">])</span> <span class="o">&amp;</span> 
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">season</span><span class="p">[</span><span class="s2">&quot;end_date&quot;</span><span class="p">])</span>
+            <span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">season_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="k">if</span> <span class="s1">&#39;editor_rating&#39;</span> <span class="ow">in</span> <span class="n">season_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">season_matches</span><span class="p">[</span><span class="s1">&#39;editor_rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas pobierania średniej oceny sezonu: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+    
+<div class="viewcode-block" id="StatisticsCalculator.get_player_win_ratio">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_player_win_ratio">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_player_win_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza procent zwycięstw zawodnika w meczach pierwszej drużyny.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            player_id (int): ID zawodnika</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Procent zwycięstw (0-100) lub 0</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Uwzględnia tylko mecze pierwszej drużyny (is_first_squad = 1)</span>
+<span class="sd">            - Sprawdza wynik Real Madryt (team_id = 1)</span>
+<span class="sd">            - Oblicza na podstawie meczów przed podaną datą</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">player_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_name</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">player_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Brak przefiltrowanych danych indywidualnych&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="k">if</span> <span class="s1">&#39;player_name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumna &#39;player_name&#39; nie istnieje. Dostępne: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[:</span><span class="mi">5</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">0</span>
+            
+            <span class="n">player_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="p">[</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">)</span> <span class="o">&amp;</span> 
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">match_date</span><span class="p">))</span>
+            <span class="p">]</span>
+            
+            <span class="k">if</span> <span class="s1">&#39;is_first_squad&#39;</span> <span class="ow">in</span> <span class="n">player_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">player_matches</span> <span class="o">=</span> <span class="n">player_matches</span><span class="p">[</span><span class="n">player_matches</span><span class="p">[</span><span class="s1">&#39;is_first_squad&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">player_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="n">required_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">,</span> <span class="s1">&#39;away_team_id&#39;</span><span class="p">,</span> <span class="s1">&#39;home_goals&#39;</span><span class="p">,</span> <span class="s1">&#39;away_goals&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">required_columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">player_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak wymaganej kolumny: </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="mi">0</span>
+                    
+            <span class="n">win_matches</span> <span class="o">=</span> <span class="n">player_matches</span><span class="p">[</span>
+                <span class="p">((</span><span class="n">player_matches</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">player_matches</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">player_matches</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]))</span> <span class="o">|</span>
+                <span class="p">((</span><span class="n">player_matches</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">player_matches</span><span class="p">[</span><span class="s1">&#39;away_goals&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">player_matches</span><span class="p">[</span><span class="s1">&#39;home_goals&#39;</span><span class="p">]))</span>
+            <span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">win_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+                
+            <span class="n">win_ratio</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">win_matches</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">player_matches</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+            <span class="k">return</span> <span class="n">win_ratio</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas obliczania win_ratio dla zawodnika </span><span class="si">{</span><span class="n">player_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_combined_player_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Łączy aktualne i historyczne dane o zawodnikach.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik z kluczami &#39;matches&#39; i &#39;players&#39; zawierający DataFrame</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Używa cache dla optymalizacji</span>
+<span class="sd">            - Preferuje przefiltrowane dane</span>
+<span class="sd">            - Zwraca puste DataFrame w przypadku błędu</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_combined_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_combined_data</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_matches</span>
+            <span class="n">individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_individual</span>
+            
+            <span class="k">if</span> <span class="n">matches</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="n">individual</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Jedno ze źródeł danych jest puste&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;matches&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(),</span> <span class="s1">&#39;players&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()}</span>
+                
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Połączono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> rekordów meczowych i </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">individual</span><span class="p">)</span><span class="si">}</span><span class="s2"> rekordów indywidualnych&quot;</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">_combined_data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;matches&#39;</span><span class="p">:</span> <span class="n">matches</span><span class="p">,</span>
+                <span class="s1">&#39;players&#39;</span><span class="p">:</span> <span class="n">individual</span>
+            <span class="p">}</span>
+            
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_combined_data</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas łączenia danych: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;matches&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(),</span> <span class="s1">&#39;players&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()}</span>
+    
+<div class="viewcode-block" id="StatisticsCalculator.get_player_per90_stats">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_player_per90_stats">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_player_per90_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza statystyki zawodnika na 90 minut gry.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            player_id (int): ID zawodnika</span>
+<span class="sd">            match_date (str/datetime): Data meczu jako punkt odniesienia</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik ze statystykami G90, A90, KP90</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Używa danych przed podaną datą</span>
+<span class="sd">            - Fallback do starych danych i zawodników na tej samej pozycji</span>
+<span class="sd">            - Zwraca domyślne wartości (0) jeśli brak danych</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">player_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_name</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">player_name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_stats</span><span class="p">()</span>
+                
+            <span class="n">player_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">player_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">match_date_dt</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span>
+                <span class="n">player_data_before</span> <span class="o">=</span> <span class="n">player_data</span><span class="p">[</span><span class="n">player_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">match_date_dt</span><span class="p">]</span>
+                
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">player_data_before</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_stats_from_dataset</span><span class="p">(</span><span class="n">player_data_before</span><span class="p">)</span>
+                    
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">player_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">old_matches</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">player_matches</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_stats_from_dataset</span><span class="p">(</span><span class="n">player_matches</span><span class="p">)</span>
+                
+            <span class="n">player_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_position</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">player_position</span><span class="p">:</span>
+                <span class="n">similar_players</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_same_position_players</span><span class="p">(</span><span class="n">player_position</span><span class="p">,</span> <span class="n">player_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">similar_players</span><span class="p">:</span>
+                    <span class="n">position_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">similar_players</span><span class="p">)]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">position_data</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_stats_from_dataset</span><span class="p">(</span><span class="n">position_data</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_stats</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas obliczania statystyk na 90 minut dla zawodnika </span><span class="si">{</span><span class="n">player_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_stats</span><span class="p">()</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_default_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zwraca domyślne statystyki zawodnika.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik z zerowymi wartościami statystyk</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;RM_PX_G90&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;RM_PX_A90&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;RM_PX_KP90&#39;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">}</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_stats_from_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza statystyki na 90 minut z zestawu danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            dataset (pd.DataFrame): Dane meczowe zawodnika</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik ze statystykami na 90 minut</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Wymaga kolumn: goals, assists, key_passes, player_min</span>
+<span class="sd">            - Zwraca domyślne wartości jeśli brak wymaganych kolumn</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">dataset</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_stats</span><span class="p">()</span>
+            
+        <span class="n">required_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;goals&#39;</span><span class="p">,</span> <span class="s1">&#39;assists&#39;</span><span class="p">,</span> <span class="s1">&#39;key_passes&#39;</span><span class="p">,</span> <span class="s1">&#39;player_min&#39;</span><span class="p">]</span>
+        <span class="n">missing_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">required_cols</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">missing_cols</span><span class="p">:</span>
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak wymaganych kolumn: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_stats</span><span class="p">()</span>
+                
+        <span class="n">total_minutes</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;player_min&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">total_minutes</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_stats</span><span class="p">()</span>
+            
+        <span class="n">goals</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;goals&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">assists</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;assists&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">key_passes</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;key_passes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;RM_PX_G90&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">goals</span> <span class="o">*</span> <span class="mi">90</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_minutes</span><span class="p">,</span>
+            <span class="s1">&#39;RM_PX_A90&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">assists</span> <span class="o">*</span> <span class="mi">90</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_minutes</span><span class="p">,</span>
+            <span class="s1">&#39;RM_PX_KP90&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">key_passes</span> <span class="o">*</span> <span class="mi">90</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_minutes</span>
+        <span class="p">}</span>
+    
+<div class="viewcode-block" id="StatisticsCalculator.get_player_stat">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.statistics_calculator.StatisticsCalculator.get_player_stat">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_player_stat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">stat_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pobiera konkretną statystykę zawodnika.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            player_id (int): ID zawodnika</span>
+<span class="sd">            match_date (str/datetime): Data meczu</span>
+<span class="sd">            stat_type (str): Typ statystyki (&quot;G90&quot;, &quot;A90&quot;, &quot;KP90&quot;)</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Wartość statystyki lub 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_player_per90_stats</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span>
+            
+            <span class="k">if</span> <span class="n">stat_type</span> <span class="o">==</span> <span class="s2">&quot;G90&quot;</span> <span class="ow">and</span> <span class="s2">&quot;RM_PX_G90&quot;</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;RM_PX_G90&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">stat_type</span> <span class="o">==</span> <span class="s2">&quot;A90&quot;</span> <span class="ow">and</span> <span class="s2">&quot;RM_PX_A90&quot;</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;RM_PX_A90&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">stat_type</span> <span class="o">==</span> <span class="s2">&quot;KP90&quot;</span> <span class="ow">and</span> <span class="s2">&quot;RM_PX_KP90&quot;</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;RM_PX_KP90&#39;</span><span class="p">]</span>
+                    
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd w get_player_stat dla zawodnika </span><span class="si">{</span><span class="n">player_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

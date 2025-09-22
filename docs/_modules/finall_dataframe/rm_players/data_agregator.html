@@ -1,0 +1,466 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>finall_dataframe.rm_players.data_agregator &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=2827c288"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">finall_dataframe.rm_players.data_agregator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu finall_dataframe.rm_players.data_agregator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.data_loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.player_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.statistics_calculator</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatisticsCalculator</span>
+
+<span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">current_dir</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">info</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">warning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">data_processing.const_variable</span><span class="w"> </span><span class="kn">import</span> <span class="n">SEASON_DATES</span> <span class="k">as</span> <span class="n">SEASON</span>
+
+<div class="viewcode-block" id="DataAggregator">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_agregator.DataAggregator">[dokumentacja]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataAggregator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Klasa odpowiedzialna za agregację przetworzonych danych do finalnej ramki danych&quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_loader</span><span class="p">,</span> <span class="n">season_manager</span><span class="p">,</span> <span class="n">player_manager</span><span class="p">,</span> <span class="n">statistics_calculator</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicjalizuje agregator danych z komponentami systemu.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            data_loader (DataLoader): Obiekt dostarczający dane źródłowe</span>
+<span class="sd">            season_manager (SeasonManager): Obiekt zarządzający sezonami</span>
+<span class="sd">            player_manager (PlayerManager): Obiekt zarządzający informacjami o zawodnikach</span>
+<span class="sd">            statistics_calculator (StatisticsCalculator): Obiekt obliczający statystyki</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Przechowuje referencje do ramek danych z meczami i statystykami</span>
+<span class="sd">            - Automatycznie definiuje schemat kolumn wyjściowych</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_loader</span> <span class="o">=</span> <span class="n">data_loader</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span> <span class="o">=</span> <span class="n">season_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span> <span class="o">=</span> <span class="n">player_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statistics_calculator</span> <span class="o">=</span> <span class="n">statistics_calculator</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">matches</span> <span class="o">=</span> <span class="n">data_loader</span><span class="o">.</span><span class="n">matches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">individual</span> <span class="o">=</span> <span class="n">data_loader</span><span class="o">.</span><span class="n">individual</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_output_columns</span><span class="p">()</span>
+        
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_output_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Definiuje schemat kolumn dla wynikowej ramki danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list: Lista nazw kolumn dla finalnej ramki danych</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Zawiera 5 kolumn informacji o meczu</span>
+<span class="sd">            - 176 kolumn danych zawodników (16 zawodników × 11 statystyk)</span>
+<span class="sd">            - 3 kolumny statystyk drużynowych</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">match_columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;MATCH_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;M_DATE&#39;</span><span class="p">,</span> <span class="s1">&#39;SEASON&#39;</span><span class="p">,</span> <span class="s1">&#39;IS_HOME&#39;</span><span class="p">,</span> <span class="s1">&#39;OPP_ID&#39;</span><span class="p">]</span>
+        
+        <span class="n">player_columns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">17</span><span class="p">):</span>  <span class="c1"># For up to 16 players</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">player_columns</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_FSQ&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_R&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_POS&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_RT_M&#39;</span><span class="p">,</span> 
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">__RT_PS&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_FORM5&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_WINR&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_G90&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_A90&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_KP9&#39;</span>
+            <span class="p">])</span>
+        
+        <span class="n">team_columns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;team_avg_rating&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;team_form_last_5&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;team_win_ratio&#39;</span>
+        <span class="p">]</span>
+        
+        <span class="n">all_columns</span> <span class="o">=</span> <span class="n">match_columns</span> <span class="o">+</span> <span class="n">player_columns</span> <span class="o">+</span>  <span class="n">team_columns</span>
+        
+        <span class="k">return</span> <span class="n">all_columns</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_match_players_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy słownik zawodników dla każdego meczu z obliczonymi statystykami.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik gdzie klucz to match_id, wartość to lista słowników z danymi zawodników</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Filtruje dane po drugim sezonie (SEASON[1][0])</span>
+<span class="sd">            - Wszystkie statystyki zaokrąglane do 3 miejsc po przecinku</span>
+<span class="sd">            - W przypadku błędów tworzy domyślne dane z None</span>
+<span class="sd">            - Każdy zawodnik ma 11 obliczonych statystyk</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">match_players_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="n">processing_individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">individual</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">SEASON</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="n">total_players</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">processing_individual</span><span class="p">)</span>
+        <span class="n">processed_players</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">successful_players</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">failed_players</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;=== ROZPOCZYNAM PRZETWARZANIE ZAWODNIKÓW ===&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba rekordów do przetworzenia: </span><span class="si">{</span><span class="n">total_players</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">processing_individual</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">match_id</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">]</span>
+            <span class="n">player_name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;player_name&#39;</span><span class="p">]</span>
+            <span class="n">match_date</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span>
+            <span class="n">processed_players</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="c1"># Log co 50 zawodników</span>
+            <span class="k">if</span> <span class="n">processed_players</span> <span class="o">%</span> <span class="mi">50</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="n">processed_players</span> <span class="o">/</span> <span class="n">total_players</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Postęp przetwarzania: </span><span class="si">{</span><span class="n">processed_players</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total_players</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">progress</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%) - Udane: </span><span class="si">{</span><span class="n">successful_players</span><span class="si">}</span><span class="s2">, Błędy: </span><span class="si">{</span><span class="n">failed_players</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="n">player_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_id</span><span class="p">(</span><span class="n">player_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">player_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Zawodnik bez ID: </span><span class="si">{</span><span class="n">player_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">failed_players</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+                
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przetwarzam zawodnika: </span><span class="si">{</span><span class="n">player_name</span><span class="si">}</span><span class="s2"> (ID: </span><span class="si">{</span><span class="n">player_id</span><span class="si">}</span><span class="s2">) w meczu </span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+                <span class="n">player_data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;player_id&#39;</span><span class="p">:</span> <span class="n">player_id</span><span class="p">,</span>
+                    <span class="s1">&#39;is_first_squad&#39;</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_first_squad&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                    <span class="s1">&#39;is_value&#39;</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_value&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                    <span class="s1">&#39;player_min&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;player_min&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+                    <span class="s1">&#39;player_position&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_manager</span><span class="o">.</span><span class="n">get_player_position</span><span class="p">(</span><span class="n">player_id</span><span class="p">),</span>
+                    <span class="s1">&#39;last_match_rating&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistics_calculator</span><span class="o">.</span><span class="n">get_player_rating</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;last_season_rating&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistics_calculator</span><span class="o">.</span><span class="n">get_last_season_rating</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;last_5_ratings&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistics_calculator</span><span class="o">.</span><span class="n">get_player_rating</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;win_ratio&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistics_calculator</span><span class="o">.</span><span class="n">get_player_win_ratio</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;goals_per_90&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistics_calculator</span><span class="o">.</span><span class="n">get_player_stat</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="s2">&quot;G90&quot;</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;assists_per_90&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistics_calculator</span><span class="o">.</span><span class="n">get_player_stat</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="s2">&quot;A90&quot;</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span>
+                    <span class="s1">&#39;key_passes_per_90&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statistics_calculator</span><span class="o">.</span><span class="n">get_player_stat</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="s2">&quot;KP90&quot;</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="p">}</span>
+                
+                <span class="n">successful_players</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Pomyślnie przetworzono: </span><span class="si">{</span><span class="n">player_name</span><span class="si">}</span><span class="s2"> - Ocena: </span><span class="si">{</span><span class="n">player_data</span><span class="p">[</span><span class="s1">&#39;last_match_rating&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Forma: </span><span class="si">{</span><span class="n">player_data</span><span class="p">[</span><span class="s1">&#39;last_5_ratings&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">failed_players</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✗ Błąd przetwarzania zawodnika </span><span class="si">{</span><span class="n">player_name</span><span class="si">}</span><span class="s2"> (ID: </span><span class="si">{</span><span class="n">player_id</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stacktrace: </span><span class="si">{</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+                <span class="n">player_data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;player_id&#39;</span><span class="p">:</span> <span class="n">player_id</span><span class="p">,</span>
+                    <span class="s1">&#39;is_first_squad&#39;</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_first_squad&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                    <span class="s1">&#39;is_value&#39;</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_value&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                    <span class="s1">&#39;player_min&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;player_min&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)),</span>
+                    <span class="s1">&#39;player_position&#39;</span><span class="p">:</span> <span class="s1">&#39;unknown&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;last_match_rating&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;last_season_rating&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;last_5_ratings&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;win_ratio&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;goals_per_90&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;assists_per_90&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="s1">&#39;key_passes_per_90&#39;</span><span class="p">:</span><span class="kc">None</span>
+                <span class="p">}</span>
+                
+            <span class="k">if</span> <span class="n">match_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">match_players_dict</span><span class="p">:</span>
+                <span class="n">match_players_dict</span><span class="p">[</span><span class="n">match_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                
+            <span class="n">match_players_dict</span><span class="p">[</span><span class="n">match_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">player_data</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;=== ZAKOŃCZONO PRZETWARZANIE ZAWODNIKÓW ===&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Łącznie przetworzono: </span><span class="si">{</span><span class="n">processed_players</span><span class="si">}</span><span class="s2"> rekordów&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Pomyślnie: </span><span class="si">{</span><span class="n">successful_players</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="p">(</span><span class="n">successful_players</span><span class="o">/</span><span class="n">processed_players</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✗ Błędy: </span><span class="si">{</span><span class="n">failed_players</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="p">(</span><span class="n">failed_players</span><span class="o">/</span><span class="n">processed_players</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📊 Utworzono dane dla </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">match_players_dict</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów&quot;</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">match_players_dict</span>
+    
+<div class="viewcode-block" id="DataAggregator.process_all_matches">
+<a class="viewcode-back" href="../../../api/finall_dataframe.rm_players.html#finall_dataframe.rm_players.data_agregator.DataAggregator.process_all_matches">[dokumentacja]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_all_matches</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Przetwarza wszystkie mecze i tworzy finalną ramkę danych.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Kompletna ramka danych z przetworzonymi informacjami o 184 kolumnach</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Filtruje mecze po drugim sezonie</span>
+<span class="sd">            - Sortuje zawodników według składu i minut</span>
+<span class="sd">            - Ogranicza do maksymalnie 16 zawodników na mecz</span>
+<span class="sd">            - Wypełnia brakujące kolumny wartościami None/0</span>
+<span class="sd">            - Zachowuje zdefiniowaną kolejność kolumn</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;=== ROZPOCZYNAM AGREGACJĘ MECZÓW ===&quot;</span><span class="p">)</span>
+            
+            <span class="n">match_players_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_match_players_dict</span><span class="p">()</span>
+            
+            <span class="n">all_matches_data</span> <span class="o">=</span> <span class="p">[]</span>
+            
+            <span class="n">processing_matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">SEASON</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="n">total_matches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">processing_matches</span><span class="p">)</span>
+            <span class="n">processed_matches</span> <span class="o">=</span> <span class="mi">0</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Liczba meczów do przetworzenia: </span><span class="si">{</span><span class="n">total_matches</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">processing_matches</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">match_id</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">]</span>
+                <span class="n">processed_matches</span> <span class="o">+=</span> <span class="mi">1</span>
+                
+                <span class="k">if</span> <span class="n">processed_matches</span> <span class="o">%</span> <span class="mi">20</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">progress</span> <span class="o">=</span> <span class="p">(</span><span class="n">processed_matches</span> <span class="o">/</span> <span class="n">total_matches</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+                    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Postęp meczów: </span><span class="si">{</span><span class="n">processed_matches</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">total_matches</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">progress</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">match_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">match_players_dict</span><span class="p">:</span>
+                    <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brak danych zawodników dla meczu ID: </span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                
+                <span class="n">players_data</span> <span class="o">=</span> <span class="n">match_players_dict</span><span class="p">[</span><span class="n">match_id</span><span class="p">]</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przetwarzam mecz </span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2"> z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">players_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> zawodnikami&quot;</span><span class="p">)</span>
+                
+                <span class="n">players_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                    <span class="n">players_data</span><span class="p">,</span> 
+                    <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;is_first_squad&#39;</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="s1">&#39;player_min&#39;</span><span class="p">]),</span> 
+                    <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+                
+                <span class="n">players_data</span> <span class="o">=</span> <span class="n">players_data</span><span class="p">[:</span><span class="mi">16</span><span class="p">]</span>
+                
+                <span class="n">match_data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;MATCH_ID&#39;</span><span class="p">:</span> <span class="n">match_id</span><span class="p">,</span>
+                    <span class="s1">&#39;M_DATE&#39;</span><span class="p">:</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;SEASON&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">season_manager</span><span class="o">.</span><span class="n">get_season_for_date</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">])[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;IS_HOME&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">&#39;OPP_ID&#39;</span><span class="p">:</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">match</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span>
+                <span class="p">}</span>
+                
+                <span class="n">team_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_team_stats</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">],</span> <span class="n">players_data</span><span class="p">)</span>
+                <span class="n">match_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">team_stats</span><span class="p">)</span>
+                
+                <span class="n">starters_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">players_data</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_first_squad&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Mecz </span><span class="si">{</span><span class="n">match_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">players_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> zawodników, </span><span class="si">{</span><span class="n">starters_count</span><span class="si">}</span><span class="s2"> w pierwszym składzie&quot;</span><span class="p">)</span>
+                
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">player</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">players_data</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">16</span><span class="p">:</span>
+                        <span class="k">break</span>
+                        
+                    <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span>
+                    <span class="n">match_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;player_id&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_FSQ&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;is_first_squad&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_R&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;is_value&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_POS&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;player_position&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_RT_M&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;last_match_rating&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">__RT_PS&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;last_season_rating&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_FORM5&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;last_5_ratings&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_WINR&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;win_ratio&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_G90&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;goals_per_90&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_A90&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;assists_per_90&#39;</span><span class="p">],</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_KP9&#39;</span><span class="p">:</span> <span class="n">player</span><span class="p">[</span><span class="s1">&#39;key_passes_per_90&#39;</span><span class="p">]</span>
+                    <span class="p">})</span>
+                
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">players_data</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">17</span><span class="p">):</span>
+                    <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span>
+                    <span class="n">match_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_FSQ&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_R&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_POS&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_RT_M&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">__RT_PS&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_FORM5&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_WINR&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_G90&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_A90&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s1">&#39;RM_PX_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">_KP9&#39;</span><span class="p">:</span> <span class="kc">None</span>
+                    <span class="p">})</span>
+                
+                <span class="n">all_matches_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match_data</span><span class="p">)</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;=== ZAKOŃCZONO AGREGACJĘ MECZÓW ===&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Pomyślnie przetworzono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_matches_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów&quot;</span><span class="p">)</span>
+            
+            <span class="n">result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_matches_data</span><span class="p">)</span>
+            
+            <span class="n">missing_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">result_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">missing_columns</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dodaję </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> brakujących kolumn&quot;</span><span class="p">)</span>
+                <span class="n">default_values</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">missing_columns</span><span class="p">}</span>
+                <span class="n">missing_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">default_values</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">result_df</span><span class="p">))</span>
+                <span class="n">result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">result_df</span><span class="p">,</span> <span class="n">missing_df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            
+            <span class="n">result_df</span> <span class="o">=</span> <span class="n">result_df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+            
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finalny DataFrame: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> kolumn&quot;</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">result_df</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas przetwarzania meczów: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_team_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match_date</span><span class="p">,</span> <span class="n">players_data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Oblicza statystyki drużynowe na podstawie zawodników pierwszego składu.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            match_date: Data meczu</span>
+<span class="sd">            players_data: Lista słowników z danymi zawodników</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Słownik z 3 statystykami drużynowymi zaokrąglonymi do 3 miejsc</span>
+<span class="sd">            </span>
+<span class="sd">        Notes:</span>
+<span class="sd">            - Uwzględnia tylko zawodników pierwszego składu (is_first_squad = 1)</span>
+<span class="sd">            - Oblicza średnią ocenę, formę i win_ratio</span>
+<span class="sd">            - W przypadku braku zawodników zwraca 0.000</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">starters</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">players_data</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_first_squad&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+            
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Obliczam statystyki drużyny z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">starters</span><span class="p">)</span><span class="si">}</span><span class="s2"> zawodników pierwszego składu&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">starters</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Brak zawodników pierwszego składu - używam wartości domyślnych&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">{</span>
+                    <span class="s1">&#39;team_avg_rating&#39;</span><span class="p">:</span> <span class="mf">0.000</span><span class="p">,</span>
+                    <span class="s1">&#39;team_form_last_5&#39;</span><span class="p">:</span> <span class="mf">0.000</span><span class="p">,</span>
+                    <span class="s1">&#39;team_win_ratio&#39;</span><span class="p">:</span> <span class="mf">0.000</span>
+                <span class="p">}</span>
+            
+            <span class="n">avg_rating</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;last_match_rating&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">starters</span><span class="p">])</span>
+            <span class="n">avg_form</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;last_5_ratings&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">starters</span><span class="p">])</span>
+            <span class="n">avg_win_ratio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;win_ratio&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">starters</span><span class="p">])</span>
+            
+            <span class="n">team_stats</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;team_avg_rating&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">avg_rating</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                <span class="s1">&#39;team_form_last_5&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">avg_form</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                <span class="s1">&#39;team_win_ratio&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">avg_win_ratio</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="p">}</span>
+            
+            <span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✓ Statystyki drużyny: Ocena=</span><span class="si">{</span><span class="n">team_stats</span><span class="p">[</span><span class="s1">&#39;team_avg_rating&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Forma=</span><span class="si">{</span><span class="n">team_stats</span><span class="p">[</span><span class="s1">&#39;team_form_last_5&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, WinRatio=</span><span class="si">{</span><span class="n">team_stats</span><span class="p">[</span><span class="s1">&#39;team_win_ratio&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">team_stats</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas obliczania statystyk drużyny: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s1">&#39;team_avg_rating&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;team_form_last_5&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;team_win_ratio&#39;</span><span class="p">:</span> <span class="kc">None</span>
+            <span class="p">}</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

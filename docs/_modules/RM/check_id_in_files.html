@@ -1,0 +1,529 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pl" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RM.check_id_in_files &mdash; REAL MADRID MATCH ANALYZER - DOCS 1.0 - dokumentacja</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=331e28ce"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=2827c288"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Indeks" href="../../genindex.html" />
+    <link rel="search" title="Szukaj" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            REAL MADRID MATCH ANALYZER - DOCS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Szukaj" aria-label="Szukaj" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">src</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">REAL MADRID MATCH ANALYZER - DOCS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Kod modułu</a></li>
+      <li class="breadcrumb-item active">RM.check_id_in_files</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Kod źródłowy modułu RM.check_id_in_files</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">helpers.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">error</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">warning</span>
+
+<span class="n">CURRENT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<span class="n">PROJECT_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">CURRENT_PATH</span><span class="p">)</span>
+<span class="n">project_filepath</span> <span class="o">=</span> <span class="n">PROJECT_PATH</span>
+
+
+<div class="viewcode-block" id="check_match_id_consistency">
+<a class="viewcode-back" href="../../api/RM.html#RM.check_id_in_files.check_match_id_consistency">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_match_id_consistency</span><span class="p">(</span><span class="n">project_filepath</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sprawdza spójność wartości match_id w trzech plikach:</span>
+<span class="sd">    - all_matches.csv</span>
+<span class="sd">    - RM_matches.csv</span>
+<span class="sd">    - filtered_real_madrid_data_20_25.csv</span>
+<span class="sd">    </span>
+<span class="sd">    Bierze pod uwagę, że filtered_real_madrid_data zawiera wiele wierszy na mecz</span>
+<span class="sd">    (jeden dla każdego zawodnika).</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        project_filepath (str): Ścieżka do głównego katalogu projektu</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True jeśli wszystkie ID są spójne, False w przeciwnym razie</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rozpoczynam sprawdzanie spójności identyfikatorów meczów między plikami...&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Definiowanie ścieżek do plików</span>
+    <span class="n">file_all_season</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_filepath</span><span class="p">,</span> <span class="s1">&#39;Data&#39;</span><span class="p">,</span> <span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s1">&#39;all_season&#39;</span><span class="p">,</span> <span class="s2">&quot;all_matches.csv&quot;</span><span class="p">)</span>
+    <span class="n">file_RM_matches</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_filepath</span><span class="p">,</span> <span class="s1">&#39;Data&#39;</span><span class="p">,</span> <span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="s1">&#39;RM_matches.csv&#39;</span><span class="p">)</span>
+    <span class="n">filtered_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_filepath</span><span class="p">,</span> <span class="s1">&#39;Data&#39;</span><span class="p">,</span> <span class="s1">&#39;Real&#39;</span><span class="p">,</span> <span class="s1">&#39;filtered_real_madrid_data_20_25.csv&#39;</span><span class="p">)</span>
+    
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ścieżki do plików:&quot;</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - all_matches.csv: </span><span class="si">{</span><span class="n">file_all_season</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - RM_matches.csv: </span><span class="si">{</span><span class="n">file_RM_matches</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - filtered_real_madrid_data_20_25.csv: </span><span class="si">{</span><span class="n">filtered_data_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Sprawdzenie czy wszystkie pliki istnieją</span>
+    <span class="n">missing_files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">filepath</span> <span class="ow">in</span> <span class="p">[</span><span class="n">file_all_season</span><span class="p">,</span> <span class="n">file_RM_matches</span><span class="p">,</span> <span class="n">filtered_data_path</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+            <span class="n">missing_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">missing_files</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">filepath</span> <span class="ow">in</span> <span class="n">missing_files</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nie znaleziono pliku: </span><span class="si">{</span><span class="n">filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Wczytywanie plików danych</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wczytuję plik all_matches.csv...&quot;</span><span class="p">)</span>
+        <span class="n">all_season</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_all_season</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie wczytano plik all_matches.csv - znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_season</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wczytuję plik RM_matches.csv...&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">RM_matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_RM_matches</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;match_id&#39;</span><span class="p">)</span>
+            <span class="n">RM_matches</span> <span class="o">=</span> <span class="n">RM_matches</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plik RM_matches.csv zawiera match_id jako indeks - zresetowano indeks do kolumny&quot;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">RM_matches</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_RM_matches</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wczytano plik RM_matches.csv bez indeksu&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie wczytano plik RM_matches.csv - znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">RM_matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+        
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wczytuję plik filtered_real_madrid_data_20_25.csv...&quot;</span><span class="p">)</span>
+        <span class="n">filtered_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filtered_data_path</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie wczytano plik filtered_real_madrid_data_20_25.csv - znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszy&quot;</span><span class="p">)</span>
+            
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania plików: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Sprawdzenie czy kolumny match_id istnieją we wszystkich plikach</span>
+    <span class="k">for</span> <span class="n">df_name</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">&quot;all_matches.csv&quot;</span><span class="p">,</span> <span class="n">all_season</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;RM_matches.csv&quot;</span><span class="p">,</span> <span class="n">RM_matches</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;filtered_real_madrid_data_20_25.csv&quot;</span><span class="p">,</span> <span class="n">filtered_data</span><span class="p">)]:</span>
+        <span class="k">if</span> <span class="s1">&#39;match_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumna match_id nie istnieje w pliku </span><span class="si">{</span><span class="n">df_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Standaryzacja kolumn dat</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Konwertuję kolumny dat na format datetime...&quot;</span><span class="p">)</span>
+        
+        <span class="n">all_season</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">all_season</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Przekonwertowano kolumnę &#39;date&#39; w pliku all_matches.csv&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="s1">&#39;date&#39;</span> <span class="ow">in</span> <span class="n">RM_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">RM_matches</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">RM_matches</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Przekonwertowano kolumnę &#39;date&#39; w pliku RM_matches.csv&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;match_date&#39;</span> <span class="ow">in</span> <span class="n">RM_matches</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">RM_matches</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">RM_matches</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">])</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Przekonwertowano kolumnę &#39;match_date&#39; na &#39;date&#39; w pliku RM_matches.csv&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Nie znaleziono kolumny z datą w pliku RM_matches.csv&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="n">filtered_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">filtered_data</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">])</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Przekonwertowano kolumnę &#39;match_date&#39; w pliku filtered_real_madrid_data_20_25.csv&quot;</span><span class="p">)</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas standaryzacji kolumn dat: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Filtrowanie meczów Realu Madryt (team_id = 1)</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Filtruję mecze Realu Madryt...&quot;</span><span class="p">)</span>
+    <span class="n">real_madrid_filter</span> <span class="o">=</span> <span class="p">(</span><span class="n">all_season</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">all_season</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">all_season_real</span> <span class="o">=</span> <span class="n">all_season</span><span class="p">[</span><span class="n">real_madrid_filter</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_season_real</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów Realu Madryt w pliku all_matches.csv&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Pobieranie unikalnych meczów z filtered_data (które ma wiele wierszy na mecz, po jednym dla każdego zawodnika)</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wyodrębniam unikalne mecze z pliku filtered_real_madrid_data_20_25.csv...&quot;</span><span class="p">)</span>
+    <span class="n">filtered_data_unique</span> <span class="o">=</span> <span class="n">filtered_data</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">,</span> <span class="s1">&#39;match_date&#39;</span><span class="p">,</span> <span class="s1">&#39;home_team_id&#39;</span><span class="p">,</span> <span class="s1">&#39;away_team_id&#39;</span><span class="p">])</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Po usunięciu duplikatów, znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_data_unique</span><span class="p">)</span><span class="si">}</span><span class="s2"> unikalnych meczów w pliku filtered_real_madrid_data_20_25.csv&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Tworzenie sygnatur meczów, które jednoznacznie identyfikują mecz na podstawie daty i drużyn</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Tworzę sygnatury meczów na podstawie daty, drużyny gospodarzy i gości...&quot;</span><span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_signature</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">home_id</span><span class="p">,</span> <span class="n">away_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tworzy unikalną sygnaturę meczu na podstawie daty i identyfikatorów drużyn.</span>
+<span class="sd">        Format: YYYY-MM-DD_home_id_away_id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">date_str</span> <span class="o">=</span> <span class="n">date</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>  <span class="c1"># Wyciągnięcie części YYYY-MM-DD</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">date_str</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Konwersja identyfikatorów drużyn na liczby całkowite, jeśli to możliwe</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">home_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">home_id</span><span class="p">))</span>
+                <span class="n">away_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">away_id</span><span class="p">))</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+                
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">home_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">away_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas tworzenia sygnatury meczu: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="c1"># Tworzenie sygnatur dla all_season</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Tworzę sygnatury dla meczów z pliku all_matches.csv...&quot;</span><span class="p">)</span>
+    <span class="n">all_season_signatures</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">all_season_real</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">create_signature</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">sig</span><span class="p">:</span>
+            <span class="n">all_season_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">])</span>
+    
+    <span class="c1"># Tworzenie sygnatur dla RM_matches</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Tworzę sygnatury dla meczów z pliku RM_matches.csv...&quot;</span><span class="p">)</span>
+    <span class="n">rm_matches_signatures</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">RM_matches</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">date_col</span> <span class="o">=</span> <span class="s1">&#39;date&#39;</span> <span class="k">if</span> <span class="s1">&#39;date&#39;</span> <span class="ow">in</span> <span class="n">row</span> <span class="k">else</span> <span class="s1">&#39;match_date&#39;</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">create_signature</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">date_col</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">sig</span><span class="p">:</span>
+            <span class="n">rm_matches_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">])</span>
+    
+    <span class="c1"># Tworzenie sygnatur dla filtered_data_unique</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Tworzę sygnatury dla meczów z pliku filtered_real_madrid_data_20_25.csv...&quot;</span><span class="p">)</span>
+    <span class="n">filtered_data_signatures</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">filtered_data_unique</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">create_signature</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;match_date&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">sig</span><span class="p">:</span>
+            <span class="n">filtered_data_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">])</span>
+    
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_season_signatures</span><span class="p">)</span><span class="si">}</span><span class="s2"> unikalnych meczów Realu Madryt w pliku all_matches.csv&quot;</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rm_matches_signatures</span><span class="p">)</span><span class="si">}</span><span class="s2"> unikalnych meczów w pliku RM_matches.csv&quot;</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filtered_data_signatures</span><span class="p">)</span><span class="si">}</span><span class="s2"> unikalnych meczów w pliku filtered_real_madrid_data_20_25.csv&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Sprawdzanie niespójności ID</span>
+    <span class="n">inconsistencies_found</span> <span class="o">=</span> <span class="kc">False</span>
+    
+    <span class="c1"># Porównanie all_season z RM_matches</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sprawdzam spójność między plikami all_matches.csv i RM_matches.csv...&quot;</span><span class="p">)</span>
+    <span class="n">common_signatures</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">all_season_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">rm_matches_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">common_signatures</span><span class="p">)</span><span class="si">}</span><span class="s2"> wspólnych meczów w obu plikach&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">common_signatures</span><span class="p">:</span>
+        <span class="n">all_season_id</span> <span class="o">=</span> <span class="n">all_season_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span>
+        <span class="n">rm_matches_id</span> <span class="o">=</span> <span class="n">rm_matches_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">all_season_id</span> <span class="o">!=</span> <span class="n">rm_matches_id</span><span class="p">:</span>
+            <span class="n">inconsistencies_found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">date</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">away</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Niezgodność ID: Mecz z dnia </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> (drużyny </span><span class="si">{</span><span class="n">home</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">away</span><span class="si">}</span><span class="s2">), all_matches.csv match_id=</span><span class="si">{</span><span class="n">all_season_id</span><span class="si">}</span><span class="s2">, RM_matches.csv match_id=</span><span class="si">{</span><span class="n">rm_matches_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Porównanie all_season z filtered_data</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sprawdzam spójność między plikami all_matches.csv i filtered_real_madrid_data_20_25.csv...&quot;</span><span class="p">)</span>
+    <span class="n">common_signatures</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">all_season_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">filtered_data_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">common_signatures</span><span class="p">)</span><span class="si">}</span><span class="s2"> wspólnych meczów w obu plikach&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">common_signatures</span><span class="p">:</span>
+        <span class="n">all_season_id</span> <span class="o">=</span> <span class="n">all_season_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span>
+        <span class="n">filtered_data_id</span> <span class="o">=</span> <span class="n">filtered_data_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">all_season_id</span> <span class="o">!=</span> <span class="n">filtered_data_id</span><span class="p">:</span>
+            <span class="n">inconsistencies_found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">date</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">away</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Niezgodność ID: Mecz z dnia </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> (drużyny </span><span class="si">{</span><span class="n">home</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">away</span><span class="si">}</span><span class="s2">), all_matches.csv match_id=</span><span class="si">{</span><span class="n">all_season_id</span><span class="si">}</span><span class="s2">, filtered_real_madrid_data match_id=</span><span class="si">{</span><span class="n">filtered_data_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Porównanie RM_matches z filtered_data</span>
+    <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sprawdzam spójność między plikami RM_matches.csv i filtered_real_madrid_data_20_25.csv...&quot;</span><span class="p">)</span>
+    <span class="n">common_signatures</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">rm_matches_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">filtered_data_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">common_signatures</span><span class="p">)</span><span class="si">}</span><span class="s2"> wspólnych meczów w obu plikach&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">common_signatures</span><span class="p">:</span>
+        <span class="n">rm_matches_id</span> <span class="o">=</span> <span class="n">rm_matches_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span>
+        <span class="n">filtered_data_id</span> <span class="o">=</span> <span class="n">filtered_data_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">rm_matches_id</span> <span class="o">!=</span> <span class="n">filtered_data_id</span><span class="p">:</span>
+            <span class="n">inconsistencies_found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">date</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">away</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Niezgodność ID: Mecz z dnia </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> (drużyny </span><span class="si">{</span><span class="n">home</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">away</span><span class="si">}</span><span class="s2">), RM_matches.csv match_id=</span><span class="si">{</span><span class="n">rm_matches_id</span><span class="si">}</span><span class="s2">, filtered_real_madrid_data match_id=</span><span class="si">{</span><span class="n">filtered_data_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Sprawdzanie meczów brakujących w filtered_data</span>
+    <span class="n">only_in_all_season</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">all_season_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">filtered_data_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">only_in_all_season</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">only_in_all_season</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów w pliku all_matches.csv, których brakuje w filtered_real_madrid_data_20_25.csv&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">only_in_all_season</span><span class="p">:</span>
+            <span class="n">date</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">away</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mecz z dnia </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> (drużyny </span><span class="si">{</span><span class="n">home</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">away</span><span class="si">}</span><span class="s2">) z ID=</span><span class="si">{</span><span class="n">all_season_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span><span class="si">}</span><span class="s2"> istnieje w all_matches.csv, ale nie ma go w filtered_real_madrid_data_20_25.csv&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wszystkie mecze z pliku all_matches.csv są również obecne w pliku filtered_real_madrid_data_20_25.csv&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Sprawdzanie meczów brakujących w all_season</span>
+    <span class="n">only_in_filtered</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">filtered_data_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">all_season_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">only_in_filtered</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">only_in_filtered</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów w pliku filtered_real_madrid_data_20_25.csv, których brakuje w all_matches.csv&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">only_in_filtered</span><span class="p">:</span>
+            <span class="n">date</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">away</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mecz z dnia </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> (drużyny </span><span class="si">{</span><span class="n">home</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">away</span><span class="si">}</span><span class="s2">) z ID=</span><span class="si">{</span><span class="n">filtered_data_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span><span class="si">}</span><span class="s2"> istnieje w filtered_real_madrid_data_20_25.csv, ale nie ma go w all_matches.csv&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wszystkie mecze z pliku filtered_real_madrid_data_20_25.csv są również obecne w pliku all_matches.csv&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Sprawdzanie meczów brakujących między RM_matches i all_season</span>
+    <span class="n">only_in_rm</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">rm_matches_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">all_season_signatures</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">only_in_rm</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Znaleziono </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">only_in_rm</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów w pliku RM_matches.csv, których brakuje w all_matches.csv&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">only_in_rm</span><span class="p">:</span>
+            <span class="n">date</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">away</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mecz z dnia </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> (drużyny </span><span class="si">{</span><span class="n">home</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">away</span><span class="si">}</span><span class="s2">) z ID=</span><span class="si">{</span><span class="n">rm_matches_signatures</span><span class="p">[</span><span class="n">sig</span><span class="p">]</span><span class="si">}</span><span class="s2"> istnieje w RM_matches.csv, ale nie ma go w all_matches.csv&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wszystkie mecze z pliku RM_matches.csv są również obecne w pliku all_matches.csv&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Podsumowanie</span>
+    <span class="k">if</span> <span class="n">inconsistencies_found</span><span class="p">:</span>
+        <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Sprawdzanie spójności ID zakończone: ZNALEZIONO NIEZGODNOŚCI&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sprawdzanie spójności ID zakończone: WSZYSTKIE ID SĄ SPÓJNE między wspólnymi meczami&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="set_match_id">
+<a class="viewcode-back" href="../../api/RM.html#RM.check_id_in_files.set_match_id">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_match_id</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">,</span> <span class="n">path_to_save</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ustawia match_id dla pliku &quot;path_to_file&quot;:</span>
+<span class="sd">    - sprawdza czy taki plik istnieje w katalogu &quot;Data&quot;</span>
+<span class="sd">    - sprawdza czy istnieje w pliku kolumna &quot;match_id&quot;, jeżeli nie to ustawia domyślne wartości dla match_id</span>
+<span class="sd">    - zapisuje plik w &quot;path_to_save&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        path_to_file (str): Ścieżka do pliku do przetworzenia</span>
+<span class="sd">        path_to_save (str): Ścieżka do zapisu pliku</span>
+<span class="sd">        type (int): </span>
+<span class="sd">            &quot;1&quot; - oznacza działanie funkcji w sposób grupowania po meczach Realu</span>
+<span class="sd">            &quot;2&quot; - oznacza działanie funkcji w sposób ogólny (indeksuje wszystkie spotkania w bazie)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True jeśli wszystko przebiegło dobrze i plik został zapisany, False w przeciwnym razie</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sprawdzenie czy plik istnieje przed wczytaniem danych</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span> 
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik </span><span class="si">{</span><span class="n">path_to_file</span><span class="si">}</span><span class="s2"> nie istnieje.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Bezpieczne wczytanie danych z obsługą wyjątków</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie wczytano plik </span><span class="si">{</span><span class="n">path_to_file</span><span class="si">}</span><span class="s2"> z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszami&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania pliku </span><span class="si">{</span><span class="n">path_to_file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Sprawdzenie wymaganych kolumn</span>
+    <span class="k">if</span> <span class="s1">&#39;home_team&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s1">&#39;away_team&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Brak kolumn &#39;home_team&#39; lub &#39;away_team&#39; w pliku.&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumny dostępne w pliku: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Sprawdzenie kolumny match_id i utworzenie jej jeśli nie istnieje</span>
+    <span class="k">if</span> <span class="s1">&#39;match_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s1">&#39;&quot;match_id&quot; nie istnieje w pliku. Tworzę nową kolumnę match_id.&#39;</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;match_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    
+    <span class="c1"># Sprawdzenie kolumny daty</span>
+    <span class="k">if</span> <span class="s1">&#39;match_date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s1">&#39;Brak kolumny &quot;match_date&quot; lub &quot;date&quot; w pliku. Ta kolumna jest wymagana.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Ustalenie kolumny, po której będziemy sortować</span>
+    <span class="n">date_column</span> <span class="o">=</span> <span class="s1">&#39;match_date&#39;</span> <span class="k">if</span> <span class="s1">&#39;match_date&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="s1">&#39;date&#39;</span>
+    
+    <span class="c1"># Filtrowanie danych w zależności od typu</span>
+    <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Filtrowanie tylko meczów Realu Madryt (team_id = 1)</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Filtrowanie: tylko mecze Realu Madryt&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;home_team&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;away_team&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># type == 2</span>
+        <span class="c1"># Wszystkie mecze bez filtrowania</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Filtrowanie: wszystkie mecze&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Sortowanie po dacie i przypisanie kolejnych ID</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">date_column</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;match_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Przypisano match_id (0-</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s2">) dla </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> meczów&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Zapisanie pliku wynikowego</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_to_save</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie zapisano plik z ustawionymi match_id do </span><span class="si">{</span><span class="n">path_to_save</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas zapisywania pliku </span><span class="si">{</span><span class="n">path_to_save</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="set_team_id">
+<a class="viewcode-back" href="../../api/RM.html#RM.check_id_in_files.set_team_id">[dokumentacja]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_team_id</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">,</span> <span class="n">path_to_save</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ustawia home_team_id oraz away_team_id dla pliku &quot;path_to_file&quot;:</span>
+<span class="sd">    - sprawdza czy taki plik istnieje w katalogu &quot;Data&quot;</span>
+<span class="sd">    - sprawdza czy istnieje w pliku kolumna &quot;home_team&quot; oraz &quot;away_team&quot; jeżeli nie to funkcja się kończy</span>
+<span class="sd">    - pobiera dane o rywalach z pliku &quot;Data/id_nazwa/rywale.csv&quot; </span>
+<span class="sd">    - na podstawie tych danych ustawia home_team_id oraz away_team_id </span>
+<span class="sd">    - zapisuje plik w &quot;path_to_save&quot; </span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        path_to_file (str): Ścieżka do pliku do przetworzenia</span>
+<span class="sd">        path_to_save (str): Ścieżka do zapisu pliku</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True jeśli wszystko przebiegło dobrze i plik został zapisany, False w przeciwnym razie</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sprawdzenie czy plik istnieje przed wczytaniem danych</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span> 
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik </span><span class="si">{</span><span class="n">path_to_file</span><span class="si">}</span><span class="s2"> nie istnieje.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Bezpieczne wczytanie danych z obsługą wyjątków</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie wczytano plik </span><span class="si">{</span><span class="n">path_to_file</span><span class="si">}</span><span class="s2"> z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> wierszami&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas wczytywania pliku </span><span class="si">{</span><span class="n">path_to_file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Sprawdzenie wymaganych kolumn</span>
+    <span class="k">if</span> <span class="s1">&#39;home_team&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s1">&#39;away_team&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Brak kolumn &#39;home_team&#39; lub &#39;away_team&#39; w pliku.&quot;</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumny dostępne w pliku: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Ścieżka do pliku z danymi rywali</span>
+    <span class="n">path_data</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">CURRENT_PATH</span><span class="p">),</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span><span class="s2">&quot;Mecze&quot;</span><span class="p">,</span> <span class="s2">&quot;id_nazwa&quot;</span><span class="p">,</span> <span class="s2">&quot;rywale.csv&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Sprawdzenie czy plik rywali istnieje</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_data</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plik rywali </span><span class="si">{</span><span class="n">path_data</span><span class="si">}</span><span class="s2"> nie istnieje.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="c1"># Wczytanie danych rywali</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rivals_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_filepath</span><span class="p">,</span><span class="s2">&quot;Data&quot;</span><span class="p">,</span><span class="s2">&quot;Mecze&quot;</span><span class="p">,</span><span class="s2">&quot;id_nazwa&quot;</span><span class="p">,</span><span class="s2">&quot;rywale.csv&quot;</span><span class="p">))</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie wczytano plik rywali z </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">rivals_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> drużynami&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Sprawdzenie wymaganych kolumn w pliku rywali</span>
+        <span class="k">if</span> <span class="s1">&#39;team_name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rivals_data</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="s1">&#39;team_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rivals_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Brak kolumn &#39;team_name&#39; lub &#39;team_id&#39; w pliku rywali.&quot;</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kolumny dostępne w pliku rywali: </span><span class="si">{</span><span class="n">rivals_data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="c1"># Tworzenie słownika mapującego nazwy drużyn na ich ID</span>
+        <span class="n">rivals_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">rivals_data</span><span class="p">[</span><span class="s1">&#39;team_name&#39;</span><span class="p">],</span> <span class="n">rivals_data</span><span class="p">[</span><span class="s1">&#39;team_id&#39;</span><span class="p">]))</span>
+        
+        <span class="c1"># Mapowanie ID drużyn dla gospodarzy i gości</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;home_team&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">rivals_dict</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;away_team&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">rivals_dict</span><span class="p">)</span>
+        
+        <span class="c1"># Sprawdzenie czy wszystkie drużyny zostały poprawnie zmapowane</span>
+        <span class="n">missing_home</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()][</span><span class="s1">&#39;home_team&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+        <span class="n">missing_away</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;away_team_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()][</span><span class="s1">&#39;away_team&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_home</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_away</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Nie wszystkie drużyny zostały zmapowane:&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_home</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brakujące drużyny gospodarzy: </span><span class="si">{</span><span class="n">missing_home</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_away</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brakujące drużyny gości: </span><span class="si">{</span><span class="n">missing_away</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Usuniecie wartosci NaN z &#39;home_team_id&#39;, &#39;away_team_id&#39;. </span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;home_team_id&#39;</span><span class="p">,</span> <span class="s1">&#39;away_team_id&#39;</span><span class="p">])</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Usuwam wiersze gdzie istnieją wartości Nan w kolumnach &#39;home_team_id&#39;, &#39;away_team_id&#39;&quot;</span><span class="p">)</span>
+        <span class="c1"># Zapisanie pliku wynikowego</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_to_save</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pomyślnie zapisano plik z ustawionymi team_id do </span><span class="si">{</span><span class="n">path_to_save</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+        
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Błąd podczas przetwarzania: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ścieżka bieżąca: </span><span class="si">{</span><span class="n">CURRENT_PATH</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ścieżka projektu: </span><span class="si">{</span><span class="n">project_filepath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">RM_team_stats_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_filepath</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_team_stats.csv&quot;</span><span class="p">)</span>
+    <span class="n">RM_team_stats_path_new</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_filepath</span><span class="p">,</span> <span class="s2">&quot;Data&quot;</span><span class="p">,</span> <span class="s2">&quot;Real&quot;</span><span class="p">,</span> <span class="s2">&quot;RM_team_stats2.csv&quot;</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ścieżka do pliku RM_team_stats: </span><span class="si">{</span><span class="n">RM_team_stats_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">set_team_id</span><span class="p">(</span><span class="n">RM_team_stats_path</span><span class="p">,</span> <span class="n">RM_team_stats_path_new</span><span class="p">)</span>
+    <span class="c1"># check_match_id_consistency(project_filepath)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Prawa zastrzeżone 2025, Kacper Figura.</p>
+  </div>
+
+  Zbudowano w <a href="https://www.sphinx-doc.org/">Sphinx</a> używając
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    dostarczone przez <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
