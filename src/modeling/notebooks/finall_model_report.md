@@ -16,26 +16,26 @@
 - [🧭 Spis Treści](#-spis-treści)
 - [1. 📝 Streszczenie projektu](#1--streszczenie-projektu)
 - [2. 🛠️ Wprowadzenie i Metodologia](#2-️-wprowadzenie-i-metodologia)
-  - [#### 🎯 2.1. Cel Projektu](#--21-cel-projektu)
-  - [#### 📊 2.2. Zbiór Danych i Metodologia Pracy](#--22-zbiór-danych-i-metodologia-pracy)
-  - [#### 🤖 2.3. Analizowane Modele](#--23-analizowane-modele)
-  - [#### 📈 2.4. Metryki Oceny Modeli: Jak Czytać Wyniki?](#--24-metryki-oceny-modeli-jak-czytać-wyniki)
+  - [🎯 2.1. Cel Projektu](#-21-cel-projektu)
+  - [📊 2.2. Zbiór Danych i Metodologia Pracy](#-22-zbiór-danych-i-metodologia-pracy)
+  - [🤖 2.3. Analizowane Modele](#-23-analizowane-modele)
+  - [📈 2.4. Metryki Oceny Modeli: Jak Czytać Wyniki?](#-24-metryki-oceny-modeli-jak-czytać-wyniki)
 - [3. 🎯 Analiza Wyników Porównawczych](#3--analiza-wyników-porównawczych)
-  - [#### 🔢 3.1. Porównanie Metryk Matematycznych](#--31-porównanie-metryk-matematycznych)
-  - [#### 💰 3.2. Analiza Biznesowa (Symulacja Finansowa)](#--32-analiza-biznesowa-symulacja-finansowa)
+  - [🔢 3.1. Porównanie Metryk Matematycznych](#-31-porównanie-metryk-matematycznych)
+  - [💰 3.2. Analiza Biznesowa (Symulacja Finansowa)](#-32-analiza-biznesowa-symulacja-finansowa)
 - [4. 🧠 Analiza Szczegółowa Modeli (Deep Dive)](#4--analiza-szczegółowa-modeli-deep-dive)
-  - [#### 🔍 4.1. Co napędza predykcje? Analiza Cech Modelu LassoCV](#--41-co-napędza-predykcje-analiza-cech-modelu-lassocv)
-  - [#### 📊 4.2. Wizualna Ocena Predykcji](#--42-wizualna-ocena-predykcji)
+  - [🔍 4.1. Co napędza predykcje? Analiza Cech Modelu LassoCV](#-41-co-napędza-predykcje-analiza-cech-modelu-lassocv)
+  - [📊 4.2. Wizualna Ocena Predykcji](#-42-wizualna-ocena-predykcji)
     - [**Model LassoCV**](#model-lassocv)
     - [**Model ElasticNetCV**](#model-elasticnetcv)
     - [**Model Złożony (Lasso + Random Forest + RidgeCV)**](#model-złożony-lasso--random-forest--ridgecv)
 - [5. 🔬 Studium Przypadków: Analiza Błędnych Predykcji](#5--studium-przypadków-analiza-błędnych-predykcji)
-  - [#### **Część 1: Błędy Kontekstowe na Przykładzie Modelu Złożonego**](#-część-1-błędy-kontekstowe-na-przykładzie-modelu-złożonego)
+  - [**Część 1: Błędy Kontekstowe na Przykładzie Modelu Złożonego**](#część-1-błędy-kontekstowe-na-przykładzie-modelu-złożonego)
     - [**Przypadek 1: Mecz z RCD Mallorca (ID 183)**](#przypadek-1-mecz-z-rcd-mallorca-id-183)
     - [**Przypadek 2: Mecz z Villarreal CF (ID 189)**](#przypadek-2-mecz-z-villarreal-cf-id-189)
     - [**Przypadek 3: Mecz z Realem Betis (ID 216)**](#przypadek-3-mecz-z-realem-betis-id-216)
     - [**Przypadek 4: Mecz z Gironą FC (ID 215)**](#przypadek-4-mecz-z-gironą-fc-id-215)
-  - [#### **Część 2: Analiza Statystyczna Ekstremalnej Predykcji Modelu ElasticNetCV**](#-część-2-analiza-statystyczna-ekstremalnej-predykcji-modelu-elasticnetcv)
+  - [**Część 2: Analiza Statystyczna Ekstremalnej Predykcji Modelu ElasticNetCV**](#część-2-analiza-statystyczna-ekstremalnej-predykcji-modelu-elasticnetcv)
     - [**Przypadek 5: Mecz z Cádiz CF (ID 186)**](#przypadek-5-mecz-z-cádiz-cf-id-186)
       - [**Wykres 1: Ogólne porównanie cech (Cadiz vs Leganés)**](#wykres-1-ogólne-porównanie-cech-cadiz-vs-leganés)
       - [**Wykres 2: Najważniejsze czynniki wpływające na predykcję w meczu z Cádiz**](#wykres-2-najważniejsze-czynniki-wpływające-na-predykcję-w-meczu-z-cádiz)
@@ -68,13 +68,13 @@ Co szczególnie obiecujące, modele osiągają tak dobre wyniki, bazując wyłą
 
 ### 2. 🛠️ Wprowadzenie i Metodologia
 
-#### #### 🎯 2.1. Cel Projektu
+#### 🎯 2.1. Cel Projektu
 
 > Cel: obiektywna, oparta na danych ocena szans Realu na zwycięstwo w nadchodzącym meczu (proxy kursów rynkowych).
 
 Głównym celem niniejszego projektu było zaprojektowanie, zbudowanie i dogłębna ocena modeli uczenia maszynowego zdolnych do predykcji kursów bukmacherskich na zwycięstwo Realu Madryt w meczach LaLiga. Chociaż model jest trenowany na podstawie kursów, które są rynkowym odzwierciedleniem prawdopodobieństwa, jego nadrzędnym zadaniem jest dostarczenie obiektywnej, opartej na danych oceny realnych szans drużyny na zwycięstwo w nadchodzącym spotkaniu. Finalnym produktem jest narzędzie analityczne, które może stanowić cenne wsparcie w procesie analizy sportowej.
 
-#### #### 📊 2.2. Zbiór Danych i Metodologia Pracy
+#### 📊 2.2. Zbiór Danych i Metodologia Pracy
 
 Podstawą analizy jest zbiór danych obejmujący **220 spotkań** Realu Madryt w ramach LaLiga z ostatnich pięciu sezonów. Proces przygotowania i wykorzystania danych został starannie zaplanowany, aby zapewnić wiarygodność i rzetelność wyników:
 
@@ -87,7 +87,7 @@ Podstawą analizy jest zbiór danych obejmujący **220 spotkań** Realu Madryt w
 > [!NOTE]
 > Chronologiczne przetwarzanie danych i blokada „wycieku” znacząco poprawiają wiarygodność oceny na zbiorze testowym.
 
-#### #### 🤖 2.3. Analizowane Modele
+#### 🤖 2.3. Analizowane Modele
 
 > Porównujemy: LassoCV (selekcja cech), hybrydę Lasso+RF+Ridge (nieliniowości + stabilizacja) oraz ElasticNetCV (kompromis L1/L2).
 
@@ -97,7 +97,7 @@ Do rozwiązania problemu wybrano trzy różne podejścia algorytmiczne, aby spra
 *   **Model Złożony (Lasso + Random Forest + RidgeCV)**: Zaawansowane podejście hybrydowe. Model ten łączy siłę kilku różnych algorytmów: Lasso do wstępnej selekcji cech, Random Forest do wychwytywania **złożonych, nieliniowych zależności** (np. "dobra forma strzelecka jednego zawodnika ma znaczenie tylko wtedy, gdy inny kluczowy gracz jest w słabszej dyspozycji") oraz Ridge do stabilizacji finalnej predykcji. Jest to próba stworzenia wszechstronnego, "komitetu ekspertów".
 *   **ElasticNetCV**: Model liniowy będący "złotym środkiem" pomiędzy dwoma popularnymi technikami regularyzacji. **Dokonuje selekcji cech, ale jest przy tym mniej radykalny niż Lasso**, co pozwala zachować więcej przydatnych informacji w modelu. Oferuje kompromis między prostotą a elastycznością.
 
-#### #### 📈 2.4. Metryki Oceny Modeli: Jak Czytać Wyniki?
+#### 📈 2.4. Metryki Oceny Modeli: Jak Czytać Wyniki?
 
 > [!WARNING]
 > RMSE > MAE sugeruje obecność kilku dużych błędów; do monitoringu stabilności preferuj RMSE, do intuicyjnej interpretacji — MAE.
@@ -119,7 +119,7 @@ Aby obiektywnie ocenić, który model jest najlepszy, posłużono się standardo
 
 Po zdefiniowaniu metodologii nadszedł czas na kluczowy element analizy: bezpośrednie porównanie wyników uzyskanych przez poszczególne modele. Ocenę przeprowadzono z dwóch perspektyw. Pierwsza to obiektywna, matematyczna precyzja, a druga – bardziej pragmatyczna – to symulacja ich skuteczności w scenariuszu biznesowym.
 
-#### #### 🔢 3.1. Porównanie Metryk Matematycznych
+#### 🔢 3.1. Porównanie Metryk Matematycznych
 
 Pierwszym krokiem jest ocena modeli na podstawie standardowych metryk statystycznych, które mierzą, jak blisko przewidywania modeli znalazły się rzeczywistych kursów bukmacherskich na zbiorze testowym. Poniższa tabela zestawia kluczowe wskaźniki dla wszystkich trzech architektur.
 
@@ -136,7 +136,7 @@ Pierwszym krokiem jest ocena modeli na podstawie standardowych metryk statystycz
 **Wnioski z analizy metryk:**
 Na pierwszy rzut oka wyniki są bardzo zbliżone, co świadczy o wysokim poziomie wszystkich testowanych podejść. Model Złożony minimalnie przeważa w metrykach R² i RMSE, co sugeruje, że potrafi nieco lepiej dopasować się do danych. Jednakże **modele LassoCV oraz ElasticNetCV osiągają niemal identyczne, bardzo dobre wyniki**, oferując przy tym znacznie prostszą i bardziej interpretowalną strukturę. Z perspektywy czysto statystycznej, oba te modele stanowią doskonały kompromis między dokładnością a przejrzystością działania.
 
-#### #### 💰 3.2. Analiza Biznesowa (Symulacja Finansowa)
+#### 💰 3.2. Analiza Biznesowa (Symulacja Finansowa)
 
 Metryki statystyczne nie zawsze oddają pełen obraz praktycznej użyteczności modelu. Dlatego przeprowadzono symulację finansową, aby ocenić, który z algorytmów generowałby najkorzystniejsze kursy z perspektywy organizatora zakładów (bukmachera).
 
@@ -195,7 +195,7 @@ Wyniki symulacji są jednoznaczne. **Modele LassoCV oraz ElasticNetCV konsekwent
 
 Analiza porównawcza wskazała faworytów, ale aby w pełni zrozumieć ich działanie, konieczne jest głębsze spojrzenie "pod maskę". W tej sekcji zbadamy, jakie czynniki modele uznały za najważniejsze oraz jak ich predykcje wyglądają w konfrontacji z rzeczywistością na wykresach.
 
-#### #### 🔍 4.1. Co napędza predykcje? Analiza Cech Modelu LassoCV
+#### 🔍 4.1. Co napędza predykcje? Analiza Cech Modelu LassoCV
 
 > [!TIP]
 > Mniej cech = większa interpretowalność i mniejsze ryzyko przeuczenia, zwłaszcza przy mniejszych zbiorach danych.
@@ -216,7 +216,7 @@ Poniższa tabela przedstawia te zmienne wraz z ich "wagą" (współczynnikiem) o
 
 Analiza tych cech pokazuje, że model buduje swoje predykcje w oparciu o logiczne i intuicyjne przesłanki, łącząc twarde dane statystyczne (forma rywala, bilans bramkowy) z fundamentalnymi czynnikami (gra u siebie) oraz unikalną wiedzą ekspercką (oceny redakcyjne).
 
-#### #### 📊 4.2. Wizualna Ocena Predykcji
+#### 📊 4.2. Wizualna Ocena Predykcji
 
 Najlepszym sposobem na ocenę ogólnej jakości modelu jest wizualizacja jego predykcji. Poniższe wykresy przedstawiają kursy przewidywane przez modele (oś Y) w odniesieniu do kursów rzeczywistych (oś X). Idealny model umieściłby wszystkie punkty na przekątnej linii (gdzie `predykcja = rzeczywistość`).
 
@@ -260,7 +260,7 @@ Każdy model, nawet najdokładniejszy, ma swoje "martwe punkty" – scenariusze,
 
 W pierwszej części tej sekcji przeanalizujemy błędy **Modelu Złożonego**, aby zilustrować, jak algorytmy zawodzą w konfrontacji z czynnikami kontekstowymi. W drugiej, przyjrzymy się ekstremalnej predykcji znacznie lepszego modelu **ElasticNetCV**, aby zrozumieć, jakie mechanizmy statystyczne mogą prowadzić do nierealistycznych wyników.
 
-#### #### **Część 1: Błędy Kontekstowe na Przykładzie Modelu Złożonego**
+#### **Część 1: Błędy Kontekstowe na Przykładzie Modelu Złożonego**
 
 Analiza skupi się na **Modelu Złożonym**, ponieważ jego błędy, ze względu na bardziej skomplikowaną strukturę, są często większe i bardziej pouczające. Na wykresie poniżej zaznaczono identyfikatory (ID) poszczególnych meczów na zbiorze testowym.
 <p align="center">
@@ -337,7 +337,7 @@ Do szczegółowej analizy wybrano cztery przypadki, które reprezentują różne
 
 **Analiza:** Przyczyną błędu wydaje się być **"efekt pamięci"** modelu. Girona w sezonie 2023/24 była rewelacją rozgrywek. Model, widząc dane Girony, mógł "pamiętać" jej fenomenalną formę z przeszłości i potraktować ją jako rywala z absolutnego topu, mimo że jej aktualna dyspozycja była znacznie słabsza. Nałożyła się na to również nieco gorsza forma samego Realu, co w połączeniu doprowadziło do nieuzasadnionego zawyżenia kursu.
 
-#### #### **Część 2: Analiza Statystyczna Ekstremalnej Predykcji Modelu ElasticNetCV**
+#### **Część 2: Analiza Statystyczna Ekstremalnej Predykcji Modelu ElasticNetCV**
 
 > [!NOTE]
 > Predykcje przed kalibracją mogą sporadycznie spadać < 1.00 — to sygnał do nałożenia bezpiecznych ograniczeń przy wdrożeniu.
