@@ -100,13 +100,13 @@ Poniżej znajduje się opis kluczowych modułów projektu. Każdy z nich posiada
 
 - **Cel:** Agregacja i przetwarzanie surowych danych o wszystkich meczach i rywalach Realu Madryt. Odpowiada za standaryzację nazw, nadawanie unikalnych ID oraz obliczanie fundamentalnych statystyk (np. PPM, odmarżowane kursy).
   
-- [➡️ **Szczegółowa dokumentacja modułu `data_processing`**](DOCUMENT\SCRIPT\data_processing\data_processing.md)
+- [➡️ **Szczegółowa dokumentacja modułu `data_processing`**](DOCUMENT/SCRIPT/data_processing/data_processing.md)
 
 ### ⚪ Moduł `RM`
 
 - **Cel:** Przetwarzanie i konsolidacja wszystkich danych związanych bezpośrednio z Realem Madryt. Moduł integruje dane drużynowe, szczegółowe statystyki indywidualne oraz unikalne dane ocenowe (redaktorów i użytkowników).
 
-- [➡️ **Szczegółowa dokumentacja modułu `RM`**](DOCUMENT\SCRIPT\RM\RM.md)
+- [➡️ **Szczegółowa dokumentacja modułu `RM`**](DOCUMENT/SCRIPT/RM/RM.md)
 
 ### 🔗 Moduł `final_dataframe`
 
