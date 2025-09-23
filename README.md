@@ -149,8 +149,8 @@ Aby uruchomić projekt (przy założeniu posiadania dostępu do danych), należy
 1. **Sklonuj repozytorium:**
 
     ```bash
-    git clone https://github.com/twoja-nazwa/nazwa-repozytorium.git
-    cd nazwa-repozytorium
+    git clone https://github.com/Kazurek11/Real-Madrid-Match-Analyzer
+    cd Real-Madrid-Match-Analyzer
     ```
 
 2. **Stwórz i aktywuj wirtualne środowisko (zalecane):**
